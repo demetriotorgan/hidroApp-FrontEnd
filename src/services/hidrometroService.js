@@ -53,3 +53,61 @@ export function calcularConsumoUltimoRegistro(registros){
 
   return consumo >=0 ? consumo : 0;
 }
+
+// services/hidrometroService.js
+
+export function gerarDadosTabela(registros) {
+  if (!registros || registros.length === 0) {
+    return [];
+  }
+
+  // Ordena do mais antigo para o mais recente
+  const ordenados = [...registros].sort(
+    (a, b) => new Date(a.data) - new Date(b.data)
+  );
+
+  return ordenados.map((item, index) => {
+    // Dia começa em 1
+    const dia = index + 1;
+
+    // Primeiro registro não tem consumo
+    if (index === 0) {
+      return {
+        dia,
+        consumo: null,
+        leitura: item.leitura,
+        data: item.data,
+      };
+    }
+
+    // Consumo = leitura atual - leitura anterior
+    const consumo =
+      item.leitura - ordenados[index - 1].leitura;
+
+    return {
+      dia,
+      consumo: consumo >= 0 ? consumo : 0,
+      leitura: item.leitura,
+      data: item.data,
+    };
+  });
+}
+
+
+export function totalConsumoAcumulado(registros) {
+  if (!registros || registros.length < 2) {
+    return 0;
+  }
+
+  // Ordena do mais antigo para o mais recente
+  const ordenados = [...registros].sort(
+    (a, b) => new Date(a.data) - new Date(b.data)
+  );
+
+  const primeiraLeitura = ordenados[0].leitura;
+  const ultimaLeitura = ordenados[ordenados.length - 1].leitura;
+
+  const total = ultimaLeitura - primeiraLeitura;
+
+  return total >= 0 ? total : 0;
+}

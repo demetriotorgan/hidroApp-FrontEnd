@@ -6,11 +6,14 @@ import LoadingModal from "../components/LoadingModal";
 import FormHidrometro from "../components/FormHidrometro";
 import { ArrowBigLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
+import TabelaHidrometro from "../components/TabelaHidrometro";
+import { gerarDadosTabela } from "../services/hidrometroService";
 
 function Hidrometro() {
-  const { dados, loading, erro, deletarHidrometro,excluindo,carregarDados } = useHidrometros();
-    const navigate = useNavigate();
+  const { dados, loading, erro, deletarHidrometro, excluindo, carregarDados } = useHidrometros();
+  const navigate = useNavigate();
+
+  const dadosParaTabela = gerarDadosTabela(dados);
 
 
   if (loading) {
@@ -21,7 +24,7 @@ function Hidrometro() {
     return <p>Erro ao carregar dados</p>
   }
 
-  
+
   return (
     <div>
       <LoadingModal
@@ -29,11 +32,16 @@ function Hidrometro() {
         message="Excluindo registro..."
       />
 
-      <h1><ArrowBigLeft 
-      onClick={() => navigate("/")}
+      <h1><ArrowBigLeft
+        onClick={() => navigate("/")}
       /> Registros do Hidrômetro</h1>
 
-      <FormHidrometro atualizarLista={carregarDados}/>
+      <FormHidrometro atualizarLista={carregarDados} />
+
+      <div>
+        <h2>Tabela de Consumo</h2>
+        <TabelaHidrometro dados={dadosParaTabela} />
+      </div>
 
       {dados.length === 0 ? (
         <p>Sem registros de Hidrômetro</p>

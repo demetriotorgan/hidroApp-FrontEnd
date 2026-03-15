@@ -1,0 +1,56 @@
+/* Container geral */
+.tabela-container {
+  background-color: #ffffff;
+  padding: 20px;
+  margin: 1em;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+/* Tabela */
+.tabela-hidrometro {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+}
+
+/* Cabeçalho */
+.tabela-hidrometro thead {
+  background-color: #1e88e5; /* azul principal */
+  color: white;
+}
+
+.tabela-hidrometro th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+}
+
+/* Linhas */
+.tabela-hidrometro td {
+  padding: 12px;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+/* Efeito hover moderno */
+.tabela-hidrometro tbody tr:hover {
+  background-color: #f5f9ff;
+  transition: 0.2s ease-in-out;
+}
+
+/* Última linha sem borda */
+.tabela-hidrometro tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Mensagem quando não há dados */
+.tabela-vazia {
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+  color: #555;
+}
