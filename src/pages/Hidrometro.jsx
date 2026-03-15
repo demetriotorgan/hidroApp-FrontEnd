@@ -4,9 +4,14 @@ import CardResumoHidrometro from "../components/CardResumoHidrometro";
 import useHidrometros from "../hooks/useHidrometros";
 import LoadingModal from "../components/LoadingModal";
 import FormHidrometro from "../components/FormHidrometro";
+import { ArrowBigLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 
 function Hidrometro() {
   const { dados, loading, erro, deletarHidrometro,excluindo,carregarDados } = useHidrometros();
+    const navigate = useNavigate();
+
 
   if (loading) {
     return <p>Carregando registros...</p>
@@ -24,7 +29,10 @@ function Hidrometro() {
         message="Excluindo registro..."
       />
 
-      <h1>Registros do Hidrômetro</h1>
+      <h1><ArrowBigLeft 
+      onClick={() => navigate("/")}
+      /> Registros do Hidrômetro</h1>
+
       <FormHidrometro atualizarLista={carregarDados}/>
 
       {dados.length === 0 ? (
