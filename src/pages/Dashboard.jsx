@@ -2,11 +2,15 @@ import { ActivityIcon, Calculator, Save } from "lucide-react";
 import useHidrometros from "../hooks/useHidrometros";
 import './Dashboard.css'
 import { useNavigate } from "react-router-dom";
+import { totalDeRegistros, dataUltimoRegistro } from "../services/hidrometroService";
 
 function Dashboard() {
 
   const { dados, loading } = useHidrometros();
   const navigate = useNavigate();
+
+  const registrosCadastrados = totalDeRegistros(dados);
+  const ultimaData = dataUltimoRegistro(dados);
 
   if (loading) {
     return <p>Carregando dashboard...</p>;
@@ -26,12 +30,12 @@ function Dashboard() {
 
           <div className="dashboard-card">
             <p>Total de Registros</p>
-            <h3>--</h3>
+            <h3>{registrosCadastrados}</h3>
           </div>
 
           <div className="dashboard-card">
             <p>Última Leitura</p>
-            <h3>--</h3>
+            <h3> {ultimaData || "Sem registros"}</h3>
           </div>
 
           <div className="dashboard-card">

@@ -3,7 +3,11 @@ import { Trash2 } from "lucide-react";
 
 function CardResumoHidrometro({ id, data, horario, leitura, obs, onDelete }) {
 
-  const dataFormatada = new Date(data).toLocaleDateString("pt-BR");
+  function formatarData(data) {
+  return new Date(data).toLocaleDateString("pt-BR", {
+    timeZone: "UTC"
+  });
+}
 
   const confirmarExclusao = () => {
     const confirmar = window.confirm("Tem certeza que deseja excluir este registro?");
@@ -27,7 +31,7 @@ function CardResumoHidrometro({ id, data, horario, leitura, obs, onDelete }) {
         </button>
       </div>
 
-      <p><strong>Data:</strong> {dataFormatada}</p>
+      <p><strong>Data:</strong> {formatarData(data)}</p>
       <p><strong>Horário:</strong> {horario}</p>
       <p><strong>Leitura:</strong> {leitura}</p>
       <p><strong>Observação:</strong> {obs}</p>
