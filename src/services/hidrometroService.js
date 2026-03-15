@@ -40,3 +40,16 @@ export function mediaConsumo(dados) {
 
   return (somaConsumo / totalIntervalos).toFixed(2);
 }
+
+export function calcularConsumoUltimoRegistro(registros){
+  if(!registros || registros.length <2){
+    return 0;
+  }
+
+  const ultimo = registros[0];
+  const anterior = registros[1];
+
+  const consumo = ultimo.leitura - anterior.leitura;
+
+  return consumo >=0 ? consumo : 0;
+}
