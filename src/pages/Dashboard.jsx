@@ -2,7 +2,7 @@ import { ActivityIcon, Calculator, Save } from "lucide-react";
 import useHidrometros from "../hooks/useHidrometros";
 import './Dashboard.css'
 import { useNavigate } from "react-router-dom";
-import { totalDeRegistros, dataUltimoRegistro } from "../services/hidrometroService";
+import { totalDeRegistros, dataUltimoRegistro, mediaConsumo  } from "../services/hidrometroService";
 
 function Dashboard() {
 
@@ -11,6 +11,7 @@ function Dashboard() {
 
   const registrosCadastrados = totalDeRegistros(dados);
   const ultimaData = dataUltimoRegistro(dados);
+  const mediaDeConsumo = mediaConsumo(dados);
 
   if (loading) {
     return <p>Carregando dashboard...</p>;
@@ -39,8 +40,8 @@ function Dashboard() {
           </div>
 
           <div className="dashboard-card">
-            <p>Média de Consumo</p>
-            <h3>--</h3>
+            <p>Média de Consumo (L)</p>
+            <h3>{mediaDeConsumo}</h3>
           </div>
 
           <div className="dashboard-card">

@@ -16,3 +16,27 @@ export function dataUltimoRegistro(dados) {
     timeZone: "UTC"
   });
 }
+
+export function mediaConsumo(dados) {
+
+  if (!dados || dados.length < 2) {
+    return 0;
+  }
+
+  let somaConsumo = 0;
+  let totalIntervalos = 0;
+
+  for (let i = 0; i < dados.length - 1; i++) {
+
+    const leituraAtual = dados[i].leitura;
+    const leituraAnterior = dados[i + 1].leitura;
+
+    const consumo = leituraAtual - leituraAnterior;
+
+    somaConsumo += consumo;
+    totalIntervalos++;
+
+  }
+
+  return (somaConsumo / totalIntervalos).toFixed(2);
+}
