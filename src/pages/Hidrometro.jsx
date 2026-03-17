@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import api from "../services/api";
 import CardResumoHidrometro from "../components/CardResumoHidrometro";
 import useHidrometros from "../hooks/useHidrometros";
 import LoadingModal from "../components/LoadingModal";

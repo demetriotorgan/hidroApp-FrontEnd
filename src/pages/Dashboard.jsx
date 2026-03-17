@@ -1,8 +1,8 @@
-import { ActivityIcon, Calculator, Save } from "lucide-react";
+import { ActivityIcon, Calculator, CloudRainWind, Save } from "lucide-react";
 import useHidrometros from "../hooks/useHidrometros";
 import './Dashboard.css'
 import { useNavigate } from "react-router-dom";
-import { totalDeRegistros, dataUltimoRegistro, mediaConsumo,calcularConsumoUltimoRegistro,totalConsumoAcumulado, maiorConsumo  } from "../services/hidrometroService";
+import { totalDeRegistros, dataUltimoRegistro, mediaConsumo, calcularConsumoUltimoRegistro, totalConsumoAcumulado, maiorConsumo } from "../services/hidrometroService";
 
 function Dashboard() {
 
@@ -62,9 +62,9 @@ function Dashboard() {
             <h3>{diaMaiorConsumo}</h3>
           </div>
 
-          <button className="dashboard-button" 
-          type="button"
-           onClick={() => navigate("/hidrometro")}
+          <button className="dashboard-button"
+            type="button"
+            onClick={() => navigate("/hidrometro")}
           >
             <Save size={18} />
             Registros
@@ -75,24 +75,35 @@ function Dashboard() {
       {/* SEÇÃO PLUVIOMETRO */}
 
       <section className="dashboard-section">
-        <h2>Pluviometria</h2>
+        <h2>Pluviometria  <CloudRainWind size={18} /></h2>
 
         <div className="dashboard-cards">
 
           <div className="dashboard-card">
-            <p>Chuva hoje</p>
+            <p>Última Chuva</p>
+            <h3>-- dias atrás</h3>
+          </div>
+
+          <div className="dashboard-card">
+            <p>Coletado</p>
             <h3>-- mm</h3>
           </div>
 
           <div className="dashboard-card">
-            <p>Chuva semanal</p>
-            <h3>-- mm</h3>
+            <p>Registros</p>
+            <h3></h3>
           </div>
-
           <div className="dashboard-card">
-            <p>Chuva mensal</p>
+            <p>Média de mm</p>
             <h3>-- mm</h3>
           </div>
+          <button className="dashboard-button"
+            type="button"
+            onClick={() => navigate("/pluviometro")}
+          >
+            <CloudRainWind size={18} />
+            Chuvas
+          </button>
 
         </div>
       </section>
