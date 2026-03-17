@@ -1,5 +1,6 @@
 import React from "react";
 import "./TabelaHidrometro.css";
+import { formatarDataSemFuso } from "../services/hidrometroService";
 
 const TabelaHidrometro = ({ dados }) => {
   if (!dados || dados.length === 0) {
@@ -13,6 +14,7 @@ const TabelaHidrometro = ({ dados }) => {
           <tr>
             <th>Dia</th>
             <th>Consumo (Litros)</th>
+            <th>Data</th>
           </tr>
         </thead>
         <tbody>
@@ -22,6 +24,7 @@ const TabelaHidrometro = ({ dados }) => {
               <td>
                 {item.consumo === null ? "—" : item.consumo}
               </td>
+              <td>{formatarDataSemFuso(item.data)}</td>
             </tr>
           ))}
         </tbody>

@@ -111,3 +111,34 @@ export function totalConsumoAcumulado(registros) {
 
   return total >= 0 ? total : 0;
 }
+
+export function maiorConsumo(registros) {
+  if (!registros || registros.length < 2) {
+    return 0;
+  }
+
+  // Ordena do mais antigo para o mais recente
+  const ordenados = [...registros].sort(
+    (a, b) => new Date(a.data) - new Date(b.data)
+  );
+
+  let maior = 0;
+
+  for (let i = 1; i < ordenados.length; i++) {
+    const consumo = ordenados[i].leitura - ordenados[i - 1].leitura;
+
+    if (consumo > maior) {
+      maior = consumo;
+    }
+  }
+
+  return maior;
+}
+
+export function formatarDataSemFuso(dataISO) {
+  if (!dataISO) return "";
+
+  const [ano, mes, dia] = dataISO.split("T")[0].split("-");
+
+  return `${dia}/${mes}/${ano}`;
+}
