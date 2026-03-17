@@ -6,6 +6,8 @@ import { ArrowBigLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import TabelaHidrometro from "../components/TabelaHidrometro";
 import { gerarDadosTabela } from "../services/hidrometroService";
+import GraficoConsumo from "../components/GraficoConsumo";
+import GraficoConsumoAcumulado from "../components/GraficoConsumoAcumulado";
 
 function Hidrometro() {
   const { dados, loading, erro, deletarHidrometro, excluindo, carregarDados } = useHidrometros();
@@ -40,6 +42,10 @@ function Hidrometro() {
         <h2>Tabela de Consumo</h2>
         <TabelaHidrometro dados={dadosParaTabela} />
       </div>
+      <h3>Consumo</h3>
+      <GraficoConsumo dados={dados}/>
+      <h3>Consumo Acumulado</h3>
+      <GraficoConsumoAcumulado dados={dados}/>
 
       {dados.length === 0 ? (
         <p>Sem registros de Hidrômetro</p>
