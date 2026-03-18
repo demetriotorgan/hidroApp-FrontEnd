@@ -1,9 +1,11 @@
 import { ArrowBigLeft } from 'lucide-react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { calcularChuvaMm } from '../services/pluviometroService';
 import api from '../services/api';
 import { usePluviometro } from '../hooks/usePluviometro ';
+import CardResumoPluviometro from '../components/CardResumoPluviometro ';
+
 
 const Pluviometro = () => {
     const navigate = useNavigate();
@@ -13,7 +15,11 @@ const Pluviometro = () => {
         mm: "",
         obs: ""
     });
-    const { salvarPluviometro, loading } = usePluviometro();
+    const { salvarPluviometro, listarPluviometros, deletarPluviometro, registros, loading, loadingRegistros } = usePluviometro();
+
+    useEffect(() => {
+        listarPluviometros();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -41,21 +47,18 @@ const Pluviometro = () => {
                 mm: "",
                 obs: ""
             });
+            listarPluviometros();
         });
     };
-
 
     return (
         <>
             <div>
-                <h1><ArrowBigLeft
+                <h2><ArrowBigLeft
                     onClick={() => navigate("/")}
-                /> Registros do Pluviômetro</h1>
-                Pluviometro
+                /> Registros do Pluviômetro</h2>
             </div>
             <form className="form-container" onSubmit={handleSubmit}>
-                <h2>Novo Registro de Pluviômetro</h2>
-
                 {/* Data */}
                 <div className="form-group">
                     <label>Data</label>
@@ -113,6 +116,26 @@ const Pluviometro = () => {
                     {loading ? "Salvando..." : "Salvar Registro"}
                 </button>
             </form>
+
+            <h2>Registros de Pluviômetro</h2>
+            {loadingRegistros ? (
+                <p>Carregando registros...</p>
+            ) : registros.length === 0 ? (
+                <p>Nenhum registro encontrado.</p>
+            ) : (
+                registros.map((item) => (
+                    <CardResumoPluviometro
+                        key={item._id}
+                        id={item._id}
+                        data={item.data}
+                        coluna={item.coluna}
+                        mm={item.mm}
+                        obs={item.obs}
+                        onDelete={deletarPluviometro}
+                    />
+                ))
+            )}
+
         </>
     )
 }
