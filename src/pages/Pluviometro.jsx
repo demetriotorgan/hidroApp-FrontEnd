@@ -5,6 +5,7 @@ import { calcularChuvaMm } from '../services/pluviometroService';
 import api from '../services/api';
 import { usePluviometro } from '../hooks/usePluviometro ';
 import CardResumoPluviometro from '../components/CardResumoPluviometro ';
+import GraficoChuvaMm from '../components/GraficoChuvaMm ';
 
 
 const Pluviometro = () => {
@@ -136,6 +137,7 @@ const Pluviometro = () => {
                 ))
             )}
 
+            <GraficoChuvaMm dados={registros} />
         </>
     )
 }
