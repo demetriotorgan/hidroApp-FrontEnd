@@ -3,12 +3,22 @@ import useHidrometros from "../hooks/useHidrometros";
 import './Dashboard.css'
 import { useNavigate } from "react-router-dom";
 import { totalDeRegistros, dataUltimoRegistro, mediaConsumo, calcularConsumoUltimoRegistro, totalConsumoAcumulado, maiorConsumo } from "../services/hidrometroService";
+import { calcularDiasSemChuva, mediaMmChuva, obterMmUltimaChuva, totalDeRegistrosDePluviometro } from "../services/pluviometroService";
+import { usePluviometro } from "../hooks/usePluviometro ";
+import { useEffect } from "react";
 
 function Dashboard() {
 
   const { dados, loading } = useHidrometros();
+  const {listarPluviometros, registros} = usePluviometro();
+
+  useEffect(()=>{
+    listarPluviometros();
+  },[])
+
   const navigate = useNavigate();
 
+  //Dados do Hidrometro
   const registrosCadastrados = totalDeRegistros(dados);
   const ultimaData = dataUltimoRegistro(dados);
   const mediaDeConsumo = mediaConsumo(dados);
@@ -16,6 +26,11 @@ function Dashboard() {
   const acumulado = totalConsumoAcumulado(dados);
   const diaMaiorConsumo = maiorConsumo(dados);
 
+  //Dados do Pluviometro
+  const diasSemChuva = calcularDiasSemChuva(registros);
+  const mmUltimaChuva = obterMmUltimaChuva(registros);
+  const totalDeRegistrosDeChuva = totalDeRegistrosDePluviometro(registros);
+  const mmMedioDeChuva = mediaMmChuva(registros);
   if (loading) {
     return <p>Carregando dashboard...</p>;
   }
@@ -80,22 +95,22 @@ function Dashboard() {
         <div className="dashboard-cards">
 
           <div className="dashboard-card">
-            <p>Última Chuva</p>
-            <h3>-- dias atrás</h3>
+            <p>Dias sem Chuva</p>
+            <h3>{diasSemChuva} dias</h3>
           </div>
 
           <div className="dashboard-card">
             <p>Coletado</p>
-            <h3>-- mm</h3>
+            <h3>{mmUltimaChuva} mm</h3>
           </div>
 
           <div className="dashboard-card">
             <p>Registros</p>
-            <h3></h3>
+            <h3>{totalDeRegistrosDeChuva}</h3>
           </div>
           <div className="dashboard-card">
             <p>Média de mm</p>
-            <h3>-- mm</h3>
+            <h3>{mmMedioDeChuva} mm</h3>
           </div>
           <button className="dashboard-button"
             type="button"
