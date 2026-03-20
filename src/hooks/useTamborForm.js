@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../services/api";
 import { getDataAtual, getHoraAtual } from "../services/dataService";
-import { calcularIQA } from "../services/iqaService";
+import { calcularIQA, validarIQA } from "../services/iqaService";
 
 export default function useTamborForm() {
     const [loading, setLoading] = useState(false);
@@ -81,6 +81,16 @@ export default function useTamborForm() {
     }
 
     async function salvarRegistro() {
+        const validacao = validarIQA(formData);
+         if (!validacao.valido) {
+        alert(validacao.mensagem);
+
+        return {
+            success: false,
+            error: validacao.mensagem
+        };
+    }
+
         const payload = gerarPayload();
 
         try {

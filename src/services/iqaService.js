@@ -158,4 +158,25 @@ export function getIqaMeta(classificacao) {
                 icon: null
             };
     }
+};
+
+export function validarIQA(formData) {
+    const resultado = calcularIQA(formData);
+
+    if (
+        resultado.status === "incompleto" ||
+        resultado.iqa === null ||
+        resultado.iqa === undefined ||
+        !resultado.classificacao
+    ) {
+        return {
+            valido: false,
+            mensagem: "Calcule o IQA antes de salvar. Existem dados incompletos."
+        };
+    }
+
+    return {
+        valido: true,
+        resultado
+    };
 }
