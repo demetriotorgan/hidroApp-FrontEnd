@@ -1,4 +1,4 @@
-import { ActivityIcon, Calculator, CloudRainWind, Save } from "lucide-react";
+import { ActivityIcon, Calculator, CloudRainWind, FlaskConical, Save } from "lucide-react";
 import useHidrometros from "../hooks/useHidrometros";
 import './Dashboard.css'
 import { useNavigate } from "react-router-dom";
@@ -126,7 +126,7 @@ function Dashboard() {
       {/* SEÇÃO QUALIDADE DA ÁGUA */}
 
       <section className="dashboard-section">
-        <h2>Qualidade da Água (Reservatório)</h2>
+        <h2>Qualidade da Água <FlaskConical /></h2>
 
         <div className="dashboard-cards">
 
@@ -144,6 +144,11 @@ function Dashboard() {
             <p>Dias desde última troca</p>
             <h3>--</h3>
           </div>
+
+          <button className="dashboard-button"
+            type="button"
+            onClick={() => navigate("/tambor")}
+          >Qualidade da Água <FlaskConical /></button>
 
         </div>
       </section>

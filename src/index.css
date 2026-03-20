@@ -140,3 +140,129 @@ h2 {
 .form-button:active {
   transform: scale(0.98);
 }
+
+/* Separadores de seção */
+.form-section-title {
+  font-size: 16px;
+  margin: 16px 0 8px;
+  font-weight: 600;
+  color: #444;
+}
+
+/* Checkbox alinhado */
+.form-checkbox {
+  flex-direction: row;
+  align-items: center;
+}
+
+.form-checkbox input {
+  margin-right: 8px;
+}
+
+/* ============================= */
+/* 🔘 BOTÃO IQA */
+/* ============================= */
+
+.btn-iqa {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn-iqa:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+.btn-iqa:active {
+  transform: scale(0.98);
+}
+
+.btn-iqa:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* ============================= */
+/* 📊 RESULTADO IQA */
+/* ============================= */
+
+.iqa-result {
+  margin-top: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  border-left: 6px solid transparent;
+}
+
+/* 🔢 Valor */
+.iqa-value {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* 🏷️ Classificação */
+.iqa-label {
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+
+/* ============================= */
+/* 🎨 VARIAÇÕES POR QUALIDADE */
+/* ============================= */
+
+/* 🟢 BOA */
+.iqa-boa {
+  background-color: #ecfdf5;
+  border-left-color: #10b981;
+  color: #065f46;
+}
+
+.iqa-boa .iqa-label {
+  background-color: #10b981;
+  color: white;
+}
+
+/* 🟡 MODERADA */
+.iqa-moderada {
+  background-color: #fffbeb;
+  border-left-color: #f59e0b;
+  color: #78350f;
+}
+
+.iqa-moderada .iqa-label {
+  background-color: #f59e0b;
+  color: white;
+}
+
+/* 🔴 RUIM */
+.iqa-ruim {
+  background-color: #fef2f2;
+  border-left-color: #ef4444;
+  color: #7f1d1d;
+}
+
+.iqa-ruim .iqa-label {
+  background-color: #ef4444;
+  color: white;
+}
