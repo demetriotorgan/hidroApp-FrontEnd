@@ -1,4 +1,3 @@
-
 export function totalDeRegistros(dados) {
   if (!dados || dados.length === 0) {
     return 0;
@@ -38,7 +37,7 @@ export function mediaConsumo(dados) {
 
   }
 
-  return (somaConsumo / totalIntervalos).toFixed(2);
+  return Number((somaConsumo / totalIntervalos).toFixed(2));
 }
 
 export function calcularConsumoUltimoRegistro(registros){
@@ -141,4 +140,96 @@ export function formatarDataSemFuso(dataISO) {
   const [ano, mes, dia] = dataISO.split("T")[0].split("-");
 
   return `${dia}/${mes}/${ano}`;
+};
+
+export function calcularVariacaoConsumo(registros) {
+    if (!registros || registros.length < 3) {
+        return null; // precisa de pelo menos 3 registros
+    }
+
+    // Ordena por data (mais recente primeiro)
+    const ordenados = [...registros].sort(
+        (a, b) => new Date(b.data) - new Date(a.data)
+    );
+
+    const atual = ordenados[0];
+    const anterior = ordenados[1];
+    const anterior2 = ordenados[2];
+
+    // Consumos (diferença entre leituras)
+    const consumoAtual = atual.leitura - anterior.leitura;
+    const consumoAnterior = anterior.leitura - anterior2.leitura;
+
+    if (consumoAnterior === 0) {
+        return null; // evita divisão por zero
+    }
+
+    const variacao =
+        ((consumoAtual - consumoAnterior) / consumoAnterior) * 100;
+
+    return {
+        consumoAtual,
+        consumoAnterior,
+        variacao: Number(variacao.toFixed(1)), // 1 casa decimal
+        tipo: variacao > 0 ? "aumento" : variacao < 0 ? "queda" : "estavel"
+    };
+};
+
+function calcularConsumos(dados) {
+  const consumos = [];
+
+  for (let i = 0; i < dados.length - 1; i++) {
+    const leituraAtual = dados[i].leitura;
+    const leituraAnterior = dados[i + 1].leitura;
+
+    const consumo = leituraAtual - leituraAnterior;
+
+    consumos.push(consumo);
+  }
+
+  return consumos;
+};
+
+function classificarCV(cv) {
+  if (cv < 10) return 'Muito Estável';
+  if (cv < 20) return 'Estável';
+  if (cv < 30) return 'Moderado';
+  if (cv < 50) return 'Variável';
+  return 'Muito Variável';
+}
+
+export function calcularCVConsumo(dados) {
+
+  if (!dados || dados.length < 2) {
+    return {
+      cv: 0,
+      tipo: 'Sem dados'
+    };
+  }
+
+  const consumos = calcularConsumos(dados);
+
+  // 🔹 Reutilizando sua função
+  const media = mediaConsumo(dados);
+
+  if (media === 0) {
+    return {
+      cv: 0,
+      tipo: 'Indefinido'
+    };
+  }
+
+  // 🔹 Variância
+  const variancia = consumos.reduce((acc, val) => {
+    return acc + Math.pow(val - media, 2);
+  }, 0) / consumos.length;
+
+  const desvioPadrao = Math.sqrt(variancia);
+
+  const cv = (desvioPadrao / media) * 100;
+
+  return {
+    cv: Number(cv.toFixed(2)),
+    tipo: classificarCV(cv)
+  };
 }
