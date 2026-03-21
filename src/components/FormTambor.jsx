@@ -5,7 +5,7 @@ import LoadingModal from "./LoadingModal";
 import { CheckCircle, AlertTriangle, XCircle } from "lucide-react";
 import { getIqaMeta } from "../services/iqaService";
 
-export default function FormTambor() {
+export default function FormTambor({ onSuccess }) {
     const { formData, handleChange, salvarRegistro, resetForm, loading, iqa, calcularIQAAtual } = useTamborForm();
     async function handleSubmit(e) {
         e.preventDefault();
@@ -14,28 +14,29 @@ export default function FormTambor() {
 
         if (resultado.success) {
             alert("Registro salvo com sucesso!");
-            resetForm();
+            resetForm();            
+            onSuccess && onSuccess();
         } else {
             alert("Erro ao salvar registro");
         }
     };
 
     function renderIqaIcon(iconType) {
-    switch (iconType) {
-        case "boa":
-            return <CheckCircle className="iqa-icon boa" />;
-        case "moderada":
-            return <AlertTriangle className="iqa-icon moderada" />;
-        case "ruim":
-            return <XCircle className="iqa-icon ruim" />;
-        default:
-            return null;
-    }
-};
+        switch (iconType) {
+            case "boa":
+                return <CheckCircle className="iqa-icon boa" />;
+            case "moderada":
+                return <AlertTriangle className="iqa-icon moderada" />;
+            case "ruim":
+                return <XCircle className="iqa-icon ruim" />;
+            default:
+                return null;
+        }
+    };
 
-const meta = iqa?.classificacao
-    ? getIqaMeta(iqa.classificacao)
-    : { className: "", icon: null };
+    const meta = iqa?.classificacao
+        ? getIqaMeta(iqa.classificacao)
+        : { className: "", icon: null };
 
     return (
         <>
@@ -251,27 +252,27 @@ const meta = iqa?.classificacao
 
 
 
-{iqa && (
-    <div className={`iqa-result ${meta.className}`}>
-        {iqa.status === "incompleto" ? (
-            <span>{iqa.mensagem}</span>
-        ) : (
-            <>
-                <div className="iqa-left">
-                    {renderIqaIcon(meta.icon)}
+                {iqa && (
+                    <div className={`iqa-result ${meta.className}`}>
+                        {iqa.status === "incompleto" ? (
+                            <span>{iqa.mensagem}</span>
+                        ) : (
+                            <>
+                                <div className="iqa-left">
+                                    {renderIqaIcon(meta.icon)}
 
-                    <div className="iqa-value">
-                        IQA: {iqa.iqa}
+                                    <div className="iqa-value">
+                                        IQA: {iqa.iqa}
+                                    </div>
+                                </div>
+
+                                <div className="iqa-label">
+                                    {iqa.classificacao}
+                                </div>
+                            </>
+                        )}
                     </div>
-                </div>
-
-                <div className="iqa-label">
-                    {iqa.classificacao}
-                </div>
-            </>
-        )}
-    </div>
-)}
+                )}
                 <button type="submit" className="form-button">
                     Salvar Registro <Save />
                 </button>
