@@ -206,7 +206,7 @@ function Dashboard() {
           </div>
 
           <div className="dashboard-card">
-            <p>Tendência</p>
+            <p>Tendência em relação ao consumo anterior</p>
             <h3 style={{ color: tendencia.color }}>
               {tendencia.icon}
               {tendencia.texto}
@@ -214,7 +214,7 @@ function Dashboard() {
           </div>
 
           <div className="dashboard-card">
-            <p>Consistência do Consumo</p>
+            <p>Consistência do Consumo (CV)</p>
             <h3 style={{ color: cvConfig.color }}>
               {cvConfig.icon}
               {cvConfig.texto}
@@ -246,7 +246,7 @@ function Dashboard() {
           </div>
 
           <div className={`dashboard-card border-${estabilidadeDoConsumo.cor}`}>
-            <p>Estabilidade do Consumo</p>
+            <p>Estabilidade do Consumo (~r)</p>
             <h3>{estabilidadeDoConsumo.coeficiente}</h3>
             <div className="status-container">
               <span
