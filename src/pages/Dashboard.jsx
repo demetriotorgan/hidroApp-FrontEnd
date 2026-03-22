@@ -2,7 +2,7 @@ import { ActivityIcon, Calculator, CloudRainWind, FlaskConical, Minus, Save, Tre
 import useHidrometros from "../hooks/useHidrometros";
 import './Dashboard.css'
 import { useNavigate } from "react-router-dom";
-import { totalDeRegistros, dataUltimoRegistro, mediaConsumo, calcularConsumoUltimoRegistro, totalConsumoAcumulado, maiorConsumo, calcularVariacaoConsumo } from "../services/hidrometroService";
+import { totalDeRegistros, dataUltimoRegistro, mediaConsumo, calcularConsumoUltimoRegistro, totalConsumoAcumulado, maiorConsumo, calcularVariacaoConsumo, percentualComparacaoConsumo, calcularLinearidadeConsumo } from "../services/hidrometroService";
 import { calcularDiasSemChuva, mediaMmChuva, obterMmUltimaChuva, totalDeRegistrosDePluviometro } from "../services/pluviometroService";
 import { usePluviometro } from "../hooks/usePluviometro ";
 import { useEffect } from "react";
@@ -29,6 +29,39 @@ function Dashboard() {
   const resultado = calcularVariacaoConsumo(dados);
   const variacao = calcularVariacaoConsumo(dados);
   const cvConsumo = calcularCVConsumo(dados);
+  const percentualAtualMaiorConsumo = percentualComparacaoConsumo(dados);
+  const estabilidadeDoConsumo = calcularLinearidadeConsumo(dados);
+
+  const mapaCoresConsumo = {
+    muito_alto: {
+      cor: "#ef4444", // vermelho
+      label: "Muito alto",
+      emoji: "🔴"
+    },
+    alto: {
+      cor: "#f97316", // laranja
+      label: "Alto",
+      emoji: "🟠"
+    },
+    moderado: {
+      cor: "#eab308", // amarelo
+      label: "Moderado",
+      emoji: "🟡"
+    },
+    baixo: {
+      cor: "#22c55e", // verde
+      label: "Baixo",
+      emoji: "🟢"
+    },
+    sem_dados: {
+      cor: "#9ca3af",
+      label: "Sem dados",
+      emoji: "⚪"
+    }
+  };
+  //Resultados da comparação percentual entre Consumo Atual e Maior consumo
+  const tipoAtual = percentualAtualMaiorConsumo.tipo;
+  const config = mapaCoresConsumo[tipoAtual] || mapaCoresConsumo.sem_dados;
 
   function getTendenciaConfig(resultado) {
     if (!resultado) {
@@ -188,6 +221,39 @@ function Dashboard() {
             </h3>
             <small>{cvConsumo.tipo}</small>
             <small>~{cvConsumo.cv}</small>
+          </div>
+
+          <div className="dashboard-card" style={{ borderLeft: `5px solid ${config.cor}` }}>
+            <p>Consumo Atual e Maior Consumo</p>
+
+            <h3 style={{ color: config.cor }}>
+              {percentualAtualMaiorConsumo.percentual}%
+            </h3>
+
+            <small style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <span
+                style={{
+                  width: "10px",
+                  height: "10px",
+                  borderRadius: "50%",
+                  backgroundColor: config.cor,
+                  display: "inline-block"
+                }}
+              ></span>
+
+              {config.label}
+            </small>
+          </div>
+
+          <div className={`dashboard-card border-${estabilidadeDoConsumo.cor}`}>
+            <p>Estabilidade do Consumo</p>
+            <h3>{estabilidadeDoConsumo.coeficiente}</h3>
+            <div className="status-container">
+              <span
+                className={`status-dot ${estabilidadeDoConsumo.cor}`}
+              ></span>
+              <small>{estabilidadeDoConsumo.nivel}</small>
+            </div>
           </div>
 
           <button className="dashboard-button"

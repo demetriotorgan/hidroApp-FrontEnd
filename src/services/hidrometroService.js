@@ -232,4 +232,133 @@ export function calcularCVConsumo(dados) {
     cv: Number(cv.toFixed(2)),
     tipo: classificarCV(cv)
   };
-}
+};
+
+//Função Percentual entre consumoAtual / Maior Consumo 
+export function percentualComparacaoConsumo(registros) {
+  if (!registros || registros.length < 2) {
+    return {
+      percentual: 0,
+      tipo: "sem_dados"
+    };
+  }
+
+  const consumoAtual = calcularConsumoUltimoRegistro(registros);
+  const consumoMaximo = maiorConsumo(registros);
+
+  if (consumoMaximo === 0) {
+    return {
+      percentual: 0,
+      tipo: "sem_referencia"
+    };
+  }
+
+  const percentual = (consumoAtual / consumoMaximo) * 100;
+
+  // Classificação inteligente da tendência
+  let tipo = "";
+
+  if (percentual >= 95) {
+    tipo = "muito_alto"; // praticamente igual ao maior
+  } else if (percentual >= 70) {
+    tipo = "alto";
+  } else if (percentual >= 40) {
+    tipo = "moderado";
+  } else {
+    tipo = "baixo";
+  }
+
+  return {
+    percentual: Number(percentual.toFixed(2)),
+    tipo,
+    consumoAtual,
+    consumoMaximo
+  };
+};
+
+//Função que mede o coeficiente de Person do consumo acumulado
+export function calcularLinearidadeConsumo(dados) {
+  if (!dados || dados.length < 2) {
+    return null;
+  }
+
+  // 1. Ordenar por data crescente
+  const ordenado = [...dados].sort(
+    (a, b) => new Date(a.data) - new Date(b.data)
+  );
+
+  const n = ordenado.length;
+
+  // 2. Criar arrays X e Y
+  const x = [];
+  const y = [];
+
+  ordenado.forEach((item, index) => {
+    x.push(index); // tempo
+    y.push(item.leitura); // acumulado
+  });
+
+  // 3. Somatórios
+  let somaX = 0,
+    somaY = 0,
+    somaXY = 0,
+    somaX2 = 0,
+    somaY2 = 0;
+
+  for (let i = 0; i < n; i++) {
+    somaX += x[i];
+    somaY += y[i];
+    somaXY += x[i] * y[i];
+    somaX2 += x[i] ** 2;
+    somaY2 += y[i] ** 2;
+  }
+
+  // 4. Cálculo de Pearson
+  const numerador = n * somaXY - somaX * somaY;
+  const denominador = Math.sqrt(
+    (n * somaX2 - somaX ** 2) * (n * somaY2 - somaY ** 2)
+  );
+
+  const r = denominador === 0 ? 0 : numerador / denominador;
+
+  // 5. Classificação
+  let classificacao = "";
+  let nivel = "";
+  let cor = "";
+  let descricao = "";
+
+  if (r >= 0.98) {
+    classificacao = "muito linear";
+    nivel = "Excelente";
+    cor = "verde";
+    descricao = "Consumo extremamente estável e previsível";
+  } else if (r >= 0.95) {
+    classificacao = "linear";
+    nivel = "Estável";
+    cor = "verde";
+    descricao = "Consumo dentro do comportamento esperado";
+  } else if (r >= 0.9) {
+    classificacao = "moderado";
+    nivel = "Atenção leve";
+    cor = "amarelo";
+    descricao = "Pequenas variações no padrão de consumo";
+  } else if (r >= 0.8) {
+    classificacao = "Irregular";
+    nivel = "alerta";
+    cor = "laranja";
+    descricao = "Consumo com variações relevantes";
+  } else {
+    classificacao = "não linear";
+    nivel = "crítico";
+    cor = "vermelho";
+    descricao = "Consumo fora do padrão esperado";
+  }
+
+  return {
+    coeficiente: Number(r.toFixed(4)),
+    classificacao,
+    nivel,
+    cor,
+    descricao,
+  };
+};

@@ -304,3 +304,52 @@ h2 {
 .card-section p strong {
   color: #444;
 }
+
+/* --------Configuração de cores do indicador de Person------------ */
+.status-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* Cores */
+.status-dot.verde {
+  background-color: #22c55e; /* verde */
+}
+
+.status-dot.amarelo {
+  background-color: #eab308; /* amarelo */
+}
+
+.status-dot.laranja {
+  background-color: #f97316; /* laranja */
+}
+
+.status-dot.vermelho {
+  background-color: #ef4444; /* vermelho */
+}
+
+/* --------Cores para o indicar de Person---------- */
+
+/* Cores */
+.border-verde {
+  border-left: 6px solid #22c55e;
+}
+
+.border-amarelo {
+  border-left: 6px solid #eab308;
+}
+
+.border-laranja {
+  border-left: 6px solid #f97316;
+}
+
+.border-vermelho {
+  border-left: 6px solid #ef4444;
+}
