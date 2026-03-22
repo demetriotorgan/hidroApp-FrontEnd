@@ -362,3 +362,45 @@ export function calcularLinearidadeConsumo(dados) {
     descricao,
   };
 };
+
+export function calcularPosicaoRegua(media, consumoAtual, limitePercentual = 50) {
+  if (!media || media === 0) {
+    return {
+      posicao: 0.5, // centro
+      diferencaPercentual: 0,
+      status: "sem_dados"
+    };
+  }
+
+  // 📊 Diferença percentual
+  const diferencaPercentual = ((consumoAtual - media) / media) * 100;
+
+  // 🔒 Clamp (limitar valores)
+  const percentualNormalizado = Math.max(
+    -limitePercentual,
+    Math.min(limitePercentual, diferencaPercentual)
+  );
+
+  // 📏 Converter para posição (0 → 1)
+  const posicao =
+    (percentualNormalizado + limitePercentual) / (2 * limitePercentual);
+
+  // 🎨 Classificação (opcional mas MUITO útil)
+  let status = "";
+
+  if (diferencaPercentual > 10) {
+    status = "muito_alto";
+  } else if (diferencaPercentual > 5) {
+    status = "alto";
+  } else if (diferencaPercentual >= -5) {
+    status = "normal";
+  } else {
+    status = "baixo";
+  }
+
+  return {
+    posicao, // de 0 a 1
+    diferencaPercentual,
+    status
+  };
+}

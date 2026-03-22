@@ -2,7 +2,7 @@ import { ActivityIcon, Calculator, CloudRainWind, FlaskConical, Minus, Save, Tre
 import useHidrometros from "../hooks/useHidrometros";
 import './Dashboard.css'
 import { useNavigate } from "react-router-dom";
-import { totalDeRegistros, dataUltimoRegistro, mediaConsumo, calcularConsumoUltimoRegistro, totalConsumoAcumulado, maiorConsumo, calcularVariacaoConsumo, percentualComparacaoConsumo, calcularLinearidadeConsumo } from "../services/hidrometroService";
+import { totalDeRegistros, dataUltimoRegistro, mediaConsumo, calcularConsumoUltimoRegistro, totalConsumoAcumulado, maiorConsumo, calcularVariacaoConsumo, percentualComparacaoConsumo, calcularLinearidadeConsumo, calcularPosicaoRegua } from "../services/hidrometroService";
 import { calcularDiasSemChuva, mediaMmChuva, obterMmUltimaChuva, totalDeRegistrosDePluviometro } from "../services/pluviometroService";
 import { usePluviometro } from "../hooks/usePluviometro ";
 import { useEffect } from "react";
@@ -31,6 +31,8 @@ function Dashboard() {
   const cvConsumo = calcularCVConsumo(dados);
   const percentualAtualMaiorConsumo = percentualComparacaoConsumo(dados);
   const estabilidadeDoConsumo = calcularLinearidadeConsumo(dados);
+  const { posicao, diferencaPercentual, status } =
+    calcularPosicaoRegua(mediaDeConsumo, consumoDiaAnterior);
 
   const mapaCoresConsumo = {
     muito_alto: {
@@ -153,6 +155,22 @@ function Dashboard() {
 
   const cvConfig = getCVConfig(cvConsumo);
 
+  //Resultados da Régua de comparação
+  function formatarStatusTexto(status) {
+  switch (status) {
+    case "muito_alto":
+      return "Muito alto";
+    case "alto":
+      return "Alto";
+    case "normal":
+      return "Normal";
+    case "baixo":
+      return "Baixo";
+    default:
+      return "Sem dados";
+  }
+}
+
 
   //Dados do Pluviometro
   const diasSemChuva = calcularDiasSemChuva(registros);
@@ -253,6 +271,43 @@ function Dashboard() {
                 className={`status-dot ${estabilidadeDoConsumo.cor}`}
               ></span>
               <small>{estabilidadeDoConsumo.nivel}</small>
+            </div>
+          </div>
+
+          <div className="dashboard-card regua-card">
+            <p>Comparação de Consumo</p>
+
+            <div className="regua">
+              {/* Label da média */}
+              <span className="label media" style={{ left: "50%" }}>
+                Média
+              </span>
+
+              {/* Label do consumo */}
+              <span
+                className="label atual"
+                style={{ left: `${posicao * 100}%` }}
+              >
+                C.A
+              </span>
+
+              {/* Pontos */}
+              <div className="ponto media" style={{ left: "50%" }} />
+
+              <div
+                className={`ponto atual ${status}`}
+                style={{ left: `${posicao * 100}%` }}
+              />
+            </div>
+            <div className="resultado-regua">
+              <span className="valor">
+                {diferencaPercentual > 0 && "+"}
+                {diferencaPercentual.toFixed(1)}%
+              </span>
+
+              <span className={`status ${status}`}>
+                {formatarStatusTexto(status)}
+              </span>
             </div>
           </div>
 
