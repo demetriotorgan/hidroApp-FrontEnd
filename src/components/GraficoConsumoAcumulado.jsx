@@ -25,7 +25,7 @@ function GraficoConsumoAcumulado({ dados }) {
       const atual = ordenados[i];
       const anterior = ordenados[i - 1];
 
-      const consumo = atual.leitura - anterior.leitura;
+      const consumo = (atual.leitura - anterior.leitura) * 10;
 
       soma += consumo;
 
@@ -57,6 +57,7 @@ function GraficoConsumoAcumulado({ dados }) {
         />
 
         <YAxis
+          domain={[0, 'dataMax + 100']}
           label={{
             value: "Acumulado (L)",
             angle: -90,

@@ -1,5 +1,6 @@
   import { TrendingUp, TrendingDown, Minus } from "lucide-react";
   import { ActivityIcon, CloudRainWind} from "lucide-react";
+  import {classificarCV} from '../services/hidrometroService';
   
   export function getTendenciaConfig(resultado) {
   if (!resultado) {
@@ -20,7 +21,7 @@
 
 
 export function getCVConfig(cv) {
-  if (!cv) {
+  if (cv == null || cv.cv == null) {
     return {
       icon: "neutral",
       color: "gray",
@@ -28,26 +29,30 @@ export function getCVConfig(cv) {
     };
   }
 
-  switch (cv.tipo) {
+  const valor = cv.cv; // 👈 AQUI está a chave
+  const tipo = classificarCV(valor);
+
+  switch (tipo) {
     case "Muito Estável":
-      return { icon: "activity", color: "green", texto: `${cv.cv}%` };
+      return { icon: "activity", color: "green", texto: `${tipo} (${valor}%)` };
 
     case "Estável":
-      return { icon: "activity", color: "limegreen", texto: `${cv.cv}%` };
+      return { icon: "activity", color: "limegreen", texto: `${tipo} (${valor}%)` };
 
     case "Moderado":
-      return { icon: "activity", color: "orange", texto: `${cv.cv}%` };
+      return { icon: "activity", color: "orange", texto: `${tipo} (${valor}%)` };
 
     case "Variável":
-      return { icon: "rain", color: "orange", texto: `${cv.cv}%` };
+      return { icon: "rain", color: "orange", texto: `${tipo} (${valor}%)` };
 
     case "Muito Variável":
-      return { icon: "rain", color: "red", texto: `${cv.cv}%` };
+      return { icon: "rain", color: "red", texto: `${tipo} (${valor}%)` };
 
     default:
       return { icon: "neutral", color: "gray", texto: "--" };
   }
 };
+
 
 export function formatarStatusTexto(status) {
   switch (status) {

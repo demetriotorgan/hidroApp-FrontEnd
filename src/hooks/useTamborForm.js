@@ -1,7 +1,8 @@
 import { useState } from "react";
 import api from "../services/api";
 import { getDataAtual, getHoraAtual } from "../services/dataService";
-import { calcularIQA, validarIQA } from "../services/iqaService";
+import { calcularIQA, validarIQA} from "../services/iqa";
+
 
 export default function useTamborForm() {
     const [loading, setLoading] = useState(false);
@@ -26,8 +27,12 @@ export default function useTamborForm() {
         obs: ""
     });
 
+    function obterIQA() {
+    return calcularIQA(formData);
+}
+
     function calcularIQAAtual() {
-        const resultado = calcularIQA(formData);
+        const resultado = obterIQA();
         if (resultado.status === "incompleto") {
             setIqa(resultado);
             return resultado;
@@ -49,7 +54,7 @@ export default function useTamborForm() {
         const dataISO = new Date(`${formData.data}T00:00:00`).toISOString();
         const horaISO = new Date(`${formData.data}T${formData.hora}:00`).toISOString();
 
-        const resultadoIQA = calcularIQA(formData);
+        const resultadoIQA = obterIQA();
 
         return {
             data: dataISO,
@@ -81,7 +86,7 @@ export default function useTamborForm() {
     }
 
     async function salvarRegistro() {
-        const validacao = validarIQA(formData);
+        const validacao = validarIQA(resultado);
          if (!validacao.valido) {
         alert(validacao.mensagem);
 
@@ -119,7 +124,7 @@ export default function useTamborForm() {
             ph: "",
             cloro: "",
             acido: "",
-            tipoAcido: "",
+            tipoAcido: formData.tipoAcido?.toLowerCase() || "",
             aguaSanitaria: "",
             lavagensDoDia: "",
             cor: "transparente",

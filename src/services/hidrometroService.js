@@ -17,28 +17,24 @@ export function dataUltimoRegistro(dados) {
 }
 
 export function mediaConsumo(dados) {
-
-  if (!dados || dados.length < 2) {
-    return 0;
-  }
-
+  // console.log("TOTAL REGISTROS:", dados.length);
   let somaConsumo = 0;
-  let totalIntervalos = 0;
 
   for (let i = 0; i < dados.length - 1; i++) {
 
-    const leituraAtual = dados[i].leitura;
-    const leituraAnterior = dados[i + 1].leitura;
+    const atual = dados[i].leitura;
+    const anterior = dados[i + 1].leitura;
 
-    const consumo = leituraAtual - leituraAnterior;
-
+    const consumo = atual - anterior;
+    // console.log(`Consumo ${i}:`, consumo * 10, "L");
     somaConsumo += consumo;
-    totalIntervalos++;
-
   }
 
-  return Number((somaConsumo / totalIntervalos).toFixed(2));
-}
+  const media = (somaConsumo * 10) / (dados.length - 1);
+
+  // console.log("MÉDIA FINAL:", media);
+  return Number(media.toFixed(2));
+};
 
 export function calcularConsumoUltimoRegistro(registros){
   if(!registros || registros.length <2){
@@ -50,7 +46,7 @@ export function calcularConsumoUltimoRegistro(registros){
 
   const consumo = ultimo.leitura - anterior.leitura;
 
-  return consumo >=0 ? consumo : 0;
+  return consumo >=0 ? consumo * 10 : 0;
 }
 
 // services/hidrometroService.js
@@ -85,7 +81,7 @@ export function gerarDadosTabela(registros) {
 
     return {
       dia,
-      consumo: consumo >= 0 ? consumo : 0,
+      consumo: consumo >= 0 ? consumo * 10 : 0,
       leitura: item.leitura,
       data: item.data,
     };
@@ -108,7 +104,7 @@ export function totalConsumoAcumulado(registros) {
 
   const total = ultimaLeitura - primeiraLeitura;
 
-  return total >= 0 ? total : 0;
+  return total >= 0 ? total * 10 : 0;
 }
 
 export function maiorConsumo(registros) {
@@ -131,7 +127,7 @@ export function maiorConsumo(registros) {
     }
   }
 
-  return maior;
+  return maior * 10;
 }
 
 export function formatarDataSemFuso(dataISO) {
@@ -182,7 +178,7 @@ function calcularConsumos(dados) {
     const leituraAtual = dados[i].leitura;
     const leituraAnterior = dados[i + 1].leitura;
 
-    const consumo = leituraAtual - leituraAnterior;
+    const consumo = (leituraAtual - leituraAnterior)*10;
 
     consumos.push(consumo);
   }
@@ -190,7 +186,7 @@ function calcularConsumos(dados) {
   return consumos;
 };
 
-function classificarCV(cv) {
+export function classificarCV(cv) {
   if (cv < 10) return 'Muito Estável';
   if (cv < 20) return 'Estável';
   if (cv < 30) return 'Moderado';
@@ -330,27 +326,27 @@ export function calcularLinearidadeConsumo(dados) {
   if (r >= 0.98) {
     classificacao = "muito linear";
     nivel = "Excelente";
-    cor = "verde";
+    cor = "green";
     descricao = "Consumo extremamente estável e previsível";
   } else if (r >= 0.95) {
     classificacao = "linear";
     nivel = "Estável";
-    cor = "verde";
+    cor = "green";
     descricao = "Consumo dentro do comportamento esperado";
   } else if (r >= 0.9) {
     classificacao = "moderado";
     nivel = "Atenção leve";
-    cor = "amarelo";
+    cor = "gold";
     descricao = "Pequenas variações no padrão de consumo";
   } else if (r >= 0.8) {
     classificacao = "Irregular";
     nivel = "alerta";
-    cor = "laranja";
+    cor = "orange";
     descricao = "Consumo com variações relevantes";
   } else {
     classificacao = "não linear";
     nivel = "crítico";
-    cor = "vermelho";
+    cor = "red";
     descricao = "Consumo fora do padrão esperado";
   }
 

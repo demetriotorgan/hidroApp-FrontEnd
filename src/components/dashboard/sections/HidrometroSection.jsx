@@ -52,7 +52,7 @@ function HidrometroSection({ data }) {
           <h3>{data.diaMaiorConsumo}</h3>
         </DashboardCard>
 
-        <DashboardCard title="Tendência">
+        <DashboardCard title="Tendência em relação ao consumo anterior">
           <h3 style={{ color: tendencia.color }}>
             {iconMap[tendencia.icon]}
             {tendencia.texto}
@@ -76,7 +76,10 @@ function HidrometroSection({ data }) {
           <small>{config.label}</small>
         </DashboardCard>
 
-        <DashboardCard title="Estabilidade (~r)">
+        <DashboardCard title="Estabilidade (~r)" style={{
+          borderLeft: `5px solid ${data.estabilidadeDoConsumo.cor}`,
+          boxShadow: `-2px 0 8px ${data.estabilidadeDoConsumo.cor}33`
+        }}>
           <h3>{data.estabilidadeDoConsumo.coeficiente}</h3>
           <small>{data.estabilidadeDoConsumo.nivel}</small>
         </DashboardCard>

@@ -27,7 +27,7 @@ function GraficoConsumo({ dados }) {
       consumo.push({
         leituraNumero: i,
         data: new Date(atual.data).toLocaleDateString("pt-BR"),
-        consumo: atual.leitura - anterior.leitura
+        consumo: (atual.leitura - anterior.leitura) * 10
       });
 
     }
@@ -52,6 +52,7 @@ function GraficoConsumo({ dados }) {
         />
 
         <YAxis
+          domain={[0, 'dataMax + 100']}
           label={{
             value: "Consumo (L)",
             angle: -90,

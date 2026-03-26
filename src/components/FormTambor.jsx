@@ -3,7 +3,7 @@ import { Save } from "lucide-react";
 import useTamborForm from "../hooks/useTamborForm";
 import LoadingModal from "./LoadingModal";
 import { CheckCircle, AlertTriangle, XCircle } from "lucide-react";
-import { getIqaMeta } from "../services/iqaService";
+import { getIqaMeta } from "../services/iqa/meta";
 
 export default function FormTambor({ onSuccess }) {
     const { formData, handleChange, salvarRegistro, resetForm, loading, iqa, calcularIQAAtual } = useTamborForm();
@@ -14,7 +14,7 @@ export default function FormTambor({ onSuccess }) {
 
         if (resultado.success) {
             alert("Registro salvo com sucesso!");
-            resetForm();            
+            resetForm();
             onSuccess && onSuccess();
         } else {
             alert("Erro ao salvar registro");
@@ -273,6 +273,17 @@ export default function FormTambor({ onSuccess }) {
                         )}
                     </div>
                 )}
+
+                {iqa?.insights?.length > 0 && (
+                    <div className="iqa-insights">
+                        {iqa.insights.map((item, index) => (
+                            <div key={index} className={`insight ${item.tipo}`}>
+                                {item.mensagem}
+                            </div>
+                        ))}
+                    </div>
+                )}
+
                 <button type="submit" className="form-button">
                     Salvar Registro <Save />
                 </button>
