@@ -1,5 +1,5 @@
 import useHidrometros from "./useHidrometros";
-import { totalDeRegistros, mediaConsumo, maiorConsumo, totalConsumoAcumulado, calcularConsumoUltimoRegistro, dataUltimoRegistro, calcularVariacaoConsumo, calcularCVConsumo, percentualComparacaoConsumo, calcularLinearidadeConsumo, calcularPosicaoRegua } from "../services/hidrometroService";
+import { totalDeRegistros, mediaConsumo, maiorConsumo, totalConsumoAcumulado, calcularConsumoUltimoRegistro, dataUltimoRegistro, calcularVariacaoConsumo, calcularCVConsumo, percentualComparacaoConsumo, calcularLinearidadeConsumo, calcularPosicaoRegua, calcularDiasMonitoramento, calcularCoeficienteA } from "../services/hidrometroService";
 import { usePluviometro } from "./usePluviometro ";
 import { calcularDiasSemChuva, mediaMmChuva, obterMmUltimaChuva, totalDeRegistrosDePluviometro } from "../services/pluviometroService";
 import { useEffect } from "react";
@@ -18,6 +18,7 @@ export function useDashboardData() {
     const cvConsumo = calcularCVConsumo(dados);
     const percentualAtualMaiorConsumo = percentualComparacaoConsumo(dados);
     const estabilidadeDoConsumo = calcularLinearidadeConsumo(dados);
+    const diasDeConsumo = calcularDiasMonitoramento(dados);
 
     //Dados do Pluviometro
     const { listarPluviometros, registros } = usePluviometro();
@@ -41,7 +42,10 @@ export function useDashboardData() {
         diasDesdeTroca: null
     };
 
+    //Dados para o modelo
+    const viabilidadeDosDados = calcularCoeficienteA(dados);   
 
+    
     return {
         loading,
         hidrometro: {
@@ -55,7 +59,8 @@ export function useDashboardData() {
             cvConsumo,
             percentualAtualMaiorConsumo,
             estabilidadeDoConsumo,
-            regua
+            regua,
+            diasDeConsumo
         },
         pluviometro: {
             diasSemChuva,
@@ -63,6 +68,9 @@ export function useDashboardData() {
             total: totalDeRegistrosDeChuva,
             media: mmMedioDeChuva
         },
-        qualidadeAgua
+        qualidadeAgua,
+        modelo:{
+            viabilidadeDosDados
+        }
     };
 }

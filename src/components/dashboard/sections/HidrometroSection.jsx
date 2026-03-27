@@ -29,11 +29,12 @@ function HidrometroSection({ data }) {
       <div className="dashboard-cards">
 
         <DashboardCard title="Total de Registros">
-          <h3>{data.total}</h3>
+          <h3>{data.total}</h3>          
         </DashboardCard>
 
         <DashboardCard title="Última Leitura">
           <h3>{data.ultimaData || "Sem registros"}</h3>
+          <small>Dias de Consumo: {data.diasDeConsumo.diasConsumo}</small>          
         </DashboardCard>
 
         <DashboardCard title="Média de Consumo (L)">

@@ -36,8 +36,8 @@ export function mediaConsumo(dados) {
   return Number(media.toFixed(2));
 };
 
-export function calcularConsumoUltimoRegistro(registros){
-  if(!registros || registros.length <2){
+export function calcularConsumoUltimoRegistro(registros) {
+  if (!registros || registros.length < 2) {
     return 0;
   }
 
@@ -46,7 +46,7 @@ export function calcularConsumoUltimoRegistro(registros){
 
   const consumo = ultimo.leitura - anterior.leitura;
 
-  return consumo >=0 ? consumo * 10 : 0;
+  return consumo >= 0 ? consumo * 10 : 0;
 }
 
 // services/hidrometroService.js
@@ -139,36 +139,36 @@ export function formatarDataSemFuso(dataISO) {
 };
 
 export function calcularVariacaoConsumo(registros) {
-    if (!registros || registros.length < 3) {
-        return null; // precisa de pelo menos 3 registros
-    }
+  if (!registros || registros.length < 3) {
+    return null; // precisa de pelo menos 3 registros
+  }
 
-    // Ordena por data (mais recente primeiro)
-    const ordenados = [...registros].sort(
-        (a, b) => new Date(b.data) - new Date(a.data)
-    );
+  // Ordena por data (mais recente primeiro)
+  const ordenados = [...registros].sort(
+    (a, b) => new Date(b.data) - new Date(a.data)
+  );
 
-    const atual = ordenados[0];
-    const anterior = ordenados[1];
-    const anterior2 = ordenados[2];
+  const atual = ordenados[0];
+  const anterior = ordenados[1];
+  const anterior2 = ordenados[2];
 
-    // Consumos (diferença entre leituras)
-    const consumoAtual = atual.leitura - anterior.leitura;
-    const consumoAnterior = anterior.leitura - anterior2.leitura;
+  // Consumos (diferença entre leituras)
+  const consumoAtual = atual.leitura - anterior.leitura;
+  const consumoAnterior = anterior.leitura - anterior2.leitura;
 
-    if (consumoAnterior === 0) {
-        return null; // evita divisão por zero
-    }
+  if (consumoAnterior === 0) {
+    return null; // evita divisão por zero
+  }
 
-    const variacao =
-        ((consumoAtual - consumoAnterior) / consumoAnterior) * 100;
+  const variacao =
+    ((consumoAtual - consumoAnterior) / consumoAnterior) * 100;
 
-    return {
-        consumoAtual,
-        consumoAnterior,
-        variacao: Number(variacao.toFixed(1)), // 1 casa decimal
-        tipo: variacao > 0 ? "aumento" : variacao < 0 ? "queda" : "estavel"
-    };
+  return {
+    consumoAtual,
+    consumoAnterior,
+    variacao: Number(variacao.toFixed(1)), // 1 casa decimal
+    tipo: variacao > 0 ? "aumento" : variacao < 0 ? "queda" : "estavel"
+  };
 };
 
 function calcularConsumos(dados) {
@@ -178,7 +178,7 @@ function calcularConsumos(dados) {
     const leituraAtual = dados[i].leitura;
     const leituraAnterior = dados[i + 1].leitura;
 
-    const consumo = (leituraAtual - leituraAnterior)*10;
+    const consumo = (leituraAtual - leituraAnterior) * 10;
 
     consumos.push(consumo);
   }
@@ -400,3 +400,186 @@ export function calcularPosicaoRegua(media, consumoAtual, limitePercentual = 50)
     status
   };
 }
+
+//Total de dias Registrados
+// services/hidrometroService.js
+
+export function calcularDiasMonitoramento(dados) {
+  if (!dados || dados.length === 0) {
+    return {
+      diasMonitorados: 0,
+      diasConsumo: 0
+    };
+  }
+
+  // Garante ordenação por data crescente
+  const ordenado = [...dados].sort(
+    (a, b) => new Date(a.data) - new Date(b.data)
+  );
+
+  const diasMonitorados = ordenado.length;
+
+  // Consumo vem das diferenças entre leituras
+  const diasConsumo = diasMonitorados > 1
+    ? diasMonitorados - 1
+    : 0;
+
+  return {
+    diasMonitorados,
+    diasConsumo
+  };
+};
+
+// services/hidrometroService.js
+
+export function calcularCoeficienteA(dados) {
+  const { diasMonitorados } = calcularDiasMonitoramento(dados);
+
+  // Validação de dados mínimos
+  if (diasMonitorados <= 5) {
+    return {
+      status: "insuficiente",
+      diasMonitorados,
+      valor: null,
+      mensagem: `Esperando dados (${diasMonitorados} registros disponíveis)`
+    };
+  }
+
+  // 📊 Obtém consumo acumulado
+  const { acumulado } = consumoAcumulado(dados);
+
+  if (!acumulado || acumulado.length === 0) {
+    return {
+      status: "erro",
+      diasMonitorados,
+      valor: null,
+      mensagem: "Não foi possível calcular o consumo acumulado"
+    };
+  }
+
+  // 📐 Regressão linear com intercepto zero
+  let numerador = 0;
+  let denominador = 0;
+
+  for (let i = 0; i < acumulado.length; i++) {
+    const d = i + 1;
+    const V = acumulado[i];
+
+    numerador += d * V;
+    denominador += d * d;
+  }
+
+  const a = denominador !== 0 ? numerador / denominador : 0;
+  const confiabilidade = classificarConfiabilidadeModelo(dados);
+
+  return {
+    status: "ok",
+    diasMonitorados,
+    valor: a,
+    confiabilidade: confiabilidade.confiabilidade,
+    nivel: confiabilidade.nivel,
+    cor: confiabilidade.cor,
+    mensagem: confiabilidade.mensagem,
+  };
+};
+
+//Função que retorna array de acumulo de consumo e acumulo final
+export function consumoAcumulado(dados) {
+  if (!dados || dados.length < 2) {
+    return {
+      acumulado: [],
+      total: 0
+    };
+  }
+
+  // Ordena por data crescente
+  const ordenado = [...dados].sort(
+    (a, b) => new Date(a.data) - new Date(b.data)
+  );
+
+  const acumulado = [];
+  let soma = 0;
+
+  for (let i = 1; i < ordenado.length; i++) {
+    const atual = ordenado[i].leitura;
+    const anterior = ordenado[i - 1].leitura;
+
+    // Consumo do dia (multiplicado por 10 como você definiu)
+    const consumo = (atual - anterior) * 10;
+
+    soma += consumo;
+    acumulado.push(soma);
+  }
+
+  return {
+    acumulado, // array: [dia1, dia2, ...]
+    total: soma
+  };
+};
+
+//Confiabilidade do Modelo A
+export function classificarConfiabilidadeModelo(dados) {
+  if (!dados || dados.length < 2) {
+    return {
+      confiabilidade: "baixa",
+      nivel: "Insuficiente",
+      cor: "gray",
+      mensagem: "Dados insuficientes para análise",
+      r: null,
+      cv: null
+    };
+  }
+
+  const resultadoCV = calcularCVConsumo(dados);
+  const resultadoPearson = calcularLinearidadeConsumo(dados);
+
+  if (!resultadoPearson) {
+    return {
+      confiabilidade: "baixa",
+      nivel: "Erro",
+      cor: "gray",
+      mensagem: "Erro ao calcular linearidade",
+      r: null,
+      cv: null
+    };
+  }
+
+  const r = resultadoPearson.coeficiente;
+  const cv = resultadoCV.cv;
+
+  let confiabilidade = "";
+  let nivel = "";
+  let cor = "";
+  let mensagem = "";
+
+  // 🔥 REGRA COMBINADA (Pearson + CV)
+  if (r >= 0.95 && cv <= 20) {
+    confiabilidade = "alta";
+    nivel = "Alta confiabilidade";
+    cor = "green";
+    mensagem = "Modelo muito estável e altamente previsível";
+  }
+  else if (r >= 0.9 && cv <= 40) {
+    confiabilidade = "media";
+    nivel = "Confiabilidade moderada";
+    cor = "gold";
+    mensagem = "Modelo com pequenas variações no consumo";
+  }
+  else {
+    confiabilidade = "baixa";
+    nivel = "Baixa confiabilidade";
+    cor = "red";
+    mensagem = "Modelo instável ou com baixa linearidade";
+  }
+
+  return {
+    confiabilidade,
+    nivel,
+    cor,
+    mensagem,
+    r,
+    cv,
+    detalheLinearidade: resultadoPearson,
+    detalheCV: resultadoCV
+  };
+};
