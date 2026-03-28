@@ -1,0 +1,151 @@
+.modelo-card {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 16px;
+
+  background: #ffffff;
+  color: #1e3a8a; /* azul principal */
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  border: 1px solid #e2e8f0;
+
+  transition: transform 0.2s ease;
+}
+
+.modelo-card:hover {
+  transform: translateY(-3px);
+}
+
+/* HEADER */
+.modelo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.modelo-header h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #64748b; /* cinza elegante */
+}
+
+.modelo-badge {
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* VALOR PRINCIPAL */
+.modelo-main {
+  margin-bottom: 18px;
+}
+
+.modelo-label {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.modelo-valor {
+  font-size: 36px;
+  font-weight: bold;
+  margin-top: 4px;
+  color: #1d4ed8; /* azul destaque */
+}
+
+.modelo-valor span {
+  font-size: 16px;
+  color: #64748b;
+}
+
+/* FORMULA */
+.modelo-formula {
+  background: #f1f5f9;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.modelo-formula code {
+  color: #2563eb;
+  font-family: monospace;
+}
+
+/* FOOTER */
+.modelo-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.modelo-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.modelo-info span {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.modelo-info strong {
+  font-size: 14px;
+  color: #1e3a8a;
+}
+
+/* ERRO */
+.modelo-erro {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 14px;
+  border: 1px solid #fecaca;
+}
+
+/* -------- Card estimativa de custo --------- */
+
+/* CARD DE CUSTO */
+.custo-card {
+  border-left: 5px solid #16a34a; /* verde financeiro */
+}
+
+/* DETALHAMENTO */
+.custo-detalhamento {
+  margin-top: 15px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.custo-faixa {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+
+  font-size: 13px;
+  padding: 6px 8px;
+  border-radius: 8px;
+
+  background: #f8fafc;
+}
+
+.custo-faixa span {
+  color: #1e3a8a;
+  font-weight: 500;
+}
+
+.custo-faixa small {
+  color: #64748b;
+}
+
+.custo-faixa strong {
+  color: #16a34a;
+}

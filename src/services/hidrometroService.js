@@ -583,3 +583,142 @@ export function classificarConfiabilidadeModelo(dados) {
     detalheCV: resultadoCV
   };
 };
+
+
+//Estimativa de Custo do Consumo
+export function calcularCustoEstimado(consumoLitros) {
+  if (!consumoLitros || consumoLitros <= 0) return null;
+
+  // 🔁 Converter litros → m³
+  const consumoM3 = consumoLitros / 1000;
+
+  let restante = consumoM3;
+
+  let agua = 0;
+  let esgoto = 0;
+
+  // 🧱 FAIXA 1 — mínimo até 5m³ (fixo)
+  const minimo = 5;
+
+  if (consumoM3 <= 5) {
+    return {
+      consumoM3: consumoM3.toFixed(2),
+      agua: 53.74,
+      esgoto: 42.99,
+      total: (53.74 + 42.99).toFixed(2),
+      detalhamento: [
+        {
+          faixa: "Mínimo (0–5m³)",
+          volume: consumoM3.toFixed(2),
+          agua: 53.74,
+          esgoto: 42.99
+        }
+      ]
+    };
+  }
+
+  // aplica mínimo completo
+  agua += 53.74;
+  esgoto += 42.99;
+  restante -= minimo;
+
+  const detalhamento = [
+    {
+      faixa: "Mínimo (0–5m³)",
+      volume: 5,
+      agua: 53.74,
+      esgoto: 42.99
+    }
+  ];
+
+  // 🧱 FAIXA 2 — 6 a 10 m³
+  if (restante > 0) {
+    const volumeFaixa = Math.min(restante, 5);
+    const custoAgua = volumeFaixa * 1.66;
+    const custoEsgoto = custoAgua * 0.8;
+
+    agua += custoAgua;
+    esgoto += custoEsgoto;
+
+    detalhamento.push({
+      faixa: "6–10m³",
+      volume: volumeFaixa,
+      agua: custoAgua,
+      esgoto: custoEsgoto
+    });
+
+    restante -= volumeFaixa;
+  }
+
+  // 🧱 FAIXA 3 — 11 a 15 m³
+  if (restante > 0) {
+    const volumeFaixa = Math.min(restante, 5);
+    const custoAgua = volumeFaixa * 9.26;
+    const custoEsgoto = custoAgua * 0.8;
+
+    agua += custoAgua;
+    esgoto += custoEsgoto;
+
+    detalhamento.push({
+      faixa: "11–15m³",
+      volume: volumeFaixa,
+      agua: custoAgua,
+      esgoto: custoEsgoto
+    });
+
+    restante -= volumeFaixa;
+  }
+
+  const total = agua + esgoto;
+
+  return {
+    consumoM3: consumoM3.toFixed(2),
+    agua: agua.toFixed(2),
+    esgoto: esgoto.toFixed(2),
+    total: total.toFixed(2),
+    detalhamento
+  };
+};
+
+
+//Criando o payload da Estimativa
+export function montarEstimativaJSON({ resultado, dados }) {
+  if (!resultado || resultado.erro) return null;
+
+  return {
+    dataCriacao: new Date().toISOString(),
+
+    modelo: {
+      diasEstimados: resultado.dias,
+      coeficienteA: Number(resultado.coeficiente.toFixed(6)),
+      confiabilidade: resultado.confiabilidade,
+      cor: resultado.cor,
+      quantidadeRegistros: dados?.length || 0
+    },
+
+    previsao: {
+      consumoLitros: Number(resultado.consumo.toFixed(2)),
+      consumoM3: Number((resultado.consumo / 1000).toFixed(3))
+    },
+
+    custo: {
+      agua: Number(resultado.custo.agua),
+      esgoto: Number(resultado.custo.esgoto),
+      total: Number(resultado.custo.total),
+
+      detalhamento: resultado.custo.detalhamento.map(item => ({
+        faixa: item.faixa,
+        volumeM3: Number(Number(item.volume).toFixed(3)),
+        agua: Number(item.agua.toFixed(2)),
+        esgoto: Number(item.esgoto.toFixed(2)),
+        total: Number((item.agua + item.esgoto).toFixed(2))
+      }))
+    },
+
+    // 🔥 OPCIONAL (mas MUITO poderoso)
+    snapshotDados: dados?.map(d => ({
+      data: d.data,
+      leitura: d.leitura
+    }))
+  };
+}
