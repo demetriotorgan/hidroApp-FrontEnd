@@ -1,0 +1,114 @@
+.estimativa-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-left: 6px solid #2563eb;
+  transition: 0.2s;
+}
+
+.estimativa-card:hover {
+  transform: translateY(-2px);
+}
+
+.card-header {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2563eb;
+  margin-bottom: 12px;
+}
+
+/* Seções */
+.card-section {
+  margin-top: 12px;
+}
+
+.card-section h3 {
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #1e3a8a;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px 12px;
+  font-size: 14px;
+}
+
+/* Total destaque */
+.total {
+  color: #16a34a;
+}
+
+/* Tag de confiabilidade */
+.tag {
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.tag.gold {
+  background: #facc15;
+  color: #78350f;
+}
+
+.tag.green {
+  background: #22c55e;
+  color: white;
+}
+
+.tag.red {
+  background: #ef4444;
+  color: white;
+}
+
+/* Detalhamento */
+.detalhamento {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.detalhe-item {
+  display: grid;
+  grid-template-columns: 1fr 80px 100px;
+  align-items: center;
+  font-size: 13px;
+  color: #374151;
+  margin-top: 4px;
+}
+
+.detalhe-item:not(:last-child) {
+  border-bottom: 1px dashed #e5e7eb;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2563eb;
+  margin-bottom: 12px;
+}
+
+/* botão delete */
+.delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  transition: 0.2s;
+}
+
+.delete-btn:hover {
+  transform: scale(1.1);
+  color: #dc2626;
+}

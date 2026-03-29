@@ -1,68 +1,19 @@
 import { Save, Sigma } from 'lucide-react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useHidrometros from '../hooks/useHidrometros';
-import { calcularCoeficienteA, calcularCustoEstimado, montarEstimativaJSON } from '../services/hidrometroService';
 import './ModeloCard.css'
-import api from '../services/api';
+import useEstimativa from '../hooks/useEstimativa';
+import useEstimativasSalvas from '../hooks/useEstimativasSalvas';
+import EstimativaCard from './EstimativaCard';
 
 const FormModelo = () => {
     const { dados } = useHidrometros();
-    const [resultado, setResultado] = useState(null);
-    const [salvandoEstimativa, setSalvandoEstimativa] = useState(false);
-    const [form, setForm] = useState({
-        dias: ""
-    });
+    const { form, resultado, salvando, handleChange, calcular, salvar } = useEstimativa(dados);
+    const { estimativas, buscar, carregandoEstimativas,deletarEstimativa } = useEstimativasSalvas();
 
-    function handleChange(e) {
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    function handleCalcularConsumo() {
-        const dias = Number(form.dias);
-        if (!dias || dias <= 0) return;
-        const modelo = calcularCoeficienteA(dados);
-
-        if (modelo.status !== "ok") {
-            setResultado({
-                erro: modelo.mensagem
-            });
-            return
-        }
-        const consumoEstimado = modelo.valor * dias;
-        const custo = calcularCustoEstimado(consumoEstimado);
-
-        setResultado({
-            dias,
-            consumo: consumoEstimado,
-            coeficiente: modelo.valor,
-            confiabilidade: modelo.confiabilidade,
-            cor: modelo.cor,
-            custo
-        });
-    };
-
-    async function handleSalvarEstimativa() {
-        const payload = montarEstimativaJSON({ resultado, dados });
-
-        if (!payload) return;
-        // console.log("JSON para API:", payload);
-        const confirmar = window.confirm("Deseja realmente salvar esta estimativa?");
-        if(!confirmar) return;
-
-        try {
-            setSalvandoEstimativa(true);
-            const response = await api.post("/saveEstimativa", payload);
-            alert('Estimativa salva com sucesso!');            
-        } catch (error) {
-            console.log('Erro ao salvar estimativa: ', error);
-            alert('Erro ao salvar estimativa')
-        }finally{
-            setSalvandoEstimativa(false);
-        }
-    };
+    useEffect(() => {
+        buscar();
+    }, []);
 
     return (
         <>
@@ -81,7 +32,7 @@ const FormModelo = () => {
                 <button
                     className='form-button'
                     type='button'
-                    onClick={handleCalcularConsumo}
+                    onClick={calcular}
                 >
                     <Sigma size={18} />
                     Calcular
@@ -174,13 +125,25 @@ const FormModelo = () => {
                     <button
                         className='form-button'
                         type='button'
-                        onClick={handleSalvarEstimativa}
+                        onClick={async () => {
+                            await salvar();
+                            buscar();
+                        }}
                     >
                         <Save size={18} />
-                        {salvandoEstimativa ? "Salvando..." : "Salvar Estimativa"}
+                        {salvando ? "Salvando..." : "Salvar Estimativa"}
                     </button>
                 </div>
             )}
+            <div>
+                {estimativas.map((item) => (
+                    <EstimativaCard
+                        key={item._id} 
+                        estimativa={item} 
+                        onDelete={deletarEstimativa}
+                        />
+                ))}
+            </div>
         </>
     )
 }
