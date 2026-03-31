@@ -9,10 +9,12 @@ import QualidadeModeloCard from './QualidadeModeloCard';
 import { montarPayloadAnalise } from '../services/hidrometroService';
 import api from '../services/api'
 import LoadingModal from "../components/LoadingModal";
+import CardAnalise from './CardAnalise';
 
 const FormPrevisao = () => {
     const { dados } = useHidrometros();
     const [salvando, setSalvando] = useState(false);
+    const [analises, setAnalises] = useState([]);
     const [form, setForm] = useState({
         dataInicial: '',
         dataFinal: '',
@@ -87,6 +89,7 @@ const FormPrevisao = () => {
             if (!confirmar) return;
             setSalvando(true)
             await api.post("/saveAnaliseComparativa", payload);
+            await carregarAnalises();
             alert("Analise Salva com sucesso");
         } catch (error) {
             console.error(error);
@@ -94,7 +97,36 @@ const FormPrevisao = () => {
         } finally {
             setSalvando(false);
         }
+    };
+
+    async function carregarAnalises() {
+        try {
+            const response = await api.get("/listarAnalisesComparativas");
+            setAnalises(response.data.dados);
+        } catch (error) {
+            console.error("Erro ao buscar análises", error);
+        }
+    };
+
+    async function handleDelete(id) {
+        try {
+            const confirmar = window.confirm('Deseja realmente excluir esta análise?');
+            if (!confirmar) return;
+
+            await api.delete(`/deletarAnaliseComparativa/${id}`);
+            setAnalises(prev => prev.filter(item => item._id !== id));
+            alert("Análise removida com sucesso");
+
+        } catch (error) {
+            console.error("Erro ao deletar análise:", error);
+            alert("Erro ao deletar análise");
+        }
+
     }
+
+    useEffect(() => {
+        carregarAnalises();
+    }, []);
 
     return (
         <>
@@ -151,6 +183,22 @@ const FormPrevisao = () => {
                 <ChartColumnBig size={18} />
                 {salvando ? "Salvando..." : "Salvar Previsão"}
             </button>
+
+            <div className="lista-analises">
+                {analises.length === 0 ? (
+                    <p style={{ marginTop: "20px" }}>
+                        Nenhuma análise salva ainda.
+                    </p>
+                ) : (
+                    analises.map((item) => (
+                        <CardAnalise
+                            key={item._id}
+                            analise={item}
+                            onDelete={handleDelete}
+                        />
+                    ))
+                )}
+            </div>
         </>
     )
 }

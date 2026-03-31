@@ -1,0 +1,60 @@
+.card-analise {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #e3e8f0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.card-header h3 {
+  color: #1e3a8a;
+  font-size: 18px;
+}
+
+.btn-delete {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #ef4444;
+}
+
+.secao {
+  border-top: 1px solid #f1f5f9;
+  padding-top: 10px;
+  margin-top: 10px;
+}
+
+.secao h4 {
+  color: #2563eb;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.secao p {
+  font-size: 13px;
+  margin: 2px 0;
+  color: #334155;
+}
+
+/* 🔥 Destaque principal */
+.destaque {
+  background: #eff6ff;
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid #bfdbfe;
+}
+
+.lista-analises {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
