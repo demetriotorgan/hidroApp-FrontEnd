@@ -1,18 +1,19 @@
 import { ArrowBigLeft } from 'lucide-react';
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import FormModelo from '../components/FormModelo';
+import FormPrevisao from '../components/FormPrevisao';
 
-const Modelo = () => {
+const Previsao = () => {
     const navigate = useNavigate();
     return (
         <>
             <h1><ArrowBigLeft
                 onClick={() => navigate("/")}
-            /> Estimativas do Modelo</h1>
-            <FormModelo />
+            /> Previsão do Modelo</h1>
+            <FormPrevisao />
         </>
+
     )
 }
 
-export default Modelo
+export default Previsao

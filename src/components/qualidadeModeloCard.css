@@ -1,0 +1,60 @@
+.card-qualidade {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-left: 6px solid #7c3aed; /* roxo */
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #4c1d95;
+  margin-bottom: 16px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.card-item {
+  background: #f1f5f9;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-item span {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.card-item strong {
+  font-size: 1.1rem;
+  color: #0f172a;
+}
+
+/* Destaques por qualidade */
+.card-item.destaque {
+  color: white;
+}
+
+.card-item.excelente {
+  background: #16a34a; /* verde forte */
+}
+
+.card-item.boa {
+  background: #22c55e; /* verde */
+}
+
+.card-item.regular {
+  background: #f59e0b; /* amarelo */
+}
+
+.card-item.ruim {
+  background: #ef4444; /* vermelho */
+}

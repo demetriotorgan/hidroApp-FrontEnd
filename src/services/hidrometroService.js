@@ -721,4 +721,157 @@ export function montarEstimativaJSON({ resultado, dados }) {
       leitura: d.leitura
     }))
   };
-}
+};
+
+//Consumo entre duas datas
+export function calcularConsumoNoPeriodo(registros, dataInicial, dataFinal) {
+  if (!registros || registros.length === 0) return null;
+
+  const ordenados = [...registros].sort(
+    (a, b) => new Date(a.data) - new Date(b.data)
+  );
+
+  const inicio = new Date(dataInicial + "T00:00:00");
+  const fim = new Date(dataFinal + "T23:59:59");
+
+  const dentroDoPeriodo = ordenados.filter(r => {
+    const data = new Date(r.data);
+    return data >= inicio && data <= fim;
+  });
+
+  if (dentroDoPeriodo.length < 2) return null;
+
+  const registroInicial = ordenados
+    .filter(r => new Date(r.data) <= inicio)
+    .pop();
+  const registroFinal = ordenados
+    .filter(r => new Date(r.data) <= fim)
+    .pop();
+
+  if (!registroInicial || !registroFinal) return null;
+
+  const consumoUnidades = registroFinal.leitura - registroInicial.leitura;
+
+  if (consumoUnidades < 0) {
+    throw new Error("Leitura final menor que inicial");
+  }
+
+  const consumoLitros = consumoUnidades * 10;
+
+  return {
+    consumoUnidades,
+    consumoLitros,
+    leituraInicial: registroInicial.leitura,
+    leituraFinal: registroFinal.leitura,
+    dataInicial: registroInicial.data,
+    dataFinal: registroFinal.data
+  };
+};
+
+//Função que calcula o consumo estimado usando o modelo de coeficiente a
+export function calcularConsumoEstimado(dados, dias) {
+  const modelo = calcularCoeficienteA(dados);
+
+  if (modelo.status !== "ok") {
+    return {
+      erro: modelo.mensagem
+    };
+  }
+
+  const consumo = modelo.valor * dias;
+  const custo = calcularCustoEstimado(consumo);
+
+  return {
+    dias,
+    consumo,
+    coeficiente: modelo.valor,
+    confiabilidade: modelo.confiabilidade,
+    cor: modelo.cor,
+    custo
+  };
+};
+
+
+//Função que monta payload de análise comparativa em um período
+export function montarPayloadAnalise({
+  form,
+  consumoDoPeriodo,
+  estimativa,
+  comparacao,
+  dados
+}) {
+  try {
+    // 🚨 Validações essenciais
+    if (!form || !consumoDoPeriodo || !estimativa || !comparacao) {
+      return null;
+    }
+
+    if (estimativa.erro) {
+      return null;
+    }
+
+    // 📅 Datas
+    const dataCriacao = new Date().toISOString();
+
+    // 📊 Derivações inteligentes
+    const erro = comparacao.erroPercentual;
+    const erroAbs = Math.abs(erro);
+
+    const acuracia = Math.max(0, 100 - erroAbs);
+
+    let tendencia = "preciso";
+    if (comparacao.diferenca > 0) tendencia = "superestimando";
+    if (comparacao.diferenca < 0) tendencia = "subestimando";
+
+    let classificacao = "ruim";
+    if (erroAbs <= 5) classificacao = "excelente";
+    else if (erroAbs <= 10) classificacao = "boa";
+    else if (erroAbs <= 20) classificacao = "regular";
+
+    // 📦 Montagem do payload
+    const payload = {
+      dataCriacao,
+
+      periodo: {
+        dataInicial: form.dataInicial,
+        dataFinal: form.dataFinal,
+        quantidadeDias: Number(form.quantidadeDias)
+      },
+
+      consumoReal: {
+        litros: consumoDoPeriodo.consumoLitros,
+        unidades: consumoDoPeriodo.consumoUnidades,
+        leituraInicial: consumoDoPeriodo.leituraInicial,
+        leituraFinal: consumoDoPeriodo.leituraFinal
+      },
+
+      modelo: {
+        consumoEstimado: estimativa.consumo.toFixed(2),
+        coeficiente: estimativa.coeficiente,
+        confiabilidade: estimativa.confiabilidade,
+        custoEstimado: Number(estimativa.custo.total)
+      },
+
+      comparacao: {
+        diferenca: comparacao.diferenca.toFixed(2),
+        erroPercentual: erro,
+        acuracia,
+        tendencia,
+        classificacao
+      },
+
+      metadata: {
+        totalRegistros: dados?.length || 0,
+        versaoModelo: "v1"
+      }
+    };
+
+    return payload;
+
+  } catch (error) {
+    console.error("Erro ao montar payload de análise:", error);
+    return null;
+  }
+};
+
+

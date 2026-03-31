@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   calcularCoeficienteA,
+  calcularConsumoEstimado,
   calcularCustoEstimado,
   montarEstimativaJSON
 } from "../services/hidrometroService";
@@ -21,25 +22,9 @@ export default function useEstimativa(dados) {
   function calcular() {
     const dias = Number(form.dias);
     if (!dias || dias <= 0) return;
-
-    const modelo = calcularCoeficienteA(dados);
-
-    if (modelo.status !== "ok") {
-      setResultado({ erro: modelo.mensagem });
-      return;
-    }
-
-    const consumo = modelo.valor * dias;
-    const custo = calcularCustoEstimado(consumo);
-
-    setResultado({
-      dias,
-      consumo,
-      coeficiente: modelo.valor,
-      confiabilidade: modelo.confiabilidade,
-      cor: modelo.cor,
-      custo
-    });
+    
+    const resultado = calcularConsumoEstimado(dados, dias)
+    setResultado(resultado);
   }
 
   async function salvar() {
