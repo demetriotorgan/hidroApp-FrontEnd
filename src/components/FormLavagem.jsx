@@ -6,10 +6,10 @@ import LoadingModal from './LoadingModal';
 const FormLavagem = ({ form, salvando, handleChange, handleSubmit }) => {
     return (
         <>
-         <LoadingModal
-        isOpen={salvando}
-        message="Salvando Registro..."
-      />
+            <LoadingModal
+                isOpen={salvando}
+                message="Salvando Registro..."
+            />
             <form className='form-container' onSubmit={handleSubmit}>
                 <div className='form-group'>
                     <label>Data
@@ -26,6 +26,7 @@ const FormLavagem = ({ form, salvando, handleChange, handleSubmit }) => {
                             className='form-input'
                             type='text'
                             name='obs'
+                            placeholder='Descrição da lavagem'
                             value={form.obs || ""}
                             onChange={handleChange}
                         />
@@ -35,6 +36,7 @@ const FormLavagem = ({ form, salvando, handleChange, handleSubmit }) => {
                             className='form-input'
                             type='number'
                             name='pesoRoupas'
+                            placeholder='Peso da roupa'
                             value={form.pesoRoupas}
                             onChange={handleChange}
                         />
@@ -63,11 +65,21 @@ const FormLavagem = ({ form, salvando, handleChange, handleSubmit }) => {
                             <option value="alto">Alto</option>
                         </select>
                     </label>
+                    <label>Litros(L)
+                        <input
+                            className='form-input'
+                            type='number'
+                            name='litros'
+                            value={form.litros}
+                            placeholder='Água usada na lavagem'
+                            onChange={handleChange} />
+                    </label>
                     <label>Sabão(g)
                         <input
                             className='form-input'
                             type='number'
                             name='sabao'
+                            placeholder='Quantidade em gramas'
                             value={form.sabao}
                             onChange={handleChange}
                         />
@@ -77,6 +89,7 @@ const FormLavagem = ({ form, salvando, handleChange, handleSubmit }) => {
                             className='form-input'
                             type='number'
                             name='amaciante'
+                            placeholder='Quantidade em gramas'
                             value={form.amaciante}
                             onChange={handleChange}
                         />
@@ -93,13 +106,14 @@ const FormLavagem = ({ form, salvando, handleChange, handleSubmit }) => {
                             <option value="curto">Curto</option>
                         </select>
                     </label>
-                    <label>Enchague
-                        <input 
-                        className='form-input'
-                        type='number'
-                        name='enchague'
-                        value={form.enchague}
-                        onChange={handleChange}
+                    <label>Enchague(L)
+                        <input
+                            className='form-input'
+                            type='number'
+                            name='enchague'
+                            value={form.enchague}
+                            placeholder='Água usada no enchague'
+                            onChange={handleChange}
                         />
                     </label>
                 </div>

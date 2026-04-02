@@ -17,6 +17,7 @@ export function useLavagem() {
         pesoRoupas: '',
         tipoLavagem: 'leve',
         nivelMaquina: 'baixo',
+        litros:'',
         sabao: '',
         amaciante: '',
         modoLavagem: 'longo',

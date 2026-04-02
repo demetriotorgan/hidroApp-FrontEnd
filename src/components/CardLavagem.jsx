@@ -80,10 +80,14 @@ const CardLavagem = ({ lavagem, onDelete, excluindo }) => {
                         <small>Amaciante</small>
                         <span>{lavagem.amaciante} ml</span>
                     </div>
-
                     <div className="card-item">
                         <Waves size={16} />
-                        <small>Enchague</small>
+                        <small>Litros(L)</small>
+                        <span>{lavagem.litros}L</span>
+                    </div>
+                    <div className="card-item">
+                        <Waves size={16} />
+                        <small>Enchague(L)</small>
                         <span>{lavagem.enchague}L</span>
                     </div>
 
