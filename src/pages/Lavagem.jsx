@@ -8,22 +8,29 @@ import CardLavagem from '../components/CardLavagem';
 
 const Lavagem = () => {
   const navigate = useNavigate();
-  const lavagemHook = useLavagem(); 
+  const lavagemHook = useLavagem();
 
   return (
     <>
       <h1><ArrowBigLeft
         onClick={() => navigate("/")}
       /> Registro de Lavagem</h1>
-      
+
       <FormLavagem {...lavagemHook} />
-      
+
       <h2>Lavagens Realizadas</h2>
-      {lavagemHook.lavagens.map((lavagem) => (
-        <CardLavagem
-          key={lavagem._id}
-          lavagem={lavagem} />
-      ))}
+      {lavagemHook.lavagens.length === 0 ? (
+        <p className="empty-message">Aguardando registros...</p>
+      ) : (
+        lavagemHook.lavagens.map((lavagem) => (
+          <CardLavagem
+            key={lavagem._id}
+            lavagem={lavagem}
+            onDelete={lavagemHook.deletarLavagem}
+            excluindo={lavagemHook.excluindoLavagem}
+          />
+        ))
+      )}
     </>
   )
 }

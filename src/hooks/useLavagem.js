@@ -5,6 +5,7 @@ import { getDataAtual } from '../services/dataUtils';
 export function useLavagem() {
     const [salvando, setSalvando] = useState(false);
     const [lavagens, setLavagens] = useState([]);
+    const [excluindoLavagem, setExcluindoLavagem] = useState(false);
 
     useEffect(() => {
         buscarLavagens();
@@ -66,12 +67,30 @@ export function useLavagem() {
         }
     };
 
+    async function deletarLavagem(id) {
+        const confirmar = window.confirm('Deseja realmente excluir este registro?');
+        if (!confirmar) return;
+        try {
+            setExcluindoLavagem(true);
+            await api.delete(`/deletarLavagem/${id}`);
+            //Atualizando lista de registro de lavagem
+            setLavagens((prev) => prev.filter((item) => item._id !== id));
+        } catch (error) {
+            console.error('Erro ao excluir registro de lavagem: ', error);
+            alert('Erro ao excluir registro de lavagem')
+        } finally {
+            setExcluindoLavagem(false);
+        }
+    }
+
     return {
         form,
         salvando,
         handleChange,
         handleSubmit,
         lavagens,
-        buscarLavagens
+        buscarLavagens,
+        deletarLavagem,
+        excluindoLavagem
     };
 }

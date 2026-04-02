@@ -95,3 +95,14 @@
     background: #fee2e2;
     color: #dc2626;
 }
+
+.empty-message {
+    margin-top: 20px;
+    padding: 16px;
+    text-align: center;
+    color: #64748b;
+    background: #f8fafc;
+    border: 1px dashed #cbd5f5;
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
