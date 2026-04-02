@@ -8,6 +8,7 @@ import TabelaHidrometro from "../components/TabelaHidrometro";
 import { gerarDadosTabela } from "../services/hidrometroService";
 import GraficoConsumo from "../components/GraficoConsumo";
 import GraficoConsumoAcumulado from "../components/GraficoConsumoAcumulado";
+import FormUltimaLeitura from "../components/FormUltimaLeitura";
 
 function Hidrometro() {
   const { dados, loading, erro, deletarHidrometro, excluindo, carregarDados } = useHidrometros();
@@ -37,6 +38,7 @@ function Hidrometro() {
       /> Registros do Hidrômetro</h1>
 
       <FormHidrometro atualizarLista={carregarDados} />
+      <FormUltimaLeitura />
 
       <div>
         <h2>Tabela de Consumo</h2>
