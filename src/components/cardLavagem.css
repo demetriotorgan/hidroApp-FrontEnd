@@ -1,0 +1,97 @@
+.card-lavagem {
+    background: #ffffff;
+    border: 1px solid #e3e8ef;
+    border-left: 5px solid #2563eb; /* azul destaque */
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card-lavagem:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* HEADER */
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #1d4ed8;
+    margin-bottom: 10px;
+}
+
+.card-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* OBS */
+
+.card-obs {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 12px;
+}
+
+/* GRID */
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+/* ITEM */
+
+.card-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f8fafc;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #334155;
+}
+
+/* HEADER COM ESPAÇO ENTRE */
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+/* LADO ESQUERDO */
+
+.card-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #1d4ed8;
+}
+
+/* BOTÃO DELETE */
+
+.card-delete-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #94a3b8;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.card-delete-btn:hover {
+    background: #fee2e2;
+    color: #dc2626;
+}

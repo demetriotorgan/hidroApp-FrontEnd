@@ -1,20 +1,7 @@
 import { useState } from "react";
 import api from "../services/api";
+import { getDataAtual, getHoraAtual } from "../services/dataUtils";
 
-function getDataAtual() {
-  const agora = new Date();
-
-  const ano = agora.getFullYear();
-  const mes = String(agora.getMonth() + 1).padStart(2, "0");
-  const dia = String(agora.getDate()).padStart(2, "0");
-
-  return `${ano}-${mes}-${dia}`;
-}
-
-function getHoraAtual() {
-  const agora = new Date();
-  return agora.toTimeString().slice(0,5);
-}
 
 
 function useFormHidrometro(atualizarLista) {

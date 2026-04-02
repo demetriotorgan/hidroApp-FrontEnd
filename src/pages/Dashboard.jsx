@@ -7,6 +7,7 @@ import PluviometroSection from "../components/dashboard/sections/PluviometroSect
 import QualidadeAguaSection from "../components/dashboard/sections/QualidadeAguaSection";
 import ModeloSection from "../components/dashboard/sections/ModeloSection";
 import PrevisaoSection from "../components/dashboard/sections/PrevisaoSection";
+import LavagemSection from "../components/dashboard/sections/LavagemSection";
 
 function Dashboard() {
 
@@ -24,6 +25,7 @@ function Dashboard() {
       <QualidadeAguaSection data={qualidadeAgua}/>
       <ModeloSection data={modelo} />
       <PrevisaoSection />
+      <LavagemSection />
     </div>
   );
 }

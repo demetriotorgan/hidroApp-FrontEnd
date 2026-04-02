@@ -6,6 +6,7 @@ import Pluviometro from "./pages/Pluviometro";
 import Tambor from "./pages/Tambor";
 import Modelo from "./pages/Modelo";
 import Previsao from "./pages/Previsao";
+import Lavagem from "./pages/Lavagem";
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
         <Route path="/pluviometro" element={<Pluviometro />} />
         <Route path="/tambor" element={<Tambor/>}/>
         <Route path="/modelo" element={<Modelo />}/>
-        <Route path="/previsao" element={<Previsao/>}/>        
+        <Route path="/previsao" element={<Previsao/>}/>   
+        <Route path="/lavagem" element={<Lavagem/>}/>   
       </Routes>
 
     </BrowserRouter>

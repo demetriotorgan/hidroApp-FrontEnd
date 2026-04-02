@@ -35,4 +35,24 @@ export function calcularIntervaloDiasInclusivo(dataInicial, dataFinal) {
   const diffDias = diffMs / (1000 * 60 * 60 * 24);
 
   return diffDias + 1;
+};
+
+export function getDataAtual() {
+  const agora = new Date();
+
+  const ano = agora.getFullYear();
+  const mes = String(agora.getMonth() + 1).padStart(2, "0");
+  const dia = String(agora.getDate()).padStart(2, "0");
+
+  return `${ano}-${mes}-${dia}`;
 }
+
+export function getHoraAtual() {
+  const agora = new Date();
+  return agora.toTimeString().slice(0,5);
+};
+
+ export function formatarData(dataISO) {
+        const data = new Date(dataISO);
+        return data.toLocaleDateString('pt-BR');
+    }
