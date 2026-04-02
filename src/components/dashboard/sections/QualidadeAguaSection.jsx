@@ -11,12 +11,16 @@ function QualidadeAguaSection({ data }) {
 
       <div className="dashboard-cards">
 
-        <DashboardCard title="Turbidez">
+        <DashboardCard title="IQA Atual">
           <h3>{data?.turbidez ?? "--"}</h3>
         </DashboardCard>
 
-        <DashboardCard title="Odor">
+        <DashboardCard title="Média de IQA">
           <h3>{data?.odor ?? "--"}</h3>
+        </DashboardCard>
+
+        <DashboardCard title="Última troca">
+          <h3>---</h3>
         </DashboardCard>
 
         <DashboardCard title="Dias desde última troca">
