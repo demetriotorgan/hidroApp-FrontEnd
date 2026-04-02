@@ -93,6 +93,15 @@ const FormLavagem = ({ form, salvando, handleChange, handleSubmit }) => {
                             <option value="curto">Curto</option>
                         </select>
                     </label>
+                    <label>Enchague
+                        <input 
+                        className='form-input'
+                        type='number'
+                        name='enchague'
+                        value={form.enchague}
+                        onChange={handleChange}
+                        />
+                    </label>
                 </div>
                 <button className="form-button" type="submit">
                     <Save size={18} />

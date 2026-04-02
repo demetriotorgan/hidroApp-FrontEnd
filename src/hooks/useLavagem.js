@@ -19,7 +19,8 @@ export function useLavagem() {
         nivelMaquina: 'baixo',
         sabao: '',
         amaciante: '',
-        modoLavagem: 'longo'
+        modoLavagem: 'longo',
+        enchague:''
     };
 
     const [form, setForm] = useState(initialState);
@@ -42,6 +43,7 @@ export function useLavagem() {
         if (!confirmar) return;
 
         try {
+            // console.log(form);
             setSalvando(true);
             await api.post('/saveLavagem', form);
             alert('Registro salvo com sucesso!');

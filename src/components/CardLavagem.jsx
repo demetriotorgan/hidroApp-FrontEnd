@@ -81,6 +81,12 @@ const CardLavagem = ({ lavagem, onDelete, excluindo }) => {
                         <span>{lavagem.amaciante} ml</span>
                     </div>
 
+                    <div className="card-item">
+                        <Waves size={16} />
+                        <small>Enchague</small>
+                        <span>{lavagem.enchague}L</span>
+                    </div>
+
                 </div>
 
             </div>
