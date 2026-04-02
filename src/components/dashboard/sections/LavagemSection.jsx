@@ -17,17 +17,31 @@ const LavagemSection = () => {
                     <DashboardCard title="Data">
                         <h3>---</h3>
                     </DashboardCard>
-                    <DashboardCard title="Quantidade (kg)">
+                    <DashboardCard title="Carga (kg)">
                         <h3>---</h3>
                     </DashboardCard>
-                    <DashboardCard title="Qtd de Produtos">
+                    <DashboardCard title="Qtd de Produtos(g)">
+                        <small>Sabão</small><br></br>
+                        <small>Amaciante</small>
+                    </DashboardCard>                                        
+                    <DashboardCard title="Total de Lavagens">
                         <h3>---</h3>
-                    </DashboardCard>
+                    </DashboardCard>                          
+                    <DashboardCard title="Média por Lavagem">
+                        <small>Água utilizada</small>                        
+                    </DashboardCard>                          
+                    <DashboardCard title="Média de Carga">
+                        <h3>---</h3>
+                    </DashboardCard>     
+                    <DashboardCard title="Média de Produtos">
+                        <small>Sabão</small><br></br>
+                        <small>Amaciante</small>
+                    </DashboardCard>     
                     <button
                         className="dashboard-button"
                         onClick={() => navigate("/lavagem")}
                     >                        
-                        Registrar Lavagem <SoapDispenserDroplet />
+                        Registrar Lavagem <SoapDispenserDroplet />                    
                     </button>
                 </div>
             </section>
