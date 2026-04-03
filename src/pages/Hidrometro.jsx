@@ -9,9 +9,12 @@ import { gerarDadosTabela } from "../services/hidrometroService";
 import GraficoConsumo from "../components/GraficoConsumo";
 import GraficoConsumoAcumulado from "../components/GraficoConsumoAcumulado";
 import FormUltimaLeitura from "../components/FormUltimaLeitura";
+import { useUltimaLeitura } from "../hooks/useUltimaLeitura";
+import CardUltimaLeitura from '../components/CardUltimaLeitura ';
 
 function Hidrometro() {
   const { dados, loading, erro, deletarHidrometro, excluindo, carregarDados } = useHidrometros();
+  const ultimaLeituraHook = useUltimaLeitura();
   const navigate = useNavigate();
 
   const dadosParaTabela = gerarDadosTabela(dados);
@@ -38,7 +41,17 @@ function Hidrometro() {
       /> Registros do Hidrômetro</h1>
 
       <FormHidrometro atualizarLista={carregarDados} />
-      <FormUltimaLeitura />
+      <FormUltimaLeitura {...ultimaLeituraHook}/>
+      <h3>Última Leitura</h3>
+      {ultimaLeituraHook.leituras.length === 0 ? (
+        <p className="empty-message">Aguardando registros...</p>
+      ):(  
+          <CardUltimaLeitura          
+          dados={ultimaLeituraHook.leituras[0]}
+          onDelete={ultimaLeituraHook.deletarUltimaLeitura}
+          excluindo={ultimaLeituraHook.excluindoUltimaLeitura}
+          />        
+      )}
 
       <div>
         <h2>Tabela de Consumo</h2>
