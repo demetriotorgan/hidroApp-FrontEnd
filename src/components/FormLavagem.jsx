@@ -60,6 +60,7 @@ const FormLavagem = ({ form, salvando, handleChange, handleSubmit }) => {
                             value={form.nivelMaquina}
                             onChange={handleChange}
                         >
+                            <option value="extra-baixo">Extra-Baixo</option>
                             <option value="baixo">Baixo</option>
                             <option value="medio">Médio</option>
                             <option value="alto">Alto</option>
