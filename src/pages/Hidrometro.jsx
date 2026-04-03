@@ -50,6 +50,7 @@ function Hidrometro() {
           dados={ultimaLeituraHook.leituras[0]}
           onDelete={ultimaLeituraHook.deletarUltimaLeitura}
           excluindo={ultimaLeituraHook.excluindoUltimaLeitura}
+          leituraAtual={dados[0]}
           />        
       )}
 

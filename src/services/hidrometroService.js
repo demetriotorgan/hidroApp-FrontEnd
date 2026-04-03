@@ -874,4 +874,18 @@ export function montarPayloadAnalise({
   }
 };
 
+//Calculo de consumo com 3 digitos: Leitura Atual - Ultima Leitura da SANEPAR
+export function calcularConsumoSanepar(leituraAtual, leituraAnterior) {
+  if (!leituraAtual || !leituraAnterior) return null;
 
+  // Garante que é número e transforma em string
+  const atualStr = leituraAtual.toString();
+
+  // Pega os 3 primeiros dígitos
+  const atual3Digitos = parseInt(atualStr.slice(0, 3), 10);
+
+  // Subtrai da leitura anterior
+  const consumo = atual3Digitos - leituraAnterior;
+
+  return consumo;
+}
