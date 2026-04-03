@@ -13,25 +13,22 @@ export const calcularChuvaMm = (alturaColuna) => {
 };
 
 export const calcularDiasSemChuva = (registros) => {
-    // Verificação de segurança
     if (!registros || registros.length === 0) {
-        return null; // ou 0, dependendo da sua regra
+        return null;
     }
 
-    // Primeiro registro (mais recente)
-    const dataUltimaChuva = new Date(registros[0].data);
+    // Pegando apenas a data (sem hora e sem fuso)
+    const dataString = registros[0].data.split('T')[0]; // "2026-04-01"
 
-    // Data atual
+    const [ano, mes, dia] = dataString.split('-');
+
+    // Criando data LOCAL sem interferência de UTC
+    const dataUltimaChuva = new Date(ano, mes - 1, dia);
+
     const hoje = new Date();
-
-    // Zerando horas para evitar erro de fração de dia
-    dataUltimaChuva.setHours(0, 0, 0, 0);
     hoje.setHours(0, 0, 0, 0);
 
-    // Diferença em milissegundos
     const diffMs = hoje - dataUltimaChuva;
-
-    // Convertendo para dias
     const diffDias = diffMs / (1000 * 60 * 60 * 24);
 
     return Math.floor(diffDias);
