@@ -15,6 +15,7 @@ const FormPrevisao = () => {
         form,
         handleChange,
         consumoDoPeriodo,
+        estimativa,
         comparacao
     } = usePrevisao(dados);
     const {
@@ -25,14 +26,32 @@ const FormPrevisao = () => {
     } = useAnalises();
 
     async function handleSalvar() {
-        const payload = montarPayloadAnalise({
-            form,
-            consumoDoPeriodo,
-            comparacao,
-            dados
-        });
 
-        if (!payload) return alert("Dados insuficientes");
+        // Proteção adicional: verificar cada item
+        if (!form?.dataInicial || !form?.dataFinal || !form?.quantidadeDias) {
+            console.warn("Form incompleto");
+        }
+        if (!consumoDoPeriodo) console.warn("Consumo do período vazio");
+        if (!comparacao) console.warn("Comparação vazia");
+        if (!dados?.length) console.warn("Dados do hidrometro vazios");
+
+        let payload;
+        try {
+            payload = montarPayloadAnalise({
+                form,
+                consumoDoPeriodo,
+                estimativa,
+                comparacao,
+                dados
+            });
+        } catch (error) {
+            console.error("Erro ao montar payload:", error);
+        }
+
+        if (!payload) {
+            console.error("DADOS INSUFICIENTES - payload null");
+            return alert("Dados insuficientes");
+        }
 
         if (!window.confirm("Deseja salvar?")) return;
 
@@ -114,4 +133,4 @@ const FormPrevisao = () => {
     )
 }
 
-export default FormPrevisao
+export default FormPrevisao;

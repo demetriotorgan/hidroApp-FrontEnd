@@ -19,9 +19,15 @@ export default function useAnalises() {
   }
 
   async function remover(id) {
-    await api.delete(`/deletarAnaliseComparativa/${id}`);
-    setAnalises(prev => prev.filter(a => a._id !== id));
-  }
+    const confirmar = window.confirm('Deseja excluir esta análise?');
+    if (!confirmar) return
+    try {
+      await api.delete(`/deletarAnaliseComparativa/${id}`);
+      setAnalises(prev => prev.filter(a => a._id !== id));
+    } catch (error) {
+      console.error('Erro ao excluir registro de análise: ', error)
+    }
+  };
 
   useEffect(() => {
     carregarAnalises();
