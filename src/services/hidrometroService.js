@@ -105,7 +105,7 @@ export function totalConsumoAcumulado(registros) {
   const total = ultimaLeitura - primeiraLeitura;
 
   return total >= 0 ? total * 10 : 0;
-}
+};
 
 export function maiorConsumo(registros) {
   if (!registros || registros.length < 2) {

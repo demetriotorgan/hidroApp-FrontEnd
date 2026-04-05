@@ -58,4 +58,17 @@ export function getHoraAtual() {
     return data.toLocaleDateString('pt-BR', {
         timeZone: 'UTC'
     });
+};
+
+export function calcularIntervaloDias(dataInicial, dataFinal) {
+  if (!dataInicial || !dataFinal) return 0;
+
+  const inicio = new Date(dataInicial + "T00:00:00");
+  const fim = new Date(dataFinal + "T00:00:00");
+
+  const diffMs = fim - inicio;
+
+  const diffDias = diffMs / (1000 * 60 * 60 * 24);
+
+  return Math.floor(diffDias);
 }

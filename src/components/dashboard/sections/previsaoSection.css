@@ -1,0 +1,94 @@
+.previsao-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.previsao-valor {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.previsao-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.previsao-badge {
+    align-self: flex-start;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: white;
+    font-weight: bold;
+}
+
+.modelo-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 0.9rem;
+}
+
+.modelo-info strong {
+    font-size: 1.4rem;
+    color: #2c3e50;
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column; /* 🔥 empilha ícone + valor */
+    align-items: center;     /* 🔥 centraliza horizontal */
+    justify-content: center; /* 🔥 centraliza vertical */
+    gap: 6px;
+    text-align: center;      /* 🔥 centraliza textos */
+}
+
+.card-content h2,
+.card-content h3 {
+    margin: 0;
+}
+
+.badge {
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.badge-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 12px;
+    border-radius: 999px;
+
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+
+    color: #fff;
+
+    min-width: 90px;
+    text-align: center;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover leve (fica muito bonito) */
+.badge-status:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* fallback quando não tem modelo */
+.badge-neutral {
+    background-color: #6b7280; /* cinza elegante */
+}
