@@ -6,10 +6,11 @@ import { useLavagem } from '../hooks/useLavagem';
 import api from '../services/api';
 import CardLavagem from '../components/CardLavagem';
 
+
 const Lavagem = () => {
   const navigate = useNavigate();
   const lavagemHook = useLavagem();
-
+  
   return (
     <>
       <h1><ArrowBigLeft

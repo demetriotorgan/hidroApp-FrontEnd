@@ -1,51 +1,133 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import DashboardCard from '../DashboardCard'
-import { SoapDispenserDroplet } from 'lucide-react';
+import {
+    SoapDispenserDroplet,
+    Droplet,
+    Calendar,
+    Package,
+    Coffee,
+    ListChecks,
+    Zap,
+    Scale,
+    Bubbles
+} from 'lucide-react'
+import {
+    getMediaAgua,
+    getMediaCarga,
+    getMediaProdutos,
+    getTotalLavagens,
+    getUltimaLavagem
+} from '../../../services/lavagemService'
+import { useLavagem } from '../../../hooks/useLavagem'
+import { formatarData } from '../../../services/dataUtils'
 
 const LavagemSection = () => {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+    const lavagemHook = useLavagem()
+
+    const ultimaLavagem = getUltimaLavagem(lavagemHook.lavagens)
+    const mediasProdutos = getMediaProdutos(lavagemHook.lavagens)
+
     return (
-        <>
-            <section className='dashboard-section'>
-                <h2>Dados de Lavagem <SoapDispenserDroplet /></h2>
-                <small>Dados da última lavagem</small>
-                <div className='dashboard-cards'>
-                    <DashboardCard title="Água usada (L)">
-                        <h3>---</h3>
-                    </DashboardCard>
-                    <DashboardCard title="Data">
-                        <h3>---</h3>
-                    </DashboardCard>
-                    <DashboardCard title="Carga (kg)">
-                        <h3>---</h3>
-                    </DashboardCard>
-                    <DashboardCard title="Qtd de Produtos(g)">
-                        <small>Sabão</small><br></br>
-                        <small>Amaciante</small>
-                    </DashboardCard>                                        
-                    <DashboardCard title="Total de Lavagens">
-                        <h3>---</h3>
-                    </DashboardCard>                          
-                    <DashboardCard title="Média por Lavagem">
-                        <small>Água utilizada</small>                        
-                    </DashboardCard>                          
-                    <DashboardCard title="Média de Carga">
-                        <h3>---</h3>
-                    </DashboardCard>     
-                    <DashboardCard title="Média de Produtos">
-                        <small>Sabão</small><br></br>
-                        <small>Amaciante</small>
-                    </DashboardCard>     
-                    <button
-                        className="dashboard-button"
-                        onClick={() => navigate("/lavagem")}
-                    >                        
-                        Registrar Lavagem <SoapDispenserDroplet />                    
-                    </button>
-                </div>
-            </section>
-        </>
+        <section className="dashboard-section">
+            <h2>Dados de Lavagem <SoapDispenserDroplet /></h2>
+            <small>Dados da última lavagem</small>
+            <div className="dashboard-cards">
+
+                <DashboardCard title="Água usada (L)">
+                    <div className="flex flex-col items-center justify-center">
+                        <Droplet size={18} />
+                        <h3>{ultimaLavagem ? ultimaLavagem.aguaUsada : '---'}</h3>
+                    </div>
+                </DashboardCard>
+
+                <DashboardCard title="Data">
+                    <div className="flex flex-col items-center justify-center">
+                        <Calendar size={18} />
+                        <h3>{ultimaLavagem ? formatarData(ultimaLavagem.data) : '---'}</h3>
+                    </div>
+                </DashboardCard>
+
+                <DashboardCard title="Carga (kg)">
+                    <div className="flex flex-col items-center justify-center">
+                        <Package size={18} />
+                        <h3>{ultimaLavagem ? ultimaLavagem.carga : '---'}</h3>
+                    </div>
+                </DashboardCard>
+
+                <DashboardCard title="Qtd de Produtos (g)">
+                    <div className="flex flex-col items-center justify-center">
+                        <div className="flex items-center gap-2">
+                            <Bubbles size={18} />
+                            <small>Sabão: {ultimaLavagem ? ultimaLavagem.produtos.sabao : '---'}</small>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Bubbles size={18} />
+                            <small>Amaciante: {ultimaLavagem ? ultimaLavagem.produtos.amaciante : '---'}</small>
+                        </div>
+                    </div>
+                </DashboardCard>
+
+                <DashboardCard title="Total de Lavagens">
+                    <div className="flex flex-col items-center justify-center">
+                        <ListChecks size={18} />
+                        <h3>{getTotalLavagens(lavagemHook.lavagens)}</h3>
+                    </div>
+                </DashboardCard>
+
+                <DashboardCard title="Média por Lavagem">
+                    <div className="flex flex-col items-center justify-center h-full">
+                        <div className="mb-2">  {/* Espaço entre ícone e texto */}
+                            <Zap size={18} />      {/* Ícone maior e centralizado */}
+                        </div>
+                        <h3 className="text-center text-gray-700">
+                            {lavagemHook.lavagens.length > 0
+                                ? getMediaAgua(lavagemHook.lavagens)
+                                : '---'} L
+                        </h3>
+                    </div>
+                </DashboardCard>
+
+                <DashboardCard title="Média de Carga">
+                    <div className="flex flex-col items-center justify-center h-full">
+                        <div className="mb-2">
+                            <Scale size={18} /> {/* Ícone maior e centralizado */}
+                        </div>
+                        <h3 className="text-center text-gray-700">
+                            {lavagemHook.lavagens.length > 0
+                                ? getMediaCarga(lavagemHook.lavagens)
+                                : '---'} kg
+                        </h3>
+                    </div>
+                </DashboardCard>
+
+                <DashboardCard title="Média de Produtos">
+                    <div className="flex flex-col items-center justify-center">
+                        <div className="flex items-center gap-2">
+                            <SoapDispenserDroplet size={18} />
+                            <small>
+                                Sabão: {lavagemHook.lavagens.length > 0 ? mediasProdutos.sabao : '---'} g
+                            </small>
+                        </div>
+                        <div className="flex items-center gap-2 mt-1">
+                            <SoapDispenserDroplet size={18} />
+                            <small>
+                                Amaciante: {lavagemHook.lavagens.length > 0 ? mediasProdutos.amaciante : '---'} g
+                            </small>
+                        </div>
+                    </div>
+                </DashboardCard>
+
+                <button
+                    className="dashboard-button"
+                    onClick={() => navigate("/lavagem")}
+                >
+                    Registrar Lavagem <SoapDispenserDroplet />
+                </button>
+
+            </div>
+        </section>
     )
 }
 
