@@ -11,7 +11,7 @@ const PrevisaoSection = () => {
             <section className="dashboard-section">
                 <h2>Previsão de Consumo <Activity /></h2>
                 <div className="dashboard-cards">
-                    <DashboardCard title="Previsão próximos 3 dias">
+                    <DashboardCard title="Previsão próxima leitura">
                         <h3>---</h3>
                     </DashboardCard>
                     <DashboardCard title="Erro percentual atual">

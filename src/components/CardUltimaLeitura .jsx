@@ -3,15 +3,14 @@ import './cardUltimaLeitura.css';
 import { Calendar, Gauge, FileText, Trash2 } from 'lucide-react';
 import { formatarData } from '../services/dataUtils';
 import LoadingModal from './LoadingModal';
-import { calcularConsumoSanepar } from '../services/hidrometroService';
+import { calcularDadosSanepar } from '../services/hidrometroService';
 
 const CardUltimaLeitura = ({ dados, onDelete, excluindo, leituraAtual }) => {
 
-  const consumo = calcularConsumoSanepar(leituraAtual?.leitura, dados.leitura);
-  const leituraAtual3 = leituraAtual?.leitura
-  ? parseInt(leituraAtual.leitura.toString().slice(0, 3), 10)
-  : null;
-
+ const { leituraAtual3, consumo } = calcularDadosSanepar(
+  leituraAtual?.leitura,
+  dados.leitura
+);
   return (
     <>
       <LoadingModal

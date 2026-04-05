@@ -874,18 +874,40 @@ export function montarPayloadAnalise({
   }
 };
 
-//Calculo de consumo com 3 digitos: Leitura Atual - Ultima Leitura da SANEPAR
-export function calcularConsumoSanepar(leituraAtual, leituraAnterior) {
-  if (!leituraAtual || !leituraAnterior) return null;
+export function extrair3PrimeirosDigitos(leitura) {
+  if (leitura == null) return null;
 
-  // Garante que é número e transforma em string
-  const atualStr = leituraAtual.toString();
+  const str = leitura.toString().trim();
 
-  // Pega os 3 primeiros dígitos
-  const atual3Digitos = parseInt(atualStr.slice(0, 3), 10);
+  if (str.length < 3) return null;
 
-  // Subtrai da leitura anterior
-  const consumo = atual3Digitos - leituraAnterior;
+  const valor = parseInt(str.slice(0, 3), 10);
 
-  return consumo;
+  return isNaN(valor) ? null : valor;
 }
+
+//Calculo de consumo com 3 digitos: Leitura Atual - Ultima Leitura da SANEPAR
+export function calcularDadosSanepar(leituraAtual, leituraAnterior) {
+  const leituraAtual3 = extrair3PrimeirosDigitos(leituraAtual);
+
+  if (leituraAtual3 === null || leituraAnterior == null) {
+    return {
+      leituraAtual3: null,
+      consumo: null
+    };
+  }
+
+  const anterior = Number(leituraAnterior);
+
+  if (isNaN(anterior)) {
+    return {
+      leituraAtual3,
+      consumo: null
+    };
+  }
+
+  return {
+    leituraAtual3,
+    consumo: leituraAtual3 - anterior
+  };
+};
