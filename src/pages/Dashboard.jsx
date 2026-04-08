@@ -8,6 +8,7 @@ import QualidadeAguaSection from "../components/dashboard/sections/QualidadeAgua
 import ModeloSection from "../components/dashboard/sections/ModeloSection";
 import PrevisaoSection from "../components/dashboard/sections/PrevisaoSection";
 import LavagemSection from "../components/dashboard/sections/LavagemSection";
+import CloroSection from "../components/dashboard/sections/CloroSection";
 
 function Dashboard() {
 
@@ -26,6 +27,7 @@ function Dashboard() {
       <ModeloSection data={modelo} />
       <PrevisaoSection />
       <LavagemSection />
+      <CloroSection />
     </div>
   );
 }

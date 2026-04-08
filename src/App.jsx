@@ -7,6 +7,7 @@ import Tambor from "./pages/Tambor";
 import Modelo from "./pages/Modelo";
 import Previsao from "./pages/Previsao";
 import Lavagem from "./pages/Lavagem";
+import Cloro from './pages/Cloro';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/modelo" element={<Modelo />}/>
         <Route path="/previsao" element={<Previsao/>}/>   
         <Route path="/lavagem" element={<Lavagem/>}/>   
+        <Route path="/cloro" element={<Cloro/>}/> 
       </Routes>
 
     </BrowserRouter>
