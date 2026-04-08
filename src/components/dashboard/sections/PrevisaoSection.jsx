@@ -30,10 +30,14 @@ const PrevisaoSection = () => {
             <div className="dashboard-cards">
 
                 {/* 🔢 Leitura Prevista */}
-                <DashboardCard title="Leitura Prevista">
+                <DashboardCard title="Leitura Prevista Atual">
                     <div className="card-content">
                         <TrendingUp size={20} />
-                        <h2>{isOk ? previsao.leituraPrevista3 ?? '---' : '---'}</h2>
+                        <h2>
+                            {isOk && !isNaN(previsao.leituraPrevista3)
+                                ? previsao.leituraPrevista3
+                                : '---'}
+                        </h2>
                     </div>
                 </DashboardCard>
 
@@ -114,6 +118,39 @@ const PrevisaoSection = () => {
                                 ? `${previsao.erroPercentual.toFixed(1)}%`
                                 : '---'}
                         </h3>
+                    </div>
+                </DashboardCard>
+
+                <DashboardCard title="Previsão da Leitura Mensal">
+                    <div className="card-content">
+                        <TrendingUp size={20} />
+                        <h2>
+                            {isOk && previsao.previsaoFatura?.status === "ok"
+                                ? `${previsao.previsaoFatura.leituraPrevistaFatura} m³`
+                                : '---'}
+                        </h2>
+                    </div>
+                </DashboardCard>
+
+                <DashboardCard title="Consumo Previsto da Fatura Mensal">
+                    <div className="card-content">
+                        <Droplets size={20} />
+                        <h3>
+                            {isOk && previsao.previsaoFatura?.status === "ok"
+                                ? `${previsao.previsaoFatura.consumoM3Fatura} m³`
+                                : '---'}
+                        </h3>
+                    </div>
+                </DashboardCard>
+
+                <DashboardCard title="Fatura Mensal Prevista Corrigida">
+                    <div className="card-content">
+                        <TrendingUp size={20} />
+                        <h2>
+                            {isOk && previsao.previsaoFaturaAjustada?.status === "ok"
+                                ? `${previsao.previsaoFaturaAjustada.leituraCorrigida} m³`
+                                : '---'}
+                        </h2>
                     </div>
                 </DashboardCard>
 

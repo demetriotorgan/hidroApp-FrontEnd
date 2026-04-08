@@ -6,10 +6,13 @@ import {
     extrair3PrimeirosDigitos
 } from "../services/hidrometroService";
 import { calcularIntervaloDias } from "../services/dataUtils";
+import { calcularPrevisaoFatura } from "../services/previsaoService";
+import { calcularPrevisaoFaturaComAjuste } from "../services/previsaoService";
 
 export function usePrevisaoLeitura() {
     const { dados } = useHidrometros();
     const { leituras } = useUltimaLeitura();
+
 
     const resultado = useMemo(() => {
 
@@ -30,7 +33,7 @@ export function usePrevisaoLeitura() {
 
         const a = modelo.valor; // litros/dia
 
-        // 📅 ETAPA 2 — Dias (CORRIGIDO)
+        // 📅 ETAPA 2 — Dias
         const ultima = leituras[0];
 
         const dataSanepar = ultima.data.split("T")[0];
@@ -38,11 +41,13 @@ export function usePrevisaoLeitura() {
 
         const dias = calcularIntervaloDias(dataSanepar, hoje);
 
-        // 🔥 ETAPA 3 — Consumo estimado (litros)
-        const consumoLitros = a * dias;
+        // 🔥 ETAPA 3 — Consumo estimado
 
-        // 🔁 Converter para unidades do hidrômetro
-        const consumoUnidades = Math.floor(consumoLitros / 10);
+        //-Fatura prevista
+        const previsaoFatura = calcularPrevisaoFatura(dados, ultima);
+
+        const consumoLitros = a * dias;
+        const consumoM3 = consumoLitros / 1000;
 
         // 🔢 Leitura atual completa
         const leituraAtualCompleta = [...dados]
@@ -55,26 +60,35 @@ export function usePrevisaoLeitura() {
             };
         }
 
-        // 🔥 valor estimado do hidrômetro (3 primeiros dígitos)
-        const leituraPrevista3 = Math.floor(consumoLitros / 10);
-
-        // 🔢 consumo real (diferença SANEPAR)
-        const consumoPrevisto = leituraPrevista3 - ultima.leitura;
-
-        //Calculando o erro:
         // 🔢 leitura real atual (3 dígitos)
         const leituraAtual3 = extrair3PrimeirosDigitos(leituraAtualCompleta);
 
         // 📊 consumo real
         const consumoReal = leituraAtual3 - ultima.leitura;
 
-        // ⚠️ erro do modelo
-        const erroAbsoluto = consumoPrevisto - consumoReal;
+        // 🔥 leitura prevista (modelo correto)
+        const leituraPrevista3 = Math.floor(
+            ultima.leitura + consumoM3
+        );
 
-        const erroPercentual = consumoReal !== 0
-            ? (Math.abs(erroAbsoluto) / consumoReal) * 100
+        // 🔥 consumo previsto (m³ com 1 casa)
+        const consumoPrevisto = Number(consumoM3.toFixed(1));
+
+        // ⚠️ erro
+        const erroAbsoluto = leituraPrevista3 - leituraAtual3;
+
+
+
+        const erroPercentual = leituraAtual3 !== 0
+            ? (Math.abs(erroAbsoluto) / leituraAtual3) * 100
             : null;
 
+        const previsaoFaturaAjustada = calcularPrevisaoFaturaComAjuste(
+            dados,
+            ultima,
+            erroAbsoluto,
+            dias
+        );
 
         return {
             status: "ok",
@@ -83,7 +97,7 @@ export function usePrevisaoLeitura() {
             diasDesdeSanepar: dias,
 
             consumoLitros,
-            consumoUnidades: consumoPrevisto, // 👈 agora correto
+            consumoUnidades: Math.floor(consumoM3),
             consumoPrevisto,
 
             leituraPrevista3,
@@ -93,10 +107,14 @@ export function usePrevisaoLeitura() {
             nivel: modelo.nivel,
             cor: modelo.cor,
             mensagem: modelo.mensagem,
+
             erroAbsoluto,
             erroPercentual,
+
             consumoReal,
             leituraAtual3,
+            previsaoFatura,
+            previsaoFaturaAjustada
         };
 
     }, [dados, leituras]);
