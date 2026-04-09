@@ -6,7 +6,7 @@ import useCloracao from '../hooks/useCloracao';
 import CloracaoCard from '../components/CloracaoCard';
 
 const Cloro = () => {
-  const { registros, carregando, carregarRegistrosCloracao } = useCloracao();
+  const { registros, carregando, carregarRegistrosCloracao,handleDelete, deletando } = useCloracao();
   const navigate = useNavigate();
   return (
     <>
@@ -16,7 +16,11 @@ const Cloro = () => {
       <FormCloro />
 
       {registros.map((item) => (
-        <CloracaoCard key={item._id} registro={item} />
+        <CloracaoCard
+          key={item._id}
+          registro={item} 
+          onDelete={handleDelete}
+          />
       ))}
 
 

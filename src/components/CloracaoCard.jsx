@@ -15,10 +15,7 @@ function CloracaoCard({ registro, onDelete }) {
 
     const dataFormatada = new Date(data).toLocaleDateString('pt-BR');
 
-    function handleDelete() {
-        const confirmar = window.confirm('Deseja excluir este registro?');
-        if (!confirmar) return;
-
+    function handleDelete() {       
         onDelete(_id);
     }
 
