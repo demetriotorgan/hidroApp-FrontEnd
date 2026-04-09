@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trash2 } from 'lucide-react';
+import { Save, Trash2 } from 'lucide-react';
 import './CloracaoCard.css';
 
 function CloracaoCard({ registro, onDelete }) {
@@ -20,6 +20,8 @@ function CloracaoCard({ registro, onDelete }) {
     }
 
     return (
+        <>
+        <h3>Ultima Cloração</h3>
         <div className="cloracao-card">
             <div className="card-header">
                 <h4>Cloração</h4>
@@ -58,6 +60,11 @@ function CloracaoCard({ registro, onDelete }) {
                 </button>
             </div>
         </div>
+        <button className="form-button" type="submit">
+                    <Save size={18} />
+                    Ver Registros
+                </button>
+        </>
     );
 }
 

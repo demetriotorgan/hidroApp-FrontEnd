@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import FormCloro from '../components/FormCloro';
 import useCloracao from '../hooks/useCloracao';
 import CloracaoCard from '../components/CloracaoCard';
+import FormPh from '../components/FormPh';
 
 const Cloro = () => {
   const { registros, carregando, carregarRegistrosCloracao, handleDelete,deletando } = useCloracao();
@@ -31,6 +32,8 @@ const Cloro = () => {
           />
         ))
       )}
+
+      <FormPh />
     </>
   );
 }

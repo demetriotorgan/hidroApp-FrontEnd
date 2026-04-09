@@ -1,4 +1,4 @@
-import { Save } from 'lucide-react'
+import { FlaskRound, Save } from 'lucide-react'
 import React, { useState } from 'react'
 import useFormCloracao from '../hooks/useFormCloracao'
 
@@ -10,7 +10,7 @@ const FormCloro = ({carregarRegistro}) => {
         salvandoDadosCloro } = useFormCloracao(carregarRegistro);
     return (
         <>
-            <h3>Cloro</h3>
+            <h3><FlaskRound /> Cloro</h3>
             <form className='form-container' onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>Reservatório Atual (L)
