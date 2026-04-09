@@ -1,0 +1,104 @@
+.cloracao-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-left: 6px solid #1e88e5;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cloracao-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* HEADER */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h4 {
+    margin: 0;
+    color: #1e88e5;
+}
+
+/* BADGE */
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.badge.cloro {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.badge.estoque {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+/* BODY */
+.card-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+}
+
+.info span {
+    color: #666;
+}
+
+.info strong {
+    font-size: 1rem;
+    color: #222;
+}
+
+/* FOOTER */
+.card-footer {
+    border-top: 1px solid #eee;
+    padding-top: 8px;
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.card-footer {
+    border-top: 1px solid #eee;
+    padding-top: 8px;
+    font-size: 0.85rem;
+    color: #555;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* BOTÃO DELETE */
+.delete-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #c62828;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.delete-button:hover {
+    background: #ffebee;
+    transform: scale(1.1);
+}

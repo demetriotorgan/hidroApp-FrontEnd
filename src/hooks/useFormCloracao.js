@@ -1,10 +1,11 @@
 import {getDataAtual} from '../services/dataUtils';
 import api from '../services/api';
 import { useState } from 'react';
+import { calcularProdutoCloro } from '../services/cloracaoUtils';
 
 function useFormCloracao() {
     const dadosCloroInicial = {
-        reservatorio: 0,
+        reservatorio: '',
         concentracao: 5,
         produto: 0,
         estoque: 0,
@@ -15,12 +16,31 @@ function useFormCloracao() {
     const [form, setForm] = useState(dadosCloroInicial);
     const [salvandoDadosCloro, setSalvandoDadosCloro] = useState(false);
 
-    function handleChange(e) {
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value
-        });
+   function handleChange(e) {
+    const { name, value, type } = e.target;
+
+    const novoValor = type === 'number' ? Number(value) : value;
+
+    const novoForm = {
+        ...form,
+        [name]: novoValor
     };
+
+    // recalcula automaticamente o produto
+    if (name === 'reservatorio' || name === 'concentracao') {
+        novoForm.produto = calcularProdutoCloro(
+            novoForm.concentracao,
+            novoForm.reservatorio
+        );
+        novoForm.estoque = calcularProdutoCloro(
+            novoForm.concentracao,
+            novoForm.reservatorio
+        );
+    }
+
+    setForm(novoForm);
+};
+
 
     async function handleSubmit(e) {
         e.preventDefault();
