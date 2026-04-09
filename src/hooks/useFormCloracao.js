@@ -3,7 +3,7 @@ import api from '../services/api';
 import { useState } from 'react';
 import { calcularProdutoCloro } from '../services/cloracaoUtils';
 
-function useFormCloracao() {
+function useFormCloracao(carregarRegistro) {
     const dadosCloroInicial = {
         reservatorio: '',
         concentracao: 5,
@@ -52,6 +52,7 @@ function useFormCloracao() {
             await api.post("/saveCloracao", form);
             alert('Registro de cloração salvo com sucesso');
             setForm(dadosCloroInicial);
+            carregarRegistro();
         } catch (error) {
             console.error('Erro ao salvar registro: ', error);
             alert('Erro ao salvar registro');

@@ -44,7 +44,7 @@ function useCloracao() {
         carregando,
         carregarRegistrosCloracao,
         handleDelete,
-        deletando
+        deletando        
     };
 }
 

@@ -102,3 +102,14 @@
     background: #ffebee;
     transform: scale(1.1);
 }
+
+.empty-state {
+    margin-top: 20px;
+    padding: 20px;
+    text-align: center;
+    background: #f5f9ff;
+    border: 2px dashed #90caf9;
+    border-radius: 12px;
+    color: #1565c0;
+    font-weight: 500;
+}

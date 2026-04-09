@@ -6,26 +6,33 @@ import useCloracao from '../hooks/useCloracao';
 import CloracaoCard from '../components/CloracaoCard';
 
 const Cloro = () => {
-  const { registros, carregando, carregarRegistrosCloracao,handleDelete, deletando } = useCloracao();
+  const { registros, carregando, carregarRegistrosCloracao, handleDelete,deletando } = useCloracao();
   const navigate = useNavigate();
+
   return (
     <>
-      <h1><ArrowBigLeft
-        onClick={() => navigate("/")}
-      /> Cálculo de Cloração</h1>
-      <FormCloro />
+      <h1>
+        <ArrowBigLeft onClick={() => navigate("/")} />
+        {' '}Cálculo de Cloração
+      </h1>
 
-      {registros.map((item) => (
-        <CloracaoCard
-          key={item._id}
-          registro={item} 
-          onDelete={handleDelete}
+      <FormCloro carregarRegistro={carregarRegistrosCloracao} />
+
+      {carregando ? (
+        <div className="empty-state">Carregando registros...</div>
+      ) : registros.length === 0 ? (
+        <div className="empty-state">Aguardando Registro</div>
+      ) : (
+        registros.map((item) => (
+          <CloracaoCard
+            key={item._id}
+            registro={item}
+            onDelete={handleDelete}
           />
-      ))}
-
-
+        ))
+      )}
     </>
-  )
+  );
 }
 
 export default Cloro

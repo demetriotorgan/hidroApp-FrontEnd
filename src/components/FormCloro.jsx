@@ -3,11 +3,11 @@ import React, { useState } from 'react'
 import useFormCloracao from '../hooks/useFormCloracao'
 
 
-const FormCloro = () => {
+const FormCloro = ({carregarRegistro}) => {
     const { form,
         handleChange,
         handleSubmit,
-        salvandoDadosCloro } = useFormCloracao();
+        salvandoDadosCloro } = useFormCloracao(carregarRegistro);
     return (
         <>
             <h3>Cloro</h3>
