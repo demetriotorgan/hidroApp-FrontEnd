@@ -15,7 +15,7 @@ const CloroSection = () => {
                         <Pipette /> <h3>---</h3>
                     </DashboardCard>
 
-                    <DashboardCard title='PPM'>
+                    <DashboardCard title='Último PPM'>
                         <Atom /> <h3>---</h3>
                     </DashboardCard>
 
@@ -23,7 +23,7 @@ const CloroSection = () => {
                         <Waves /> <h3>---</h3>
                     </DashboardCard>
 
-                    <DashboardCard title='pH Final'>
+                    <DashboardCard title='pH Atual'>
                         <WandSparkles /> <h3>---</h3>
                     </DashboardCard>
 
