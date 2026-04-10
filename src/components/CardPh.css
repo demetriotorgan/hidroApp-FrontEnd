@@ -1,0 +1,82 @@
+.card-ph-row {
+    display: flex;
+    flex-direction: column; /* 🔥 chave da solução */
+    background: #ffffff;
+    border: 1px solid #dbeafe;
+    border-left: 4px solid #2563eb;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.card-ph-row:hover {
+    background: #f8fafc;
+}
+
+/* Cada linha */
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* separa label e valor */
+    gap: 10px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 6px;
+}
+
+/* Remove borda da última */
+.cell:last-child {
+    border-bottom: none;
+}
+
+/* Grupo ícone + texto */
+.cell-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cell div {
+    display: flex;
+    flex-direction: column;
+}
+
+.cell small {
+    font-size: 0.7rem;
+    color: #64748b;
+}
+
+.cell span {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.cell svg {
+    color: #2563eb;
+    flex-shrink: 0;
+}
+
+.destaque span {
+    color: #1d4ed8;
+}
+
+/* Botão delete alinhado à direita */
+.actions {
+    justify-content: flex-end;
+    border-bottom: none;
+}
+
+.delete-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #ef4444;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.delete-btn:hover {
+    background: #fee2e2;
+}

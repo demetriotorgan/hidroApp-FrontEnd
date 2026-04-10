@@ -2,55 +2,19 @@ import { FlaskConical, Save } from 'lucide-react'
 import React, { useState } from 'react'
 import { getDataAtual } from '../services/dataUtils'
 import { calcularAcido } from '../services/acidoService'
+import useFormPh from '../hooks/useFormPh'
+import api from '../services/api'
+import CardPh from './CardPh'
 
 const FormPh = () => {
-    const dadosInicias = {
-        reservatorio: '',
-        phAtual: '',
-        phObjetivo: 6.8,
-        acido: '',
-        data: getDataAtual()
-    }
 
-    const [form, setForm] = useState(dadosInicias);
+    const { form, handleChange, handleSubmit, salvandopH, registroPh, carregandopH } = useFormPh();
 
-    function handleChange(e) {
-        const { name, value, type } = e.target;
-        const novoValor = value;
-
-        const novoForm = {
-            ...form,
-            [name]: novoValor
-        };
-
-        //Calculo da massa de ácido
-        const reservatorio = parseFloat(novoForm.reservatorio);
-        const phAtual = parseFloat(novoForm.phAtual);
-        const phObjetivo = parseFloat(novoForm.phObjetivo);
-
-        if (
-            !isNaN(reservatorio) &&
-            !isNaN(phObjetivo) &&
-            !isNaN(phAtual) &&
-            novoForm.reservatorio !== '' &&
-            novoForm.phAtual !== '' &&
-            novoForm.phObjetivo !== ''
-        ) {
-            novoForm.acido = calcularAcido(
-                phObjetivo,
-                reservatorio,
-                phAtual
-            );
-        } else {
-            novoForm.acido = '';
-        }
-        setForm(novoForm);
-    };
 
     return (
         <>
             <h3><FlaskConical /> Correção de pH</h3>
-            <form className='form-container'>
+            <form className='form-container' onSubmit={handleSubmit}>
                 <div className='form-group'>
                     <label>Reservatório Atual (L)
                         <input
@@ -104,6 +68,19 @@ const FormPh = () => {
                     Salvar Registro
                 </button>
             </form>
+
+            {carregandopH ? (
+                <div className="empty-state">Carregando registros...</div>
+            ) : registroPh.length === 0 ? (
+                <div className="empty-state">Aguardando Registro</div>
+            ) : (
+                registroPh.map((item) => (
+                    <CardPh
+                        key={item._id}
+                        registro={item}                        
+                    />
+                ))
+            )}
         </>
     )
 }
