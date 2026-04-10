@@ -10,7 +10,10 @@ import CardPh from '../components/CardPh';
 
 const Cloro = () => {
   const { registros, carregando, carregarRegistrosCloracao, handleDelete, deletando } = useCloracao();
-  const { carregandopH, registroPh, deletandoPh, carregarRegistrospH, handleDeletePh } = usePh();
+  const { carregandopH, registrosPh, deletandoPh, carregarRegistrospH, handleDeletePh } = usePh();
+  const primeiroCloracao = registros[0];
+  const primeiroPh = registrosPh[0];
+
   const navigate = useNavigate();
 
   return (
@@ -21,20 +24,21 @@ const Cloro = () => {
       </h1>
 
       <FormCloro carregarRegistro={carregarRegistrosCloracao} />
+      <h3>Última correção de Cloro</h3>
 
       {carregando ? (
         <div className="empty-state">Carregando registros...</div>
       ) : registros.length === 0 ? (
-        <div className="empty-state">Aguardando Registro</div>
+        <div className="empty-state">Aguardando Registro de Cloro</div>
       ) : (
-        registros.map((item) => (
+        primeiroCloracao && (
           <CloracaoCard
-            key={item._id}
-            registro={item}
+            key={primeiroCloracao._id}
+            registro={primeiroCloracao}
             onDelete={handleDelete}
             deletandoCloro={deletando}
           />
-        ))
+        )
       )}
       <button className="form-button" type="submit">
         <Pencil size={18} />
@@ -42,24 +46,24 @@ const Cloro = () => {
       </button>
 
       <FormPh carregarRegistroPh={carregarRegistrospH} />
-      
+
       <h3>Útilma Correção de pH</h3>
 
       {carregandopH ? (
         <div className="empty-state">Carregando registros...</div>
-      ) : registroPh.length === 0 ? (
-        <div className="empty-state">Aguardando Registro</div>
+      ) : registrosPh.length === 0 ? (
+        <div className="empty-state">Aguardando Registro de pH</div>
       ) : (
-        registroPh.map((item) => (
+        primeiroPh && (
           <CardPh
-            key={item._id}
-            registro={item}            
+            key={primeiroPh._id}
+            registro={primeiroPh}
             onDelete={handleDeletePh}
             deletando={deletandoPh}
           />
-        ))
+        )
       )}
-       <button className="form-button" type="submit">
+      <button className="form-button" type="submit">
         <Pencil size={18} />
         Ver Registros
       </button>

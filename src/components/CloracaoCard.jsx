@@ -25,8 +25,7 @@ function CloracaoCard({ registro, onDelete,deletandoCloro }) {
         <LoadingModal
                 isOpen={deletandoCloro}
                 message="Deletando registro de cloro"
-            />
-            <h3>Ultima Cloração</h3>
+            />            
             <div className="cloracao-card">
                 <div className="card-header">
                     <h4>Cloração</h4>

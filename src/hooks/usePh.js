@@ -4,7 +4,7 @@ import api from "../services/api";
 function usePh() {
 
     const [carregandopH, setCarregandopH] = useState(false);
-    const [registroPh, setRegistrospH] = useState([]);
+    const [registrosPh, setRegistrospH] = useState([]);
     const [deletandoPh, setDeletandoPh] = useState(false);
 
     useEffect(() => {
@@ -44,7 +44,7 @@ function usePh() {
 
     return {      
         carregandopH,          
-        registroPh,
+        registrosPh,
         deletandoPh,
         carregarRegistrospH,
         handleDeletePh        
