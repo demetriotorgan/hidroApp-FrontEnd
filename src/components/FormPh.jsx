@@ -5,14 +5,18 @@ import { calcularAcido } from '../services/acidoService'
 import useFormPh from '../hooks/useFormPh'
 import api from '../services/api'
 import CardPh from './CardPh'
+import LoadingModal from './LoadingModal'
 
-const FormPh = () => {
+const FormPh = ({carregarRegistroPh}) => {
 
-    const { form, handleChange, handleSubmit, salvandopH, registroPh, carregandopH } = useFormPh();
-
+    const { form, handleChange, salvandopH,  handleSubmit } = useFormPh({carregarRegistroPh});
 
     return (
         <>
+            <LoadingModal
+                isOpen={salvandopH}
+                message="Salvando registro"
+            />
             <h3><FlaskConical /> Correção de pH</h3>
             <form className='form-container' onSubmit={handleSubmit}>
                 <div className='form-group'>
@@ -68,19 +72,6 @@ const FormPh = () => {
                     Salvar Registro
                 </button>
             </form>
-
-            {carregandopH ? (
-                <div className="empty-state">Carregando registros...</div>
-            ) : registroPh.length === 0 ? (
-                <div className="empty-state">Aguardando Registro</div>
-            ) : (
-                registroPh.map((item) => (
-                    <CardPh
-                        key={item._id}
-                        registro={item}                        
-                    />
-                ))
-            )}
         </>
     )
 }

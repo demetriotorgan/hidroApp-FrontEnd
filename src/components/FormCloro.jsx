@@ -1,15 +1,20 @@
 import { FlaskRound, Save } from 'lucide-react'
 import React, { useState } from 'react'
 import useFormCloracao from '../hooks/useFormCloracao'
+import LoadingModal from './LoadingModal';
 
 
-const FormCloro = ({carregarRegistro}) => {
+const FormCloro = ({ carregarRegistro }) => {
     const { form,
         handleChange,
         handleSubmit,
         salvandoDadosCloro } = useFormCloracao(carregarRegistro);
     return (
         <>
+            <LoadingModal
+                isOpen={salvandoDadosCloro}
+                message="Salvando registro de Cloro"
+            />
             <h3><FlaskRound /> Cloro</h3>
             <form className='form-container' onSubmit={handleSubmit}>
                 <div className="form-group">

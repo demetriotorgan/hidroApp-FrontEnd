@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
 import { getDataAtual } from "../services/dataUtils";
 import { calcularAcido } from "../services/acidoService";
+import { useState } from "react";
 import api from "../services/api";
 
-function useFormPh() {
+function useFormPh({carregarRegistroPh}) {
     const dadosInicias = {
         reservatorio: '',
         phAtual: '',
@@ -14,14 +14,6 @@ function useFormPh() {
 
     const [form, setForm] = useState(dadosInicias);
     const [salvandopH, setSalvandopH] = useState(false);
-    const [carregandopH, setCarregandopH] = useState(false);
-    const [registroPh, setRegistrospH] = useState([]);
-
-    useEffect(()=>{
-        carregarRegistrospH();
-    },[])
-
-
 
     function handleChange(e) {
         const { name, value, type } = e.target;
@@ -66,36 +58,24 @@ function useFormPh() {
             setSalvandopH(true);
             await api.post('/salvarph', form);
             alert('Registro de pH salvo com sucesso');
-            setForm(dadosInicias);   
-            carregarRegistrospH();
+            setForm(dadosInicias);
+            carregarRegistroPh();
         } catch (error) {
             console.error('Erro ao salvar registro de pH: ', error);
             alert('Erro ao salvar registro de pH');
-        }finally{
+        } finally {
             setSalvandopH(false);
         }
     };
 
-    //GET
-    const carregarRegistrospH = async()=>{
-        try {
-            setCarregandopH(true);
-            const res = await api.get('/listarph');
-            setRegistrospH(res.data);
-        } catch (error) {
-            console.error(error);            
-        }finally{
-            setCarregandopH(false);
-        }
-    }
+
+
 
     return {
         form,
         handleChange,
-        handleSubmit,
         salvandopH,
-        registroPh,
-        carregandopH
+        handleSubmit
     }
 }
 

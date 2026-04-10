@@ -1,8 +1,9 @@
 import React from 'react';
 import { Save, Trash2 } from 'lucide-react';
 import './CloracaoCard.css';
+import LoadingModal from './LoadingModal';
 
-function CloracaoCard({ registro, onDelete }) {
+function CloracaoCard({ registro, onDelete,deletandoCloro }) {
     const {
         _id,
         reservatorio,
@@ -15,55 +16,55 @@ function CloracaoCard({ registro, onDelete }) {
 
     const dataFormatada = new Date(data).toLocaleDateString('pt-BR');
 
-    function handleDelete() {       
+    function handleDelete() {
         onDelete(_id);
     }
 
     return (
         <>
-        <h3>Ultima Cloração</h3>
-        <div className="cloracao-card">
-            <div className="card-header">
-                <h4>Cloração</h4>
-                <span className={`badge ${utilizado}`}>
-                    {utilizado}
-                </span>
+        <LoadingModal
+                isOpen={deletandoCloro}
+                message="Deletando registro de cloro"
+            />
+            <h3>Ultima Cloração</h3>
+            <div className="cloracao-card">
+                <div className="card-header">
+                    <h4>Cloração</h4>
+                    <span className={`badge ${utilizado}`}>
+                        {utilizado}
+                    </span>
+                </div>
+
+                <div className="card-body">
+                    <div className="info">
+                        <span>💧 Reservatório</span>
+                        <strong>{reservatorio} L</strong>
+                    </div>
+
+                    <div className="info">
+                        <span>🧪 Concentração</span>
+                        <strong>{concentracao} mg/L</strong>
+                    </div>
+
+                    <div className="info">
+                        <span>⚗️ Produto</span>
+                        <strong>{produto} g</strong>
+                    </div>
+
+                    <div className="info">
+                        <span>🧴 Estoque</span>
+                        <strong>{estoque} L</strong>
+                    </div>
+                </div>
+
+                <div className="card-footer">
+                    <span>📅 {dataFormatada}</span>
+
+                    <button className="delete-button" onClick={handleDelete}>
+                        <Trash2 size={16} />
+                    </button>
+                </div>
             </div>
-
-            <div className="card-body">
-                <div className="info">
-                    <span>💧 Reservatório</span>
-                    <strong>{reservatorio} L</strong>
-                </div>
-
-                <div className="info">
-                    <span>🧪 Concentração</span>
-                    <strong>{concentracao} mg/L</strong>
-                </div>
-
-                <div className="info">
-                    <span>⚗️ Produto</span>
-                    <strong>{produto} g</strong>
-                </div>
-
-                <div className="info">
-                    <span>🧴 Estoque</span>
-                    <strong>{estoque} L</strong>
-                </div>
-            </div>
-
-            <div className="card-footer">
-                <span>📅 {dataFormatada}</span>
-
-                <button className="delete-button" onClick={handleDelete}>
-                    <Trash2 size={16} />
-                </button>
-            </div>
-        </div>
-        <button className="form-button" type="submit">
-                    <Save size={18} />
-                    Ver Registros
-                </button>
         </>
     );
 }
