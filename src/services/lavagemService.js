@@ -61,3 +61,73 @@ export function getMediaProdutos(lavagens) {
         amaciante: (totalAmaciante / lavagens.length).toFixed(1)
     };
 };
+
+// Calculo de litros de água + enxague + eficiência (L/kg)
+export function calcularAguaLavagem(registros) {
+    if (!Array.isArray(registros)) return [];
+
+    const agrupado = {};
+
+    registros.forEach((item) => {
+        const dataFormatada = new Date(item.data).toLocaleDateString('pt-BR', {
+            timeZone: 'UTC'
+        });
+
+        const litros = Number(item.litros) || 0;
+        const enchague = Number(item.enchague) || 0;
+        const peso = Number(item.pesoRoupas) || 0;
+
+        const total = litros + enchague;
+
+        if (!agrupado[dataFormatada]) {
+            agrupado[dataFormatada] = {
+                totalAgua: 0,
+                pesoTotal: 0
+            };
+        }
+
+        agrupado[dataFormatada].totalAgua += total;
+        agrupado[dataFormatada].pesoTotal += peso;
+    });
+
+    // transformar em array + calcular eficiência
+    const resultado = Object.entries(agrupado).map(([data, valores]) => {
+        const { totalAgua, pesoTotal } = valores;
+
+        const litrosPorKg = pesoTotal > 0 
+            ? totalAgua / pesoTotal 
+            : 0;
+
+        return {
+            data,
+            totalAgua,
+            pesoTotal,
+            litrosPorKg: Number(litrosPorKg.toFixed(2)) // arredondado
+        };
+    });
+
+    return resultado.sort((a, b) => {
+        const [d1, m1, y1] = a.data.split('/');
+        const [d2, m2, y2] = b.data.split('/');
+
+        return new Date(`${y1}-${m1}-${d1}`) - new Date(`${y2}-${m2}-${d2}`);
+    });
+};
+
+//Calculo de Eficiencia das lavagens
+// Classificação de eficiência
+function classificarEficiencia(litrosPorKg) {
+    if (litrosPorKg <= 60) return 'BOA';
+    if (litrosPorKg <= 90) return 'MÉDIA';
+    return 'RUIM';
+}
+
+// Dados para tabela
+export function gerarDadosTabelaEficiencia(registros) {
+    const dados = calcularAguaLavagem(registros);
+
+    return dados.map(item => ({
+        ...item,
+        indicador: classificarEficiencia(item.litrosPorKg)
+    }));
+};

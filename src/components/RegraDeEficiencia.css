@@ -1,0 +1,72 @@
+.regra-container {
+    margin-top: 20px;
+    padding: 16px;
+    background-color: #f4f8ff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.regra-titulo {
+    color: #0d47a1;
+    margin-bottom: 10px;
+}
+
+.regra-descricao {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.regra-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.regra-tabela th {
+    background-color: #1565c0;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+.regra-tabela td {
+    padding: 10px;
+    border-bottom: 1px solid #e3f2fd;
+}
+
+.regra-tabela tr:hover {
+    background-color: #eef5ff;
+}
+
+/* BADGES */
+.badge {
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: white;
+    font-size: 0.85rem;
+}
+
+.badge.boa {
+    background-color: #2e7d32;
+}
+
+.badge.media {
+    background-color: #f9a825;
+}
+
+.badge.ruim {
+    background-color: #c62828;
+}
+
+/* dica */
+.regra-dica {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #e3f2fd;
+    border-left: 4px solid #1976d2;
+    border-radius: 6px;
+    color: #0d47a1;
+}

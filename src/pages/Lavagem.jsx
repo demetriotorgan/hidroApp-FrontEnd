@@ -5,6 +5,10 @@ import FormLavagem from '../components/FormLavagem';
 import { useLavagem } from '../hooks/useLavagem';
 import api from '../services/api';
 import CardLavagem from '../components/CardLavagem';
+import GraficoAguaDeLavagem from '../components/GraficoAguaDeLavagem';
+import GraficoEficienciaDeLavagem from '../components/GraficoEficienciaDeLavagem';
+import TabelaDeEficiencia from '../components/TabelaDeEficiencia';
+import RegraDeEficiencia from '../components/RegraDeEficiencia';
 
 
 const Lavagem = () => {
@@ -18,6 +22,20 @@ const Lavagem = () => {
       /> Registro de Lavagem</h1>
 
       <FormLavagem {...lavagemHook} />
+
+      <h3>Histórico de Consumo de Água</h3>
+      <GraficoAguaDeLavagem registros={lavagemHook.lavagens}/>
+
+      <h3>Eficiência das Lavagens</h3>
+      <GraficoEficienciaDeLavagem registros={lavagemHook.lavagens} />
+
+      <h3>Faixas de Eficiência</h3>
+      <RegraDeEficiencia />
+
+      <h3>Eficiência nas Lavagens</h3>
+      <TabelaDeEficiencia registros={lavagemHook.lavagens} />
+
+
 
       <h2>Lavagens Realizadas</h2>
       {lavagemHook.lavagens.length === 0 ? (
