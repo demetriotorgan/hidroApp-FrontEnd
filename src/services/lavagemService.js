@@ -157,11 +157,11 @@ export function calcularAguaLavagem(registros) {
     });
 
     return resultado.sort((a, b) => {
-        const [d1, m1, y1] = a.data.split('/');
-        const [d2, m2, y2] = b.data.split('/');
+    const [d1, m1, y1] = a.data.split('/');
+    const [d2, m2, y2] = b.data.split('/');
 
-        return new Date(`${y1}-${m1}-${d1}`) - new Date(`${y2}-${m2}-${d2}`);
-    });
+    return new Date(`${y2}-${m2}-${d2}`) - new Date(`${y1}-${m1}-${d1}`);
+});
 };
 
 //Calculo de Eficiencia das lavagens

@@ -14,7 +14,8 @@ import {
 
 const GraficoEficienciaDeLavagem = ({ registros }) => {
 
-    const dados = calcularAguaLavagem(registros);
+    const dados = [...calcularAguaLavagem(registros)].reverse();
+    // console.log(dados.map(d => d.data));
 
     return (
         <div style={{ width: '100%'}}>

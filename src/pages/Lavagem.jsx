@@ -45,7 +45,7 @@ const Lavagem = () => {
       {lavagemHook.lavagens.length === 0 ? (
         <p className="empty-message">Aguardando registros...</p>
       ) : (
-        lavagemHook.lavagens.slice(0, 1).map((lavagem) => (
+        lavagemHook.lavagens.map((lavagem) => (
           <CardLavagem
             key={lavagem._id}
             lavagem={lavagem}

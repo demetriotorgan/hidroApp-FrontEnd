@@ -14,7 +14,7 @@ import {
 
 const GraficoEficienciaRelativa = ({ registros }) => {
 
-    const dados = gerarDadosGraficoEficiencia(registros);
+    const dados = [...gerarDadosGraficoEficiencia(registros)].reverse();
 
     return (
         <div style={{ width: '100%'}}>
