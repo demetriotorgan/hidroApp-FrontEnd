@@ -62,7 +62,7 @@ export function getMediaProdutos(lavagens) {
     };
 };
 
-// Calculo de litros de água + enxague + eficiência (L/kg)
+//Calculo da Eficiencia de Lavagem e Enxágues
 export function calcularAguaLavagem(registros) {
     if (!Array.isArray(registros)) return [];
 
@@ -73,36 +73,86 @@ export function calcularAguaLavagem(registros) {
             timeZone: 'UTC'
         });
 
-        const litros = Number(item.litros) || 0;
-        const enchague = Number(item.enchague) || 0;
+        const litrosLavagem = Number(item.litros) || 0;
+        const litrosEnxague = Number(item.enchague) || 0;
         const peso = Number(item.pesoRoupas) || 0;
-
-        const total = litros + enchague;
 
         if (!agrupado[dataFormatada]) {
             agrupado[dataFormatada] = {
-                totalAgua: 0,
+                totalLavagem: 0,
+                totalEnxague: 0,
                 pesoTotal: 0
             };
         }
 
-        agrupado[dataFormatada].totalAgua += total;
+        agrupado[dataFormatada].totalLavagem += litrosLavagem;
+        agrupado[dataFormatada].totalEnxague += litrosEnxague;
         agrupado[dataFormatada].pesoTotal += peso;
     });
 
-    // transformar em array + calcular eficiência
-    const resultado = Object.entries(agrupado).map(([data, valores]) => {
-        const { totalAgua, pesoTotal } = valores;
+    const capacidadeMax = 12;
+    const volumeMin = 40;
+    const volumeMax = 80;
 
-        const litrosPorKg = pesoTotal > 0 
-            ? totalAgua / pesoTotal 
+    const resultado = Object.entries(agrupado).map(([data, valores]) => {
+        const { totalLavagem, totalEnxague, pesoTotal } = valores;
+
+        const totalAgua = totalLavagem + totalEnxague;
+
+        // 🔹 EVITAR divisão por zero
+        const litrosPorKgLavagem = pesoTotal > 0 ? totalLavagem / pesoTotal : 0;
+        const litrosPorKgEnxague = pesoTotal > 0 ? totalEnxague / pesoTotal : 0;
+        const litrosPorKgTotal = pesoTotal > 0 ? totalAgua / pesoTotal : 0;
+
+        // 🔹 IDEAL LAVAGEM (modelo da máquina)
+        let litrosIdeaisLavagem = volumeMin + ((volumeMax - volumeMin) / capacidadeMax) * pesoTotal;
+
+        if (litrosIdeaisLavagem > volumeMax) {
+            litrosIdeaisLavagem = volumeMax;
+        }
+
+        // 🔹 IDEAL ENXÁGUE (com restrição mínima)
+        const enxagueCalculado = litrosIdeaisLavagem * 0.5;
+        const litrosIdeaisEnxague = Math.max(enxagueCalculado, volumeMin);
+
+        const totalIdeal = litrosIdeaisLavagem + litrosIdeaisEnxague;
+
+        // 🔹 EFICIÊNCIA RELATIVA
+        const eficienciaRelativaLavagem = litrosIdeaisLavagem > 0
+            ? totalLavagem / litrosIdeaisLavagem
+            : 0;
+
+        const eficienciaRelativaEnxague = litrosIdeaisEnxague > 0
+            ? totalEnxague / litrosIdeaisEnxague
+            : 0;
+
+        const eficienciaRelativaTotal = totalIdeal > 0
+            ? totalAgua / totalIdeal
             : 0;
 
         return {
             data,
+
+            // 🔹 TOTAIS
+            pesoTotal: Number(pesoTotal.toFixed(2)),
+            totalLavagem,
+            totalEnxague,
             totalAgua,
-            pesoTotal,
-            litrosPorKg: Number(litrosPorKg.toFixed(2)) // arredondado
+
+            // 🔹 EFICIÊNCIA (L/kg)
+            eficienciaLavagem: Number(litrosPorKgLavagem.toFixed(2)),
+            eficienciaEnxague: Number(litrosPorKgEnxague.toFixed(2)),
+            eficienciaTotal: Number(litrosPorKgTotal.toFixed(2)),
+
+            // 🔹 IDEAIS
+            litrosIdeaisLavagem: Number(litrosIdeaisLavagem.toFixed(2)),
+            litrosIdeaisEnxague: Number(litrosIdeaisEnxague.toFixed(2)),
+            totalIdeal: Number(totalIdeal.toFixed(2)),
+
+            // 🔹 EFICIÊNCIA RELATIVA
+            eficienciaRelativaLavagem: Number(eficienciaRelativaLavagem.toFixed(2)),
+            eficienciaRelativaEnxague: Number(eficienciaRelativaEnxague.toFixed(2)),
+            eficienciaRelativaTotal: Number(eficienciaRelativaTotal.toFixed(2))
         };
     });
 
@@ -116,11 +166,14 @@ export function calcularAguaLavagem(registros) {
 
 //Calculo de Eficiencia das lavagens
 // Classificação de eficiência
-function classificarEficiencia(litrosPorKg) {
-    if (litrosPorKg <= 60) return 'BOA';
-    if (litrosPorKg <= 90) return 'MÉDIA';
+function classificarEficiencia(eficienciaRelativa) {
+    if (eficienciaRelativa === 0) return 'SEM DADOS';
+
+    if (eficienciaRelativa <= 1.1) return 'EXCELENTE';
+    if (eficienciaRelativa <= 1.3) return 'BOA';
+    if (eficienciaRelativa <= 1.6) return 'MÉDIA';
     return 'RUIM';
-}
+};
 
 // Dados para tabela
 export function gerarDadosTabelaEficiencia(registros) {
@@ -128,6 +181,81 @@ export function gerarDadosTabelaEficiencia(registros) {
 
     return dados.map(item => ({
         ...item,
-        indicador: classificarEficiencia(item.litrosPorKg)
+
+        // 🔹 classificação separada
+        indicadorLavagem: classificarEficiencia(item.eficienciaRelativaLavagem),
+
+        indicadorEnxague: item.totalEnxague > 0
+            ? classificarEficiencia(item.eficienciaRelativaEnxague)
+            : 'NÃO HOUVE',
+
+        indicadorTotal: classificarEficiencia(item.eficienciaRelativaTotal)
     }));
 };
+
+//Calculo de Eficiencia
+export function calcularEficiencia(carga) {
+    const cargaKg = Number(carga) || 0;
+
+    if (cargaKg <= 0) {
+        return {
+            erro: "Carga inválida"
+        };
+    }
+
+    const capacidadeMax = 12;
+    const volumeMin = 40;
+    const volumeMax = 80;
+
+    // 🔹 Lavagem (modelo linear)
+    let litrosIdeaisLavagem = volumeMin + ((volumeMax - volumeMin) / capacidadeMax) * cargaKg;
+
+    if (litrosIdeaisLavagem > volumeMax) litrosIdeaisLavagem = volumeMax;
+
+    const litrosRecomendados = Math.round(litrosIdeaisLavagem);
+
+    // 🔹 Enxágue (com restrição física)
+    const enxagueCalculado = litrosIdeaisLavagem * 0.5;
+    const litrosRecomendadosEnxague = Math.round(
+        Math.max(enxagueCalculado, volumeMin)
+    );
+
+    // 🔹 Totais
+    const totalAgua = litrosRecomendados + litrosRecomendadosEnxague;
+
+    // 🔹 Eficiência total
+    const eficiencia = totalAgua / cargaKg;
+
+    // 🔹 Nível da máquina (baseado na lavagem)
+    let nivel = "";
+    if (litrosRecomendados <= 45) nivel = "extra-baixo";
+    else if (litrosRecomendados <= 60) nivel = "baixo";
+    else if (litrosRecomendados <= 75) nivel = "médio";
+    else nivel = "alto";
+
+    // 🔹 Status
+    let status = "";
+    if (eficiencia <= 20) status = "excelente";
+    else if (eficiencia <= 40) status = "boa";
+    else if (eficiencia <= 60) status = "média";
+    else status = "baixa eficiência";
+
+    return {
+        carga: cargaKg,
+
+        // lavagem
+        litrosIdeais: Number(litrosIdeaisLavagem.toFixed(2)),
+        litrosRecomendados,
+
+        // enxágue
+        litrosRecomendadosEnxague,
+
+        // total
+        totalAgua,
+
+        eficiencia: Number(eficiencia.toFixed(2)),
+
+        nivel,
+        status
+    };
+}

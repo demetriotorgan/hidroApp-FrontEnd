@@ -17,19 +17,19 @@ const GraficoEficienciaDeLavagem = ({ registros }) => {
     const dados = calcularAguaLavagem(registros);
 
     return (
-        <div style={{ width: '100%', height: 320 }}>
-            <ResponsiveContainer>
+        <div style={{ width: '100%'}}>
+            <ResponsiveContainer width = '100%' height= {320} >
                 <LineChart data={dados}>
                     <CartesianGrid strokeDasharray="3 3" />
 
                     <XAxis dataKey="data" />
 
-                    <YAxis 
+                    <YAxis
                         yAxisId="left"
                         label={{ value: 'Litros', angle: -90, position: 'insideLeft' }}
                     />
 
-                    <YAxis 
+                    <YAxis
                         yAxisId="right"
                         orientation="right"
                         label={{ value: 'L/kg', angle: 90, position: 'insideRight' }}
@@ -53,7 +53,7 @@ const GraficoEficienciaDeLavagem = ({ registros }) => {
                     <Line
                         yAxisId="right"
                         type="monotone"
-                        dataKey="litrosPorKg"
+                        dataKey="eficienciaTotal"
                         stroke="#28a745"
                         strokeWidth={2}
                         name="Eficiência (L/kg)"

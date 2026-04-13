@@ -18,8 +18,8 @@ const GraficoAguaDeLavagem = ({ registros }) => {
     const dados = calcularAguaLavagem(registros);
 // console.log("📊 dados processados:", dados);
     return (
-        <div style={{ width: '100%', height: 300 }}>
-            <ResponsiveContainer>
+        <div style={{ width: '100%'}}>
+            <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={dados}>
                     <CartesianGrid strokeDasharray="3 3" />
                     

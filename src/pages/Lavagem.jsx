@@ -9,6 +9,7 @@ import GraficoAguaDeLavagem from '../components/GraficoAguaDeLavagem';
 import GraficoEficienciaDeLavagem from '../components/GraficoEficienciaDeLavagem';
 import TabelaDeEficiencia from '../components/TabelaDeEficiencia';
 import RegraDeEficiencia from '../components/RegraDeEficiencia';
+import FormEficiencia from '../components/FormEficiencia';
 
 
 const Lavagem = () => {
@@ -21,6 +22,10 @@ const Lavagem = () => {
         onClick={() => navigate("/")}
       /> Registro de Lavagem</h1>
 
+      <h3>Calculador de Eficiência</h3>
+      <FormEficiencia />
+
+      <h3>Cadastrar Nova Lavagem</h3>
       <FormLavagem {...lavagemHook} />
 
       <h3>Histórico de Consumo de Água</h3>
@@ -28,14 +33,9 @@ const Lavagem = () => {
 
       <h3>Eficiência das Lavagens</h3>
       <GraficoEficienciaDeLavagem registros={lavagemHook.lavagens} />
-
-      <h3>Faixas de Eficiência</h3>
-      <RegraDeEficiencia />
-
+      
       <h3>Eficiência nas Lavagens</h3>
       <TabelaDeEficiencia registros={lavagemHook.lavagens} />
-
-
 
       <h2>Lavagens Realizadas</h2>
       {lavagemHook.lavagens.length === 0 ? (
@@ -50,6 +50,10 @@ const Lavagem = () => {
           />
         ))
       )}
+
+      <h3>Faixas de Eficiência</h3>
+      <RegraDeEficiencia />
+
     </>
   )
 }

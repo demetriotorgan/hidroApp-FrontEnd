@@ -1,0 +1,106 @@
+.card-eficiencia {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border-left: 6px solid #1976d2;
+    transition: transform 0.2s;
+}
+
+.card-eficiencia:hover {
+    transform: translateY(-4px);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.card-header h3 {
+    margin: 0;
+    color: #0d47a1;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.bloco {
+    background: #f5faff;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+}
+
+.bloco h4 {
+    margin-bottom: 6px;
+    color: #1565c0;
+}
+
+.destaque {
+    grid-column: span 2;
+    background: #e3f2fd;
+    font-weight: bold;
+}
+
+/* BADGES */
+.badge {
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    color: #fff !important;
+}
+
+.badge.excelente {
+    background: #4375f5;
+}
+
+.badge.boa {
+    background: #2e7d32;
+}
+
+.badge.média {
+    background: #f9a825;
+}
+
+.badge.ruim {
+    background: #c62828;
+}
+
+.bloco .badge {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 0.7rem;
+}
+
+.diagnostico {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+}
+
+/* Tipos */
+.diagnostico.ok {
+    background: #e8f5e9;
+    color: #1b5e20;
+}
+
+.diagnostico.atencao {
+    background: #fff8e1;
+    color: #f57f17;
+}
+
+.diagnostico.alerta {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.diagnostico.critico {
+    background: #b71c1c;
+    color: white;
+}

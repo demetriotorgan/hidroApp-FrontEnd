@@ -1,0 +1,37 @@
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+/* INSIGHTS */
+.insights-container {
+    margin-top: 10px;
+}
+
+.card-insights {
+    margin-top: 10px;
+    padding: 16px;
+    background: linear-gradient(135deg, #e3f2fd, #ffffff);
+    border-left: 5px solid #1976d2;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.card-insights p {
+    margin: 6px 0;
+    color: #0d47a1;
+}

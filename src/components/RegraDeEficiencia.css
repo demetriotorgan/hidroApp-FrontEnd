@@ -70,3 +70,18 @@
     border-radius: 6px;
     color: #0d47a1;
 }
+
+.subtitulo {
+    margin-top: 12px;
+    color: #0d47a1;
+    font-size: 1rem;
+}
+
+.formula {
+    background: #e3f2fd;
+    padding: 10px;
+    border-left: 4px solid #1976d2;
+    margin: 10px 0;
+    font-family: monospace;
+    font-size: 0.9rem;
+}
