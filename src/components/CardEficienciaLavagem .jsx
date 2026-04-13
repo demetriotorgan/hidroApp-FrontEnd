@@ -64,7 +64,7 @@ const CardEficienciaLavagem = ({ item }) => {
                 </span>
             </div>
 
-            <div className="card-grid">
+            <div className="card-eficiencia-grid">
 
                 {/* 🧼 LAVAGEM */}
                 <div className="bloco">
@@ -98,7 +98,7 @@ const CardEficienciaLavagem = ({ item }) => {
                 </div>
 
                 {/* 📊 TOTAL */}
-                <div className="bloco destaque">
+                <div className="bloco eficiencia-destaque">
                     <h4>Total</h4>
                     <p><strong>Água:</strong> {item.totalAgua} L</p>
                     <p><strong>Ideal:</strong> {item.totalIdeal} L</p>

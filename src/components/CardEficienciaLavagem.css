@@ -23,7 +23,7 @@
     color: #0d47a1;
 }
 
-.card-grid {
+.card-eficiencia-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
@@ -41,7 +41,7 @@
     color: #1565c0;
 }
 
-.destaque {
+.eficiencia-destaque {
     grid-column: span 2;
     background: #e3f2fd;
     font-weight: bold;
