@@ -14,7 +14,15 @@ import {
 
 const GraficoEficienciaRelativa = ({ registros }) => {
 
-    const dados = [...gerarDadosGraficoEficiencia(registros)].reverse();
+    const dadosBrutos = gerarDadosGraficoEficiencia(registros);
+    // ordena corretamente (antigo → recente)
+const dadosOrdenados = [...dadosBrutos].reverse();
+
+    // 🔥 recria o índice correto
+const dados = dadosOrdenados.map((item, index) => ({
+    ...item,
+    lavagem: index + 1
+}));
 
     return (
         <div style={{ width: '100%'}}>

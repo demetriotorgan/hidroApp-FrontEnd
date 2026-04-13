@@ -15,7 +15,7 @@ import {
 const GraficoAguaDeLavagem = ({ registros }) => {
 // console.log("📥 registros recebidos:", registros);
 
-    const dados = calcularAguaLavagem(registros);
+    const dados = [...calcularAguaLavagem(registros).reverse()];
 // console.log("📊 dados processados:", dados);
     return (
         <div style={{ width: '100%'}}>

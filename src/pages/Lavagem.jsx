@@ -54,13 +54,7 @@ const Lavagem = () => {
           />
 
         ))
-      )}
-
-      {lavagemHook.lavagens.length > 3 && (
-        <button className="btn-ver-mais">
-          Ver mais lavagens
-        </button>
-      )}
+      )}     
 
       <h3>Faixas de Eficiência</h3>
       <RegraDeEficiencia />
