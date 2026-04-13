@@ -28,9 +28,9 @@ const {
           value={form.data || ""}
           onChange={handleChange}
         />
-      </div>
+      
 
-      <div className="form-group">
+      
         <label>Horário</label>
         <input
           className="form-input"
@@ -39,9 +39,9 @@ const {
           value={form.horario || ""}
           onChange={handleChange}
         />
-      </div>
+      
 
-      <div className="form-group">
+      
         <label>Leitura</label>
         <input
           className="form-input"
@@ -50,9 +50,9 @@ const {
           value={form.leitura || ""}
           onChange={handleChange}
         />
-      </div>
+      
 
-      <div className="form-group">
+      
         <label>Observação</label>
         <textarea
           className="form-textarea"
@@ -60,13 +60,13 @@ const {
           value={form.obs || ""}
           onChange={handleChange}
         />
-      </div>
+      
 
       <button className="form-button" type="submit">
         <Save size={18}/>
         Salvar Registro
       </button>
-
+</div>
     </form>
     </>
   );
