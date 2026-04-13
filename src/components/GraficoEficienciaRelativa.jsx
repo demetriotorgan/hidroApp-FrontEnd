@@ -17,8 +17,8 @@ const GraficoEficienciaRelativa = ({ registros }) => {
     const dados = gerarDadosGraficoEficiencia(registros);
 
     return (
-        <div style={{ width: '100%', height: 320 }}>
-            <ResponsiveContainer width="100%" height="100%">
+        <div style={{ width: '100%'}}>
+            <ResponsiveContainer width="100%" height="320">
                 <LineChart data={dados}>
                     
                     <CartesianGrid strokeDasharray="3 3" />

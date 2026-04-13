@@ -16,7 +16,7 @@ import GraficoEficienciaRelativa from '../components/GraficoEficienciaRelativa';
 const Lavagem = () => {
   const navigate = useNavigate();
   const lavagemHook = useLavagem();
-  
+
   return (
     <>
       <h1><ArrowBigLeft
@@ -30,14 +30,14 @@ const Lavagem = () => {
       <FormLavagem {...lavagemHook} />
 
       <h3>Histórico de Consumo de Água</h3>
-      <GraficoAguaDeLavagem registros={lavagemHook.lavagens}/>
+      <GraficoAguaDeLavagem registros={lavagemHook.lavagens} />
 
       <h3>Eficiência das Lavagens</h3>
       <GraficoEficienciaDeLavagem registros={lavagemHook.lavagens} />
 
       <h3>Escala de Eficiência</h3>
       <GraficoEficienciaRelativa registros={lavagemHook.lavagens} />
-      
+
       <h3>Eficiência nas Lavagens</h3>
       <TabelaDeEficiencia registros={lavagemHook.lavagens} />
 
@@ -45,14 +45,21 @@ const Lavagem = () => {
       {lavagemHook.lavagens.length === 0 ? (
         <p className="empty-message">Aguardando registros...</p>
       ) : (
-        lavagemHook.lavagens.map((lavagem) => (
+        lavagemHook.lavagens.slice(0, 1).map((lavagem) => (
           <CardLavagem
             key={lavagem._id}
             lavagem={lavagem}
             onDelete={lavagemHook.deletarLavagem}
             excluindo={lavagemHook.excluindoLavagem}
           />
+
         ))
+      )}
+
+      {lavagemHook.lavagens.length > 3 && (
+        <button className="btn-ver-mais">
+          Ver mais lavagens
+        </button>
       )}
 
       <h3>Faixas de Eficiência</h3>

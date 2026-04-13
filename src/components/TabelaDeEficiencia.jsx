@@ -16,10 +16,16 @@ const TabelaDeEficiencia = ({ registros }) => {
                 <div className="vazio">Aguardando registros...</div>
             ) : (
                 <div className="cards-container">
-                    {dados.map((item, index) => (
+                    {dados.slice(0, 3).map((item, index) => (
                         <CardEficienciaLavagem key={index} item={item} />
                     ))}
                 </div>
+            )}
+
+            {dados.length > 3 && (
+                <button className="btn-ver-mais">
+                    Ver mais lavagens
+                </button>
             )}
 
         </div>
