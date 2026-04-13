@@ -189,7 +189,11 @@ export function gerarDadosTabelaEficiencia(registros) {
             ? classificarEficiencia(item.eficienciaRelativaEnxague)
             : 'NÃO HOUVE',
 
-        indicadorTotal: classificarEficiencia(item.eficienciaRelativaTotal)
+        indicadorTotal: classificarEficiencia(item.eficienciaRelativaTotal),
+        // 🔥 NOVO: ESCALA NUMÉRICA
+        escalaLavagem: item.eficienciaRelativaLavagem,
+        escalaEnxague: item.eficienciaRelativaEnxague,
+        escalaTotal: item.eficienciaRelativaTotal
     }));
 };
 
@@ -258,4 +262,13 @@ export function calcularEficiencia(carga) {
         nivel,
         status
     };
+};
+
+export function gerarDadosGraficoEficiencia(registros) {
+    const dados = calcularAguaLavagem(registros);
+
+    return dados.map((item, index) => ({
+        lavagem: index + 1, // 👈 eixo X sequencial
+        eficiencia: item.eficienciaRelativaTotal
+    }));
 }

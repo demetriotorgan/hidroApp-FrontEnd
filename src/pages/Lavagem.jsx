@@ -10,6 +10,7 @@ import GraficoEficienciaDeLavagem from '../components/GraficoEficienciaDeLavagem
 import TabelaDeEficiencia from '../components/TabelaDeEficiencia';
 import RegraDeEficiencia from '../components/RegraDeEficiencia';
 import FormEficiencia from '../components/FormEficiencia';
+import GraficoEficienciaRelativa from '../components/GraficoEficienciaRelativa';
 
 
 const Lavagem = () => {
@@ -33,6 +34,9 @@ const Lavagem = () => {
 
       <h3>Eficiência das Lavagens</h3>
       <GraficoEficienciaDeLavagem registros={lavagemHook.lavagens} />
+
+      <h3>Escala de Eficiência</h3>
+      <GraficoEficienciaRelativa registros={lavagemHook.lavagens} />
       
       <h3>Eficiência nas Lavagens</h3>
       <TabelaDeEficiencia registros={lavagemHook.lavagens} />
