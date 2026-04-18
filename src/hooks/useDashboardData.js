@@ -3,10 +3,12 @@ import { totalDeRegistros, mediaConsumo, maiorConsumo, totalConsumoAcumulado, ca
 import { usePluviometro } from "./usePluviometro ";
 import { calcularDiasSemChuva, mediaMmChuva, obterMmUltimaChuva, totalDeRegistrosDePluviometro } from "../services/pluviometroService";
 import { useEffect } from "react";
+import useCloracao from "./useCloracao";
+import { calcularMetricasCloracao, getUltimaCloracao } from "../services/cloracaoUtils";
 
 export function useDashboardData() {
     const { dados, loading } = useHidrometros();
-
+    
     //Dados do Hidrometro
     const total = totalDeRegistros(dados);
     const media = mediaConsumo(dados);
@@ -45,6 +47,11 @@ export function useDashboardData() {
     //Dados para o modelo
     const viabilidadeDosDados = calcularCoeficienteA(dados);   
 
+    //Dados de Cloração
+    const {registros: registrosCloracao} = useCloracao();
+    const ultimaCloracao = getUltimaCloracao(registrosCloracao);
+    const metricasCloracao = calcularMetricasCloracao(registrosCloracao);
+
     
     return {
         loading,
@@ -71,6 +78,8 @@ export function useDashboardData() {
         qualidadeAgua,
         modelo:{
             viabilidadeDosDados
-        }
+        },
+        ultimaCloracao,
+        metricasCloracao
     };
 }

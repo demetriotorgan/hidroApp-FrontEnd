@@ -2,8 +2,13 @@ import { Atom, Flag, Pipette, TestTubeDiagonal, WandSparkles, Waves } from 'luci
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import DashboardCard from '../DashboardCard';
+import useCloracao from '../../../hooks/useCloracao';
+import { getUltimaCloracao } from '../../../services/cloracaoUtils';
+import { formatarData } from '../../../services/dataUtils';
 
-const CloroSection = () => {
+const CloroSection = ({dadosUltimaCloracao,dadosCloracao}) => {
+    
+
     const navigate = useNavigate();
     return (
         <>
@@ -12,19 +17,31 @@ const CloroSection = () => {
 
                 <div className="dashboard-cards">
                     <DashboardCard title='Última Cloração'>
-                        <Pipette /> <h3>---</h3>
+                        <Pipette /> <h3>{dadosUltimaCloracao?.produto || '---'}(g)</h3>
                     </DashboardCard>
 
-                    <DashboardCard title='Último PPM'>
-                        <Atom /> <h3>---</h3>
+                    <DashboardCard title='Concentração Objetivo'>
+                        <Atom /> <h3>{dadosUltimaCloracao?.concentracao || '---'}(mg/L)</h3>
                     </DashboardCard>
 
-                    <DashboardCard title='Reservatório (L)'>
-                        <Waves /> <h3>---</h3>
+                    <DashboardCard title='Reservatório Alvo'>
+                        <Waves /> <h3>{dadosUltimaCloracao?.reservatorio || '---'}(L)</h3>
                     </DashboardCard>
 
-                    <DashboardCard title='pH Atual'>
-                        <WandSparkles /> <h3>---</h3>
+                    <DashboardCard title='Data'>
+                        <WandSparkles /> <h3>{formatarData(dadosUltimaCloracao?.data) || '---'}</h3>
+                    </DashboardCard>
+
+                    <DashboardCard title='Volume Médio'>
+                        <h3>{dadosCloracao.volumeMedio}(L)</h3>
+                    </DashboardCard>
+
+                    <DashboardCard title='Cloro Médio'>
+                        <h3>{dadosCloracao.produtoMedio}(g)</h3>
+                    </DashboardCard>
+
+                    <DashboardCard title='Concentração Média'>
+                        <h3>{dadosCloracao.concentracaoMedia}(g/L)</h3>
                     </DashboardCard>
 
                     <button

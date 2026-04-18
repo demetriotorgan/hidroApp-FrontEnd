@@ -110,3 +110,47 @@ export function analisarDosagem(registros) {
     };
 };
 
+export const getUltimaCloracao = (registros) => {
+    if (!registros || registros.length === 0) return null;
+
+    // Ordena do mais recente para o mais antigo
+    const ordenado = [...registros].sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+
+    return ordenado[0];
+};
+
+export const calcularMetricasCloracao = (registros) => {
+    if (!registros || registros.length === 0) {
+        return {
+            volumeMedio: 0,
+            produtoMedio: 0,
+            concentracaoMedia: 0
+        };
+    }
+
+    const totalRegistros = registros.length;
+
+    let somaVolume = 0;
+    let somaProduto = 0;
+
+    registros.forEach((r) => {
+        somaVolume += Number(r.reservatorio) || 0;
+        somaProduto += Number(r.produto) || 0;
+    });
+
+    const volumeMedio = somaVolume / totalRegistros;
+    const produtoMedio = somaProduto / totalRegistros;
+
+    // ⚠️ Relação média (produto por litro)
+    const concentracaoMedia = volumeMedio > 0
+        ? produtoMedio / volumeMedio
+        : 0;
+
+    return {
+        volumeMedio,
+        produtoMedio,
+        concentracaoMedia
+    };
+};
