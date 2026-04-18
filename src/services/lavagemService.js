@@ -62,108 +62,6 @@ export function getMediaProdutos(lavagens) {
     };
 };
 
-//Calculo da Eficiencia de Lavagem e Enxágues
-export function calcularAguaLavagem(registros) {
-    if (!Array.isArray(registros)) return [];
-
-    const agrupado = {};
-
-    registros.forEach((item) => {
-        const dataFormatada = new Date(item.data).toLocaleDateString('pt-BR', {
-            timeZone: 'UTC'
-        });
-
-        const litrosLavagem = Number(item.litros) || 0;
-        const litrosEnxague = Number(item.enchague) || 0;
-        const peso = Number(item.pesoRoupas) || 0;
-
-        if (!agrupado[dataFormatada]) {
-            agrupado[dataFormatada] = {
-                totalLavagem: 0,
-                totalEnxague: 0,
-                pesoTotal: 0
-            };
-        }
-
-        agrupado[dataFormatada].totalLavagem += litrosLavagem;
-        agrupado[dataFormatada].totalEnxague += litrosEnxague;
-        agrupado[dataFormatada].pesoTotal += peso;
-    });
-
-    const capacidadeMax = 12;
-    const volumeMin = 40;
-    const volumeMax = 80;
-
-    const resultado = Object.entries(agrupado).map(([data, valores]) => {
-        const { totalLavagem, totalEnxague, pesoTotal } = valores;
-
-        const totalAgua = totalLavagem + totalEnxague;
-
-        // 🔹 EVITAR divisão por zero
-        const litrosPorKgLavagem = pesoTotal > 0 ? totalLavagem / pesoTotal : 0;
-        const litrosPorKgEnxague = pesoTotal > 0 ? totalEnxague / pesoTotal : 0;
-        const litrosPorKgTotal = pesoTotal > 0 ? totalAgua / pesoTotal : 0;
-
-        // 🔹 IDEAL LAVAGEM (modelo da máquina)
-        let litrosIdeaisLavagem = volumeMin + ((volumeMax - volumeMin) / capacidadeMax) * pesoTotal;
-
-        if (litrosIdeaisLavagem > volumeMax) {
-            litrosIdeaisLavagem = volumeMax;
-        }
-
-        // 🔹 IDEAL ENXÁGUE (com restrição mínima)
-        const enxagueCalculado = litrosIdeaisLavagem * 0.5;
-        const litrosIdeaisEnxague = Math.max(enxagueCalculado, volumeMin);
-
-        const totalIdeal = litrosIdeaisLavagem + litrosIdeaisEnxague;
-
-        // 🔹 EFICIÊNCIA RELATIVA
-        const eficienciaRelativaLavagem = litrosIdeaisLavagem > 0
-            ? totalLavagem / litrosIdeaisLavagem
-            : 0;
-
-        const eficienciaRelativaEnxague = litrosIdeaisEnxague > 0
-            ? totalEnxague / litrosIdeaisEnxague
-            : 0;
-
-        const eficienciaRelativaTotal = totalIdeal > 0
-            ? totalAgua / totalIdeal
-            : 0;
-
-        return {
-            data,
-
-            // 🔹 TOTAIS
-            pesoTotal: Number(pesoTotal.toFixed(2)),
-            totalLavagem,
-            totalEnxague,
-            totalAgua,
-
-            // 🔹 EFICIÊNCIA (L/kg)
-            eficienciaLavagem: Number(litrosPorKgLavagem.toFixed(2)),
-            eficienciaEnxague: Number(litrosPorKgEnxague.toFixed(2)),
-            eficienciaTotal: Number(litrosPorKgTotal.toFixed(2)),
-
-            // 🔹 IDEAIS
-            litrosIdeaisLavagem: Number(litrosIdeaisLavagem.toFixed(2)),
-            litrosIdeaisEnxague: Number(litrosIdeaisEnxague.toFixed(2)),
-            totalIdeal: Number(totalIdeal.toFixed(2)),
-
-            // 🔹 EFICIÊNCIA RELATIVA
-            eficienciaRelativaLavagem: Number(eficienciaRelativaLavagem.toFixed(2)),
-            eficienciaRelativaEnxague: Number(eficienciaRelativaEnxague.toFixed(2)),
-            eficienciaRelativaTotal: Number(eficienciaRelativaTotal.toFixed(2))
-        };
-    });
-
-    return resultado.sort((a, b) => {
-    const [d1, m1, y1] = a.data.split('/');
-    const [d2, m2, y2] = b.data.split('/');
-
-    return new Date(`${y2}-${m2}-${d2}`) - new Date(`${y1}-${m1}-${d1}`);
-});
-};
-
 //Calculo de Eficiencia das lavagens
 // Classificação de eficiência
 function classificarEficiencia(eficienciaRelativa) {
@@ -272,3 +170,201 @@ export function gerarDadosGraficoEficiencia(registros) {
         eficiencia: item.eficienciaRelativaTotal
     }));
 }
+
+//Calculo de Eficiencia por lavagem individual
+export function calcularEficienciaPorLavagem(lavagem) {
+    if (!lavagem) return null;
+
+    const capacidadeMax = 12;
+    const volumeMin = 40;
+    const volumeMax = 80;
+
+    const peso = Number(lavagem.pesoRoupas) || 0;
+    const litrosLavagem = Number(lavagem.litros) || 0;
+    const litrosEnxague = Number(lavagem.enchague) || 0;
+
+    // 🔹 Data formatada (mantendo padrão atual)
+    const data = new Date(lavagem.data).toLocaleDateString('pt-BR', {
+        timeZone: 'UTC'
+    });
+
+    // 🔹 IDEAL LAVAGEM (por lavagem individual)
+    let litrosIdeaisLavagem =
+        volumeMin + ((volumeMax - volumeMin) / capacidadeMax) * peso;
+
+    if (litrosIdeaisLavagem > volumeMax) {
+        litrosIdeaisLavagem = volumeMax;
+    }
+
+    // 🔹 IDEAL ENXÁGUE (por lavagem individual)
+    const enxagueCalculado = litrosIdeaisLavagem * 0.5;
+    const litrosIdeaisEnxague = Math.max(enxagueCalculado, volumeMin);
+
+    // 🔹 TOTAIS
+    const totalAgua = litrosLavagem + litrosEnxague;
+    const totalIdeal = litrosIdeaisLavagem + litrosIdeaisEnxague;
+
+    // 🔹 EFICIÊNCIA RELATIVA (por lavagem)
+    const eficienciaRelativaLavagem =
+        litrosIdeaisLavagem > 0 ? litrosLavagem / litrosIdeaisLavagem : 0;
+
+    const eficienciaRelativaEnxague =
+        litrosIdeaisEnxague > 0 ? litrosEnxague / litrosIdeaisEnxague : 0;
+
+    const eficienciaRelativaTotal =
+        totalIdeal > 0 ? totalAgua / totalIdeal : 0;
+
+    // 🔹 EFICIÊNCIA L/kg (mantendo compatibilidade com sistema)
+    const eficienciaLavagem =
+        peso > 0 ? litrosLavagem / peso : 0;
+
+    const eficienciaEnxague =
+        peso > 0 ? litrosEnxague / peso : 0;
+
+    const eficienciaTotal =
+        peso > 0 ? totalAgua / peso : 0;
+
+    return {
+        data,
+
+        // 🔹 BASE
+        peso: Number(peso.toFixed(2)),
+        litrosLavagem,
+        litrosEnxague,
+
+        // 🔹 TOTAIS
+        totalAgua: Number(totalAgua.toFixed(2)),
+        totalIdeal: Number(totalIdeal.toFixed(2)),
+
+        // 🔹 IDEAIS (CORRETOS agora)
+        litrosIdeaisLavagem: Number(litrosIdeaisLavagem.toFixed(2)),
+        litrosIdeaisEnxague: Number(litrosIdeaisEnxague.toFixed(2)),
+
+        // 🔹 EFICIÊNCIA RELATIVA
+        eficienciaRelativaLavagem: Number(eficienciaRelativaLavagem.toFixed(2)),
+        eficienciaRelativaEnxague: Number(eficienciaRelativaEnxague.toFixed(2)),
+        eficienciaRelativaTotal: Number(eficienciaRelativaTotal.toFixed(2)),
+
+        // 🔹 EFICIÊNCIA L/kg
+        eficienciaLavagem: Number(eficienciaLavagem.toFixed(2)),
+        eficienciaEnxague: Number(eficienciaEnxague.toFixed(2)),
+        eficienciaTotal: Number(eficienciaTotal.toFixed(2))
+    };
+};
+
+//Função auxiliar que calcula os valores de Lavagem e Enxague individual de cada registro de Lavagem
+export function calcularAguaLavagem(registros) {
+    if (!Array.isArray(registros)) return [];
+
+    const agrupado = {};
+
+    registros.forEach((lavagem) => {
+        const resultado = calcularEficienciaPorLavagem(lavagem);
+
+        if (!resultado) return;
+
+        const data = resultado.data;
+
+        if (!agrupado[data]) {
+            agrupado[data] = {
+                data,
+
+                // 🔹 ACUMULADORES REAIS
+                totalLavagem: 0,
+                totalEnxague: 0,
+                totalAgua: 0,
+                pesoTotal: 0,
+
+                // 🔹 ACUMULADORES IDEAIS (AGORA CORRETOS)
+                litrosIdeaisLavagem: 0,
+                litrosIdeaisEnxague: 0,
+                totalIdeal: 0
+            };
+        }
+
+        // 🔹 SOMA REAL (igual antes)
+        agrupado[data].totalLavagem += resultado.litrosLavagem;
+        agrupado[data].totalEnxague += resultado.litrosEnxague;
+        agrupado[data].totalAgua += resultado.totalAgua;
+        agrupado[data].pesoTotal += resultado.peso;
+
+        // 🔥 🔥 🔥 AQUI ESTÁ A CORREÇÃO PRINCIPAL 🔥 🔥 🔥
+        // soma os IDEAIS INDIVIDUAIS (não recalcula por peso total)
+        agrupado[data].litrosIdeaisLavagem += resultado.litrosIdeaisLavagem;
+        agrupado[data].litrosIdeaisEnxague += resultado.litrosIdeaisEnxague;
+        agrupado[data].totalIdeal += resultado.totalIdeal;
+    });
+
+    const resultadoFinal = Object.values(agrupado).map((item) => {
+
+        // 🔹 EFICIÊNCIA RELATIVA (AGORA CORRETA)
+        const eficienciaRelativaLavagem =
+            item.litrosIdeaisLavagem > 0
+                ? item.totalLavagem / item.litrosIdeaisLavagem
+                : 0;
+
+        const eficienciaRelativaEnxague =
+            item.litrosIdeaisEnxague > 0
+                ? item.totalEnxague / item.litrosIdeaisEnxague
+                : 0;
+
+        const eficienciaRelativaTotal =
+            item.totalIdeal > 0
+                ? item.totalAgua / item.totalIdeal
+                : 0;
+
+        // 🔹 EFICIÊNCIA L/kg (mantida)
+        const eficienciaLavagem =
+            item.pesoTotal > 0 ? item.totalLavagem / item.pesoTotal : 0;
+
+        const eficienciaEnxague =
+            item.pesoTotal > 0 ? item.totalEnxague / item.pesoTotal : 0;
+
+        const eficienciaTotal =
+            item.pesoTotal > 0 ? item.totalAgua / item.pesoTotal : 0;
+
+        // 🔍 LOG DE VALIDAÇÃO (PASSO 3)
+        console.log('📊 EFR v2 - DIA:', item.data, {
+            pesoTotal: item.pesoTotal,
+            totalLavagem: item.totalLavagem,
+            totalEnxague: item.totalEnxague,
+            litrosIdeaisLavagem: item.litrosIdeaisLavagem,
+            litrosIdeaisEnxague: item.litrosIdeaisEnxague,
+            totalIdeal: item.totalIdeal,
+            eficienciaRelativaTotal
+        });
+
+        return {
+            data: item.data,
+
+            // 🔹 TOTAIS
+            pesoTotal: Number(item.pesoTotal.toFixed(2)),
+            totalLavagem: Number(item.totalLavagem.toFixed(2)),
+            totalEnxague: Number(item.totalEnxague.toFixed(2)),
+            totalAgua: Number(item.totalAgua.toFixed(2)),
+
+            // 🔹 EFICIÊNCIA L/kg
+            eficienciaLavagem: Number(eficienciaLavagem.toFixed(2)),
+            eficienciaEnxague: Number(eficienciaEnxague.toFixed(2)),
+            eficienciaTotal: Number(eficienciaTotal.toFixed(2)),
+
+            // 🔹 IDEAIS (AGORA CORRETOS)
+            litrosIdeaisLavagem: Number(item.litrosIdeaisLavagem.toFixed(2)),
+            litrosIdeaisEnxague: Number(item.litrosIdeaisEnxague.toFixed(2)),
+            totalIdeal: Number(item.totalIdeal.toFixed(2)),
+
+            // 🔹 EFICIÊNCIA RELATIVA
+            eficienciaRelativaLavagem: Number(eficienciaRelativaLavagem.toFixed(2)),
+            eficienciaRelativaEnxague: Number(eficienciaRelativaEnxague.toFixed(2)),
+            eficienciaRelativaTotal: Number(eficienciaRelativaTotal.toFixed(2))
+        };
+    });
+
+    // 🔹 Ordenação mantida (igual ao original)
+    return resultadoFinal.sort((a, b) => {
+        const [d1, m1, y1] = a.data.split('/');
+        const [d2, m2, y2] = b.data.split('/');
+
+        return new Date(`${y2}-${m2}-${d2}`) - new Date(`${y1}-${m1}-${d1}`);
+    });
+};
