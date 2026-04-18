@@ -7,6 +7,9 @@ import CloracaoCard from '../components/CloracaoCard';
 import FormPh from '../components/FormPh';
 import usePh from '../hooks/usePh';
 import CardPh from '../components/CardPh';
+import GraficoCloracao from '../components/GraficoCloracao'
+import GraficoDosagem from '../components/GraficoDosagem';
+import GraficoVolumeReservatorio from '../components/GraficoVolumeReservatorio';
 
 const Cloro = () => {
   const { registros, carregando, carregarRegistrosCloracao, handleDelete, deletando } = useCloracao();
@@ -24,8 +27,11 @@ const Cloro = () => {
       </h1>
 
       <FormCloro carregarRegistro={carregarRegistrosCloracao} />
-      <h3>Última correção de Cloro</h3>
 
+      <h3>Histórico de Cloração</h3>
+      <GraficoCloracao dados={registros} />
+      
+      <h3>Última correção de Cloro</h3>
       {carregando ? (
         <div className="empty-state">Carregando registros...</div>
       ) : registros.length === 0 ? (
@@ -40,6 +46,14 @@ const Cloro = () => {
           />
         )
       )}
+
+      <h3>Dosagem (Volume x Cloro)</h3>
+      <GraficoDosagem registros={registros} />
+
+      <h3>Volume do Reservatório</h3>
+      <GraficoVolumeReservatorio registros={registros} />
+
+
       <button className="form-button" type="submit">
         <Pencil size={18} />
         Ver Registros

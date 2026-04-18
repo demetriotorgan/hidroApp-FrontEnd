@@ -1,0 +1,65 @@
+/* Container geral */
+.painel-analise {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #f4f8ff;
+  border: 1px solid #dbe7ff;
+}
+
+/* Grid dos indicadores */
+.analise-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+/* Card individual */
+.analise-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e1ecff;
+  box-shadow: 0 2px 6px rgba(0, 0, 50, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.analise-item:hover {
+  transform: translateY(-2px);
+}
+
+/* Ícone */
+.analise-icon {
+  color: #2563eb;
+}
+
+/* Texto */
+.analise-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.analise-label {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.analise-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+/* Conclusão */
+.analise-conclusao {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #e8f0ff;
+  border-left: 4px solid #2563eb;
+  font-size: 14px;
+  color: #1e3a8a;
+}
