@@ -9,18 +9,16 @@ import {
   ResponsiveContainer
 } from 'recharts';
 
-const GraficoCloracao = ({ dados }) => {
+const GraficoCloracao = ({ dados }) => {  
 
-  // 1. Ordenar do mais antigo para o mais recente
-  const dadosOrdenados = [...dados].sort(
-    (a, b) => new Date(a.data) - new Date(b.data)
-  );
-
-  // 2. Criar estrutura para o gráfico
-  const dadosFormatados = dadosOrdenados.map((item, index) => ({
+  // 1. Criar estrutura para o gráfico
+  const dadosFormatados = [...dados]
+  .reverse()
+  .map((item, index) => ({
     indice: index + 1,           // eixo X (1,2,3...)
     produto: item.produto        // eixo Y
   }));
+
 
   return (
     <div style={{ width: '100%', height: 300 }}>

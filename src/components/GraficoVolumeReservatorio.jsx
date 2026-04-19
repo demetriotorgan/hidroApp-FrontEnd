@@ -15,13 +15,10 @@ const GraficoVolumeReservatorio = ({ registros }) => {
     return <div>Aguardando dados de volume...</div>;
   }
 
-  // 1. Ordenar do mais antigo → mais recente
-  const ordenados = [...registros].sort(
-    (a, b) => new Date(a.data) - new Date(b.data)
-  );
-
-  // 2. Formatar dados
-  const dadosGrafico = ordenados.map((item, index) => ({
+    // 1. Formatar dados
+  const dadosGrafico = [...registros]
+  .reverse()
+  .map((item, index) => ({
     indice: index + 1,
     volume: Number(item.reservatorio),
     data: item.data
