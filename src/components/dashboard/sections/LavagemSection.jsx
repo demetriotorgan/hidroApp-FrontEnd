@@ -22,12 +22,8 @@ import {
 import { useLavagem } from '../../../hooks/useLavagem'
 import { formatarData } from '../../../services/dataUtils'
 
-const LavagemSection = () => {
-    const navigate = useNavigate()
-    const lavagemHook = useLavagem()
-
-    const ultimaLavagem = getUltimaLavagem(lavagemHook.lavagens)
-    const mediasProdutos = getMediaProdutos(lavagemHook.lavagens)
+const LavagemSection = ({ultimaLavagem,mediasProdutos,lavagemHook,eficienciaGlobal}) => {
+    const navigate = useNavigate()  
 
     return (
         <section className="dashboard-section">
@@ -117,6 +113,18 @@ const LavagemSection = () => {
                             </small>
                         </div>
                     </div>
+                </DashboardCard>
+
+                <DashboardCard title="EFR Global">
+                    <h3>{eficienciaGlobal.efrGeral.toFixed(2)}</h3>
+                </DashboardCard>
+
+                <DashboardCard title="EFR Global por Lavagens">
+                    <h3>{eficienciaGlobal.efrLavagem.toFixed(2)}</h3>
+                </DashboardCard>
+
+                 <DashboardCard title="EFR Global por Enxágues">
+                    <h3>{eficienciaGlobal.efrEnxague.toFixed(2)}</h3>
                 </DashboardCard>
 
                 <button

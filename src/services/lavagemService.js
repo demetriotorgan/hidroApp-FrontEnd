@@ -324,15 +324,15 @@ export function calcularAguaLavagem(registros) {
             item.pesoTotal > 0 ? item.totalAgua / item.pesoTotal : 0;
 
         // 🔍 LOG DE VALIDAÇÃO (PASSO 3)
-        console.log('📊 EFR v2 - DIA:', item.data, {
-            pesoTotal: item.pesoTotal,
-            totalLavagem: item.totalLavagem,
-            totalEnxague: item.totalEnxague,
-            litrosIdeaisLavagem: item.litrosIdeaisLavagem,
-            litrosIdeaisEnxague: item.litrosIdeaisEnxague,
-            totalIdeal: item.totalIdeal,
-            eficienciaRelativaTotal
-        });
+        // console.log('📊 EFR v2 - DIA:', item.data, {
+        //     pesoTotal: item.pesoTotal,
+        //     totalLavagem: item.totalLavagem,
+        //     totalEnxague: item.totalEnxague,
+        //     litrosIdeaisLavagem: item.litrosIdeaisLavagem,
+        //     litrosIdeaisEnxague: item.litrosIdeaisEnxague,
+        //     totalIdeal: item.totalIdeal,
+        //     eficienciaRelativaTotal
+        // });
 
         return {
             data: item.data,
@@ -368,3 +368,71 @@ export function calcularAguaLavagem(registros) {
         return new Date(`${y2}-${m2}-${d2}`) - new Date(`${y1}-${m1}-${d1}`);
     });
 };
+
+
+// Calculo de Eficiencia Global (modelo por lavagem)
+export function calcularEfrGeralLavagens(registros) {
+  if (!registros || registros.length === 0) {
+    return {
+      efrGeral: 0,
+      efrLavagem: 0,
+      efrEnxague: 0
+    };
+  }
+
+  let volumeRealLavagem = 0;
+  let volumeRealEnxague = 0;
+
+  let volumeIdealLavagem = 0;
+
+  registros.forEach((r) => {
+    const litros = r.litros || 0;
+    const enxague = r.enchague || 0;
+    const carga = r.pesoRoupas || 0;
+
+    // 🔹 Reais
+    volumeRealLavagem += litros;
+    volumeRealEnxague += enxague;
+
+    // 🔹 Ideal por lavagem
+    const Li = 40 + ((80 - 40) / 12) * carga;
+    volumeIdealLavagem += Li;
+  });
+
+  const totalLavagens = registros.length;
+
+  // 🔹 Ideal enxague
+  const volumeIdealEnxague = 40 * totalLavagens;
+
+  // 🔹 Totais
+  const volumeRealTotal = volumeRealLavagem + volumeRealEnxague;
+  const volumeIdealTotal = volumeIdealLavagem + volumeIdealEnxague;
+
+  // 🔹 EFRs
+  const efrLavagem =
+    volumeIdealLavagem > 0
+      ? volumeRealLavagem / volumeIdealLavagem
+      : 0;
+
+  const efrEnxague =
+    volumeIdealEnxague > 0
+      ? volumeRealEnxague / volumeIdealEnxague
+      : 0;
+
+  const efrGeral =
+    volumeIdealTotal > 0
+      ? volumeRealTotal / volumeIdealTotal
+      : 0;
+
+  return {
+    volumeRealLavagem,
+    volumeRealEnxague,
+    volumeIdealLavagem,
+    volumeIdealEnxague,
+    volumeRealTotal,
+    volumeIdealTotal,
+    efrLavagem,
+    efrEnxague,
+    efrGeral
+  };
+}

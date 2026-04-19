@@ -5,10 +5,12 @@ import { calcularDiasSemChuva, mediaMmChuva, obterMmUltimaChuva, totalDeRegistro
 import { useEffect } from "react";
 import useCloracao from "./useCloracao";
 import { calcularMetricasCloracao, getUltimaCloracao } from "../services/cloracaoUtils";
+import { useLavagem } from "./useLavagem";
+import { calcularEfrGeralLavagens, getMediaProdutos, getUltimaLavagem } from "../services/lavagemService";
 
 export function useDashboardData() {
     const { dados, loading } = useHidrometros();
-    
+
     //Dados do Hidrometro
     const total = totalDeRegistros(dados);
     const media = mediaConsumo(dados);
@@ -45,14 +47,21 @@ export function useDashboardData() {
     };
 
     //Dados para o modelo
-    const viabilidadeDosDados = calcularCoeficienteA(dados);   
+    const viabilidadeDosDados = calcularCoeficienteA(dados);
+
+    //Dados de Lavagem
+    const lavagemHook = useLavagem()
+
+    const ultimaLavagem = getUltimaLavagem(lavagemHook.lavagens)
+    const mediasProdutos = getMediaProdutos(lavagemHook.lavagens)
+    const eficienciaGlobal = calcularEfrGeralLavagens(lavagemHook.lavagens)
 
     //Dados de Cloração
-    const {registros: registrosCloracao} = useCloracao();
+    const { registros: registrosCloracao } = useCloracao();
     const ultimaCloracao = getUltimaCloracao(registrosCloracao);
     const metricasCloracao = calcularMetricasCloracao(registrosCloracao);
 
-    
+
     return {
         loading,
         hidrometro: {
@@ -76,9 +85,13 @@ export function useDashboardData() {
             media: mmMedioDeChuva
         },
         qualidadeAgua,
-        modelo:{
+        modelo: {
             viabilidadeDosDados
         },
+        ultimaLavagem,
+        mediasProdutos,
+        lavagemHook,
+        eficienciaGlobal,
         ultimaCloracao,
         metricasCloracao
     };

@@ -12,7 +12,7 @@ import CloroSection from "../components/dashboard/sections/CloroSection";
 
 function Dashboard() {
 
-  const { loading, hidrometro, pluviometro,qualidadeAgua, modelo,ultimaCloracao,metricasCloracao } = useDashboardData();  
+  const { loading, hidrometro, pluviometro, qualidadeAgua, modelo, ultimaLavagem, mediasProdutos, lavagemHook, eficienciaGlobal, ultimaCloracao, metricasCloracao } = useDashboardData();
 
   if (loading) {
     return <p>Carregando dashboard...</p>;
@@ -21,16 +21,21 @@ function Dashboard() {
   return (
     <div className="dashboard">
       <h1>Painel de Monitoramento <ActivityIcon /></h1>
-      <HidrometroSection data={hidrometro}/>
-      <PluviometroSection data={pluviometro}/>      
-      <QualidadeAguaSection data={qualidadeAgua}/>
+      <HidrometroSection data={hidrometro} />
+      <PluviometroSection data={pluviometro} />
+      <QualidadeAguaSection data={qualidadeAgua} />
       <ModeloSection data={modelo} />
       <PrevisaoSection />
-      <LavagemSection />
-      <CloroSection 
+      <LavagemSection
+        ultimaLavagem={ultimaLavagem}
+        mediasProdutos={mediasProdutos}
+        lavagemHook={lavagemHook}
+        eficienciaGlobal={eficienciaGlobal}
+      />
+      <CloroSection
         dadosUltimaCloracao={ultimaCloracao}
         dadosCloracao={metricasCloracao}
-        />
+      />
     </div>
   );
 }
