@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Hidrometro from "./pages/Hidrometro";
 import Pluviometro from "./pages/Pluviometro";
-import Tambor from "./pages/Tambor";
+import Iqa from "./pages/Iqa";
 import Modelo from "./pages/Modelo";
 import Previsao from "./pages/Previsao";
 import Lavagem from "./pages/Lavagem";
@@ -19,7 +19,7 @@ function App() {
 
         <Route path="/hidrometro" element={<Hidrometro />} />
         <Route path="/pluviometro" element={<Pluviometro />} />
-        <Route path="/tambor" element={<Tambor/>}/>
+        <Route path="/iqa" element={<Iqa/>}/>
         <Route path="/modelo" element={<Modelo />}/>
         <Route path="/previsao" element={<Previsao/>}/>   
         <Route path="/lavagem" element={<Lavagem/>}/>   

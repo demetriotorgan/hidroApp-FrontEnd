@@ -33,7 +33,7 @@ function QualidadeAguaSection({ data }) {
 
         <button
           className="dashboard-button"
-          onClick={() => navigate("/tambor")}
+          onClick={() => navigate("/iqa")}
         >
           Qualidade da Água <FlaskConical />
         </button>
