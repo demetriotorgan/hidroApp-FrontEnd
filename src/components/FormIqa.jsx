@@ -55,16 +55,7 @@ export default function FormIqa({ onSuccess, registroEmEdicao, onCancelEdit }) {
                             value={formData.hidrometroInicial}
                             onChange={handleChange}
                         />
-                    </label>
-
-                    <label>Total de Recirculação
-                        <input
-                            className="form-input"
-                            type="number"
-                            name="totalDeRecirculacao"
-                            value={formData.totalDeRecirculacao}
-                            onChange={handleChange} />
-                    </label>
+                    </label>                    
 
                     <label>pH
                         <input
@@ -172,6 +163,16 @@ export default function FormIqa({ onSuccess, registroEmEdicao, onCancelEdit }) {
                             onChange={handleChange}
                             readOnly
                         />
+                    </label>
+                    <label>Total de Recirculação
+                        <input
+                            className="form-input"
+                            type="number"
+                            name="totalDeRecirculacao"
+                            value={formData.totalDeRecirculacao}
+                            onChange={handleChange} 
+                            readOnly
+                            />                            
                     </label>
                 </div>
 

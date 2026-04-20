@@ -452,4 +452,51 @@ export function calcularMediaDiaria(historico){
   const totalGeral = valoresDiarios.reduce((acc, litros) => acc + litros, 0);
   
   return (totalGeral / valoresDiarios.length).toFixed(2);
-}
+};
+
+// 🔄 Calcula número de recirculações com base no hidrômetro
+export function calcularRecirculacoes({
+    hidrometroInicial,
+    hidrometroFinal,
+    volume
+}) {
+    const hi = Number(hidrometroInicial);
+    const hf = Number(hidrometroFinal);
+    const vol = Number(volume);
+
+    // validações básicas
+    if (!hi || !hf || !vol) return "";
+    if (hf <= hi) return "";
+
+    // diferença no hidrômetro
+    const diferenca = hf - hi;
+
+    // converte para litros (multiplica por 10)
+    const volumeRecirculado = diferenca * 10;
+
+    if (volumeRecirculado === 0) return "";
+
+    // número de recirculações
+    const recirculacoes = volumeRecirculado/ vol;
+
+    // arredonda para 1 casa decimal
+    return Number(recirculacoes.toFixed(1));
+};
+
+// ⏱️ Calcula tempo de recirculação em minutos
+export function calcularTempoRecirculacao(horaInicial, horaFinal) {
+    if (!horaInicial || !horaFinal) return "";
+
+    const [h1, m1] = horaInicial.split(":").map(Number);
+    const [h2, m2] = horaFinal.split(":").map(Number);
+
+    const minutosInicial = h1 * 60 + m1;
+    const minutosFinal = h2 * 60 + m2;
+
+    const diferenca = minutosFinal - minutosInicial;
+
+    // evita valores negativos (ex: erro de input)
+    if (diferenca <= 0) return "";
+
+    return diferenca; // já está em minutos
+};

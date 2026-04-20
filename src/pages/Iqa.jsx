@@ -11,6 +11,16 @@ const Iqa = () => {
   const [registroEmEdicao, setRegistroEmEdicao] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!registroEmEdicao) return;
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  }, [registroEmEdicao]);
+
   return (
     <>
       <h1><ArrowBigLeft
@@ -27,6 +37,13 @@ const Iqa = () => {
 
       {/* LOADING */}
       {carregando && <p>Carregando registros...</p>}
+
+      {/* LISTA VAZIA */}
+      {!carregando && registrosDaAgua.length === 0 && (
+        <div className="empty-state">
+          <p>📭 Aguardando registros de qualidade da água...</p>
+        </div>
+      )}
 
       {/* LISTA */}
       {!carregando && registrosDaAgua.map((registro) => (

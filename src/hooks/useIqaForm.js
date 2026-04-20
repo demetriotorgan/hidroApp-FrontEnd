@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
-import { getDataAtual, getHoraAtual } from "../services/dataService";
+import { getDataAtual, getHoraAtual, getHoraAtualParaFinal, formatHora } from "../services/dataService";
 import { calcularIQARegistro, validarIQA } from "../services/iqa";
+import { calcularRecirculacoes, calcularTempoRecirculacao } from "../services/lavagemService";
 
 
 export default function useIqaForm(registroEmEdicao, onSuccess) {
@@ -25,6 +26,7 @@ export default function useIqaForm(registroEmEdicao, onSuccess) {
 
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState(formInicial);
+     const isEdit = !!registroEmEdicao;
 
     function handleChange(e) {
         setFormData({
@@ -63,6 +65,11 @@ export default function useIqaForm(registroEmEdicao, onSuccess) {
     useEffect(() => {
         if (!registroEmEdicao) return;
 
+        const horaFinalCalculada =
+            registroEmEdicao.horaFinal
+                ? formatHora(registroEmEdicao.horaFinal)
+                : getHoraAtualParaFinal(); // 🔥 AQUI
+
         setFormData({
             data: registroEmEdicao.data?.split("T")[0] || "",
             volume: registroEmEdicao.volume || "",
@@ -77,19 +84,50 @@ export default function useIqaForm(registroEmEdicao, onSuccess) {
             valorDeiqa: registroEmEdicao.valorDeiqa || "",
             obs: registroEmEdicao.obs || "",
             hidrometroFinal: registroEmEdicao.hidrometroFinal || "",
-            horaFinal: formatHora(registroEmEdicao.horaFinal),
+            horaFinal: horaFinalCalculada, // 🔥 aqui
             tempoRecirculacao: registroEmEdicao.tempoRecirculacao || ""
         });
 
     }, [registroEmEdicao]);
 
-    function formatHora(dataISO) {
-        if (!dataISO) return "";
-        const d = new Date(dataISO);
-        return d.toTimeString().slice(0, 5);
-    }
+   
 
-    const isEdit = !!registroEmEdicao;
+    useEffect(() => {
+    const { hidrometroInicial, hidrometroFinal, volume } = formData;
+
+    const resultado = calcularRecirculacoes({
+        hidrometroInicial,
+        hidrometroFinal,
+        volume
+    });
+
+    if (resultado === "") return;
+
+    setFormData(prev => ({
+        ...prev,
+        totalDeRecirculacao: resultado
+    }));
+
+}, [
+    formData.hidrometroInicial,
+    formData.hidrometroFinal,
+    formData.volume
+]);
+
+//Tempo de recirculação
+useEffect(() => {
+    const { horaInicial, horaFinal } = formData;
+
+    const tempo = calcularTempoRecirculacao(horaInicial, horaFinal);
+
+    if (tempo === "") return;
+
+    setFormData(prev => ({
+        ...prev,
+        tempoRecirculacao: tempo
+    }));
+
+}, [formData.horaInicial, formData.horaFinal]);
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -140,13 +178,11 @@ export default function useIqaForm(registroEmEdicao, onSuccess) {
                 alert('Registro de IAQ salvo com sucesso');
             }
 
-            if (!isEdit) {
-                setFormData({
-                    ...formInicial,
-                    data: getDataAtual(),
-                    horaInicial: getHoraAtual()
-                });
-            }
+            setFormData({
+                ...formInicial,
+                data: getDataAtual(),
+                horaInicial: getHoraAtual()
+            });
             onSuccess && onSuccess();
         } catch (error) {
             console.error('Erro ao salvar registro de IQA: ', error);

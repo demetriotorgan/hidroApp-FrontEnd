@@ -19,4 +19,15 @@ export function getHoraAtual() {
     const minutos = String(agora.getMinutes()).padStart(2, "0");
 
     return `${horas}:${minutos}`;
-}
+};
+
+// ⏱️ Retorna hora atual para fechamento de registro
+export function getHoraAtualParaFinal() {
+    return getHoraAtual();
+};
+
+export function formatHora(dataISO) {
+    if (!dataISO) return "";
+    const d = new Date(dataISO);
+    return d.toTimeString().slice(0, 5);
+};

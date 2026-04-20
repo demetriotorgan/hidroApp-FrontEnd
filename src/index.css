@@ -353,3 +353,9 @@ h2 {
 .border-vermelho {
   border-left: 6px solid #ef4444;
 }
+
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  color: #777;
+}
