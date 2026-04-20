@@ -128,7 +128,7 @@ const LavagemSection = ({ultimaLavagem,mediasProdutos,lavagemHook,eficienciaGlob
                     <h3>{eficienciaGlobal.efrEnxague.toFixed(2)}</h3>
                 </DashboardCard>
 
-                <DashboardCard title="Media Diária de Lavagem">
+                <DashboardCard title="Volume Médio Diário de Lavagem">
                     <h3>{calcularMediaDiaria(lavagemHook.lavagens)}(L)</h3>
                 </DashboardCard>
 
