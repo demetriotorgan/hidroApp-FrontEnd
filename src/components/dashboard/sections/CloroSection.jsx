@@ -33,11 +33,11 @@ const CloroSection = ({dadosUltimaCloracao,dadosCloracao}) => {
                     </DashboardCard>
 
                     <DashboardCard title='Volume Médio'>
-                        <h3>{dadosCloracao.volumeMedio}(L)</h3>
+                        <h3>{dadosCloracao.volumeMedio.toFixed(2)}(L)</h3>
                     </DashboardCard>
 
                     <DashboardCard title='Cloro Médio'>
-                        <h3>{dadosCloracao.produtoMedio}(g)</h3>
+                        <h3>{dadosCloracao.produtoMedio.toFixed(2)}(g)</h3>
                     </DashboardCard>
 
                     <DashboardCard title='Concentração Média'>

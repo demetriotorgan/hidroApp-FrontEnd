@@ -1,50 +1,41 @@
-import { normalizarDados } from "./normalizacao";
+import { normalizarParametros } from "./normalizacao";
 import { dadosInvalidos } from "./validacao";
-import { calcularIndicesQuimicos } from "./quimico";
-import { calcularIndicesVisuais, aplicarPenalizacaoVisual } from "./visual";
-import { calcularIQAFinal } from "./calculo";
+import { calcularIQA } from "./calculo";
 import { classificarIQA } from "./classificacao";
 import { gerarInsights } from "./insights";
 
-export function calcularIQA(formData) {
-  const dados = normalizarDados(formData);
+export function calcularIQARegistro(formData) {
+  // 1. Normalização
+  const dados = normalizarParametros(formData);
 
+  // 2. Validação
   if (dadosInvalidos(dados)) {
     return { status: "incompleto", mensagem: "Esperando dados" };
   }
 
-  const { I_pH, I_cl, critico } = calcularIndicesQuimicos(dados);
-  const visuais = calcularIndicesVisuais(dados);
-  const I_visual = aplicarPenalizacaoVisual(dados, visuais.I_visual);
+  // 3. Cálculo principal
+  const iqa = calcularIQA(dados);
 
-  const IQA = calcularIQAFinal(I_pH, I_cl, I_visual, critico);
-  const classificacao = classificarIQA(IQA);
+  // 4. Classificação
+  const classificacao = classificarIQA(iqa);
 
-  const insights = gerarInsights(dados, {
-  ...visuais,
-  I_pH,
-  I_cl,
-  I_visual
-});
+  // 5. Insights
+  const insights = gerarInsights(dados,classificacao);
 
   return {
-    iqa: IQA,
+    iqa,
     classificacao,
     insights,
     detalhes: {
-      ...visuais,
-      I_pH,
-      I_cl,
-      I_visual,
-      critico
+      ...dados
     }
   };
-}
+};
 
 export function validarIQA(resultado) {
   if (
     resultado.status === "incompleto" ||
-    !resultado.classificacao
+    typeof resultado.iqa !== "number"
   ) {
     return {
       valido: false,

@@ -435,4 +435,21 @@ export function calcularEfrGeralLavagens(registros) {
     efrEnxague,
     efrGeral
   };
+};
+
+export function calcularMediaDiaria(historico){
+     if (!historico || historico.length === 0) return 0;
+
+  // 1. Agrupar litros por data (usando apenas a parte da data YYYY-MM-DD)
+  const consumoPorDia = historico.reduce((acc, log) => {
+    const data = log.data.split('T')[0];
+    acc[data] = (acc[data] || 0) + log.litros;
+    return acc;
+  }, {});
+
+  // 2. Calcular a média baseada nos dias únicos encontrados
+  const valoresDiarios = Object.values(consumoPorDia);
+  const totalGeral = valoresDiarios.reduce((acc, litros) => acc + litros, 0);
+  
+  return (totalGeral / valoresDiarios.length).toFixed(2);
 }

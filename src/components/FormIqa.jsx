@@ -3,7 +3,7 @@ import { Save } from "lucide-react";
 import useIqaForm from "../hooks/useIqaForm";
 import LoadingModal from "./LoadingModal";
 import { CheckCircle, AlertTriangle, XCircle } from "lucide-react";
-import { getIqaMeta } from "../services/iqa/meta";
+
 
 export default function FormIqa({ onSuccess }) {
     const { formData, handleChange, loading, handleSubmit } = useIqaForm();   

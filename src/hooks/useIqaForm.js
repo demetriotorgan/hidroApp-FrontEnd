@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../services/api";
 import { getDataAtual, getHoraAtual } from "../services/dataService";
-import { calcularIQA, validarIQA } from "../services/iqa";
+import { calcularIQARegistro, validarIQA } from "../services/iqa";
 
 
 export default function useIqaForm() {
@@ -32,6 +32,32 @@ export default function useIqaForm() {
             [e.target.name]: e.target.value
         });
     };
+
+    useEffect(() => {
+    const { ph, cor, turbidez, odor } = formData;
+
+    // Verifica se todos os campos necessários existem
+    if (!ph || !cor || !turbidez || !odor) {
+        return;
+    }
+
+    const resultado = calcularIQARegistro({
+        ph: Number(ph),
+        cor,
+        turbidez,
+        odor
+    });
+
+    const validacao = validarIQA(resultado);
+
+    if (!validacao.valido) return;
+
+    setFormData(prev => ({
+        ...prev,
+        valorDeiqa: resultado.iqa
+    }));
+
+}, [formData.ph, formData.cor, formData.turbidez, formData.odor]);
 
     async function handleSubmit(e) {
         e.preventDefault();

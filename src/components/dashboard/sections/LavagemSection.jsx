@@ -13,6 +13,7 @@ import {
     Bubbles
 } from 'lucide-react'
 import {
+    calcularMediaDiaria,
     getMediaAgua,
     getMediaCarga,
     getMediaProdutos,
@@ -125,6 +126,10 @@ const LavagemSection = ({ultimaLavagem,mediasProdutos,lavagemHook,eficienciaGlob
 
                  <DashboardCard title="EFR Global por Enxágues">
                     <h3>{eficienciaGlobal.efrEnxague.toFixed(2)}</h3>
+                </DashboardCard>
+
+                <DashboardCard title="Media Diária de Lavagem">
+                    <h3>{calcularMediaDiaria(lavagemHook.lavagens)}(L)</h3>
                 </DashboardCard>
 
                 <button
