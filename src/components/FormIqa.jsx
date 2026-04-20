@@ -5,9 +5,9 @@ import LoadingModal from "./LoadingModal";
 import { CheckCircle, AlertTriangle, XCircle } from "lucide-react";
 
 
-export default function FormIqa({ onSuccess }) {
-    const { formData, handleChange, loading, handleSubmit } = useIqaForm();   
-   
+export default function FormIqa({ onSuccess, registroEmEdicao, onCancelEdit }) {
+    const { formData, handleChange, loading, handleSubmit } = useIqaForm(registroEmEdicao, onSuccess);
+
 
     return (
         <>
@@ -15,6 +15,9 @@ export default function FormIqa({ onSuccess }) {
                 isOpen={loading}
                 message="Salvando Registro..."
             />
+            <h2>
+                {registroEmEdicao ? "✏️ Editando Registro" : "➕ Novo Registro"}
+            </h2>
             <form className="form-container" onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>Data
@@ -175,6 +178,11 @@ export default function FormIqa({ onSuccess }) {
                 <button type="submit" className="form-button">
                     Salvar Registro <Save />
                 </button>
+                {registroEmEdicao && (
+                    <button type="button" className="form-button" onClick={onCancelEdit}>
+                        Cancelar edição
+                    </button>
+                )}
             </form>
         </>
     );

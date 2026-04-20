@@ -911,3 +911,4 @@ export function calcularDadosSanepar(leituraAtual, leituraAnterior) {
     consumo: leituraAtual3 - anterior
   };
 };
+

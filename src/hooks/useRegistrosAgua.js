@@ -4,6 +4,7 @@ import api from "../services/api";
 export default function useRegistrosAgua() {
   const [registrosDaAgua, setRegistrosDaAgua] = useState([]);
   const [carregando, setCarregando] = useState(true);
+  const [deletando, setDeletando] = useState(false);
 
   // =============================
   // 🔄 CARREGAR REGISTROS
@@ -12,7 +13,7 @@ export default function useRegistrosAgua() {
     try {
       setCarregando(true);
 
-      const res = await api.get("/listarTambores");
+      const res = await api.get("/listarIqa");
 
       // ordenar do mais recente
       const dadosOrdenados = res.data.sort(
@@ -32,10 +33,11 @@ export default function useRegistrosAgua() {
   // =============================
   const deletarRegistro = async (id) => {
     try {
-    const confirmar = window.confirm("Deseja realmente excluir?");
-    if (!confirmar) return;
+      const confirmar = window.confirm("Deseja realmente excluir?");
+      if (!confirmar) return;
 
-      await api.delete(`/deletarTambor/${id}`);
+      setDeletando(true);
+      await api.delete(`/deletarIqa/${id}`);
 
       // remove do state sem recarregar
       setRegistrosDaAgua((prev) =>
@@ -43,6 +45,8 @@ export default function useRegistrosAgua() {
       );
     } catch (err) {
       console.error("Erro ao deletar:", err);
+    }finally{
+      setDeletando(false);
     }
   };
 
@@ -58,5 +62,6 @@ export default function useRegistrosAgua() {
     carregando,
     carregarRegistros,
     deletarRegistro,
+    deletando
   };
 }

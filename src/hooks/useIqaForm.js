@@ -4,7 +4,7 @@ import { getDataAtual, getHoraAtual } from "../services/dataService";
 import { calcularIQARegistro, validarIQA } from "../services/iqa";
 
 
-export default function useIqaForm() {
+export default function useIqaForm(registroEmEdicao, onSuccess) {
     const formInicial = {
         data: getDataAtual(),
         volume: "",
@@ -34,30 +34,62 @@ export default function useIqaForm() {
     };
 
     useEffect(() => {
-    const { ph, cor, turbidez, odor } = formData;
+        const { ph, cor, turbidez, odor } = formData;
 
-    // Verifica se todos os campos necessários existem
-    if (!ph || !cor || !turbidez || !odor) {
-        return;
+        // Verifica se todos os campos necessários existem
+        if (!ph || !cor || !turbidez || !odor) {
+            return;
+        }
+
+        const resultado = calcularIQARegistro({
+            ph: Number(ph),
+            cor,
+            turbidez,
+            odor
+        });
+
+        const validacao = validarIQA(resultado);
+
+        if (!validacao.valido) return;
+
+        setFormData(prev => ({
+            ...prev,
+            valorDeiqa: resultado.iqa
+        }));
+
+    }, [formData.ph, formData.cor, formData.turbidez, formData.odor]);
+
+    //Ediçao
+    useEffect(() => {
+        if (!registroEmEdicao) return;
+
+        setFormData({
+            data: registroEmEdicao.data?.split("T")[0] || "",
+            volume: registroEmEdicao.volume || "",
+            horaInicial: formatHora(registroEmEdicao.horaInicial),
+            hidrometroInicial: registroEmEdicao.hidrometroInicial || "",
+            totalDeRecirculacao: registroEmEdicao.totalDeRecirculacao || "",
+            ph: registroEmEdicao.ph || "",
+            lavagensNoDia: registroEmEdicao.lavagensNoDia || "",
+            cor: registroEmEdicao.cor || "transparente",
+            turbidez: registroEmEdicao.turbidez || "baixa",
+            odor: registroEmEdicao.odor || "semOdor",
+            valorDeiqa: registroEmEdicao.valorDeiqa || "",
+            obs: registroEmEdicao.obs || "",
+            hidrometroFinal: registroEmEdicao.hidrometroFinal || "",
+            horaFinal: formatHora(registroEmEdicao.horaFinal),
+            tempoRecirculacao: registroEmEdicao.tempoRecirculacao || ""
+        });
+
+    }, [registroEmEdicao]);
+
+    function formatHora(dataISO) {
+        if (!dataISO) return "";
+        const d = new Date(dataISO);
+        return d.toTimeString().slice(0, 5);
     }
 
-    const resultado = calcularIQARegistro({
-        ph: Number(ph),
-        cor,
-        turbidez,
-        odor
-    });
-
-    const validacao = validarIQA(resultado);
-
-    if (!validacao.valido) return;
-
-    setFormData(prev => ({
-        ...prev,
-        valorDeiqa: resultado.iqa
-    }));
-
-}, [formData.ph, formData.cor, formData.turbidez, formData.odor]);
+    const isEdit = !!registroEmEdicao;
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -69,7 +101,8 @@ export default function useIqaForm() {
             hidrometroInicial: Number(formData.hidrometroInicial),
             totalDeRecirculacao: Number(formData.totalDeRecirculacao),
             lavagensNoDia: Number(formData.lavagensNoDia),
-            horaInicial: new Date(`${formData.data}T${formData.horaInicial}`)
+            horaInicial: new Date(`${formData.data}T${formData.horaInicial}`),
+            obs: formData.obs
         };
 
         // opcionais
@@ -89,17 +122,32 @@ export default function useIqaForm() {
             payload.valorDeiqa = Number(formData.valorDeiqa);
         }
         console.log(payload);
-        const confirmar = window.confirm('Deseja salvar este registro de IQA?');
+
+        const confirmar = window.confirm(
+            isEdit
+                ? "Deseja atualizar este registro?"
+                : "Deseja salvar este registro?"
+        );
+
         if (!confirmar) return
         try {
             setLoading(true);
-            await api.post("/salvarIqa", payload);
-            alert('Registro de IAQ salvo com sucesso');
-            setFormData(() => ({
-                ...formInicial,
-                data: getDataAtual(),
-                horaInicial: getHoraAtual()
-            }));
+            if (isEdit) {
+                await api.patch(`/atualizarIqa/${registroEmEdicao._id}`, payload);
+                alert('Registro de IAQ atualizado com sucesso');
+            } else {
+                await api.post("/salvarIqa", payload);
+                alert('Registro de IAQ salvo com sucesso');
+            }
+
+            if (!isEdit) {
+                setFormData({
+                    ...formInicial,
+                    data: getDataAtual(),
+                    horaInicial: getHoraAtual()
+                });
+            }
+            onSuccess && onSuccess();
         } catch (error) {
             console.error('Erro ao salvar registro de IQA: ', error);
         } finally {
