@@ -9,6 +9,7 @@ import ModeloSection from "../components/dashboard/sections/ModeloSection";
 import PrevisaoSection from "../components/dashboard/sections/PrevisaoSection";
 import LavagemSection from "../components/dashboard/sections/LavagemSection";
 import CloroSection from "../components/dashboard/sections/CloroSection";
+import CicloMensalPanel from "./CicloMensalPanel";
 
 function Dashboard() {
 
@@ -35,6 +36,12 @@ function Dashboard() {
       <CloroSection
         dadosUltimaCloracao={ultimaCloracao}
         dadosCloracao={metricasCloracao}
+      />
+      <CicloMensalPanel
+        dataInicial="2026-03-17"
+        dataFinal="2026-04-15"
+        leituraInicial={786}
+        leituraFinal={796}
       />
     </div>
   );

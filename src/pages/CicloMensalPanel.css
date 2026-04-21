@@ -1,0 +1,118 @@
+/* 🔹 Container principal */
+.ciclo-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* 🔹 Título */
+.ciclo-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* 🔹 Seções */
+.ciclo-section {
+  margin-bottom: 30px;
+}
+
+/* 🔹 Grid de cards */
+.ciclo-cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* 🔹 Card padrão */
+.ciclo-card {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  min-width: 140px;
+  background-color: #f9f9f9;
+  transition: 0.2s;
+}
+
+.ciclo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* 🔹 Título do card */
+.ciclo-card-title {
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 5px;
+}
+
+/* 🔹 Valor do card */
+.ciclo-card-value {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* 🔹 Destaques por tipo */
+.card-positivo {
+  border-left: 5px solid #2ecc71;
+}
+
+.card-negativo {
+  border-left: 5px solid #e74c3c;
+}
+
+.card-neutro {
+  border-left: 5px solid #f1c40f;
+}
+
+/* 🔹 Texto de tendência */
+.ciclo-tendencia {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.tendencia-positiva {
+  color: #e74c3c; /* superestimando */
+}
+
+.tendencia-negativa {
+  color: #3498db; /* subestimando */
+}
+
+.tendencia-neutra {
+  color: #555;
+}
+
+/* 🔹 Insight */
+.ciclo-insight {
+  background-color: #eef6ff;
+  border-left: 4px solid #3498db;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* 🔹 Ajuste coeficiente */
+.ciclo-ajuste {
+  background-color: #f4fff4;
+  border-left: 4px solid #2ecc71;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* 🔹 Área de gráficos */
+.ciclo-grafico {
+  background-color: #FFF;
+  color: #0f0;
+  padding: 10px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 12px;
+}
+
+/* 🔹 Estados */
+.ciclo-loading,
+.ciclo-empty {
+  padding: 20px;
+  text-align: center;
+  color: #777;
+}
