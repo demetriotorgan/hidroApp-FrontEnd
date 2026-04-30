@@ -45,7 +45,7 @@ export function calcularConsumoUltimoRegistro(registros) {
   const anterior = registros[1];
 
   const consumo = ultimo.leitura - anterior.leitura;
-
+ 
   return consumo >= 0 ? consumo * 10 : 0;
 }
 
@@ -78,7 +78,7 @@ export function gerarDadosTabela(registros) {
     // Consumo = leitura atual - leitura anterior
     const consumo =
       item.leitura - ordenados[index - 1].leitura;
-
+    console.log('Consumo calculado: ',consumo);
     return {
       dia,
       consumo: consumo >= 0 ? consumo * 10 : 0,

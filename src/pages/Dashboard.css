@@ -219,3 +219,9 @@
   background: #fee2e2;
   color: #991b1b;
 }
+
+.dashboard-section-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}

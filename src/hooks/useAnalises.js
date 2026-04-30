@@ -37,6 +37,7 @@ export default function useAnalises() {
     analises,
     salvar,
     remover,
+    carregarAnalises,
     loading
   };
 }

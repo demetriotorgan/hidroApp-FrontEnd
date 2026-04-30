@@ -1,166 +1,136 @@
+/**
+ * 🪟 VITRINE DO CICLO
+ *
+ * Responsável por:
+ * - receber produto pronto
+ * - exibir dados visuais do ciclo
+ * - renderizar cards e blocos visuais
+ *
+ * NÃO é responsabilidade:
+ * - processar dados
+ * - montar gráficos
+ * - calcular métricas
+ * - interpretar regra
+ */
+
 import React from "react";
-import useAnaliseCiclo from "../hooks/useAnaliseCiclo";
-import useHidrometros from "../hooks/useHidrometros";
+import usePainelCiclo from "../hooks/usePainelCiclo";
+import useGraficoCiclo from "../hooks/useGraficoCiclo";
+
 import "./CicloMensalPanel.css";
 import GraficoPrevisoes from "../components/GraficoPrevisoes";
 import GraficoErro from "../components/GraficoErro";
 
-export default function CicloMensalPanel({
-    dataInicial,
-    dataFinal,
-    leituraInicial,
-    leituraFinal
-}) {
-    const {
-        status,
-        resultado,
-        previsoesFiltradas,
-        comparacoesFiltradas,
-        coeficienteSugerido,
-        loading
-    } = useAnaliseCiclo({
-        dataInicial,
-        dataFinal,
-        leituraInicial,
-        leituraFinal
-    });
-
-    // 🔹 Estados visuais
-    if (loading) {
-        return <div className="ciclo-loading">Carregando análise do ciclo...</div>;
-    }
-
-    if (status === "aguardando novo ciclo") {
-        return (
-            <div className="ciclo-empty">
-                Aguardando dados suficientes para análise...
-            </div>
-        );
-    }
-
-    if (!resultado) {
-        return <div className="ciclo-empty">Nenhum dado disponível</div>;
-    }
-
-    const {
-        consumoReal,
-        consumoPrevisto,
-        erroPercentualReal,
-        tendencia,
-        metricas
-    } = resultado;
-
-    const acuracia = 100 - Math.abs(erroPercentualReal);
-
-    const tipoErro =
-        Math.abs(erroPercentualReal) < 5
-            ? "positivo"
-            : Math.abs(erroPercentualReal) < 10
-                ? "neutro"
-                : "negativo";
-
-    const classeTendencia =
-        tendencia === "superestimando"
-            ? "tendencia-positiva"
-            : tendencia === "subestimando"
-                ? "tendencia-negativa"
-                : "tendencia-neutra";
-
-    const gerarInsight = () => {
-        if (Math.abs(erroPercentualReal) < 5) {
-            return "Modelo muito preciso neste ciclo.";
-        }
-        if (erroPercentualReal > 10) {
-            return "Modelo está superestimando consumo.";
-        }
-        if (erroPercentualReal < -10) {
-            return "Modelo está subestimando consumo.";
-        }
-        if (Math.abs(metricas.RMSE) > Math.abs(metricas.MAE) * 1.5) {
-            return "Alta variabilidade nas previsões.";
-        }
-        return "Modelo com comportamento estável.";
-    };
-
-    // 🔹 ERRO CONTINUA APENAS PARA O GRÁFICO 2
-    const dadosErro = comparacoesFiltradas.map(item => ({
-        data: item.periodo.dataFinal,
-        erro: item.erro,
-        erroPercentual: item.erroPercentual
-    }));
-
+export default function CicloMensalPanel({produto, graficos, loading}) {
+  if (loading) {
     return (
-        <div className="ciclo-container">
-            <h2 className="ciclo-title">Análise do Ciclo Mensal</h2>
-
-            {/* 🔹 Cards resumo */}
-            <div className="ciclo-section ciclo-cards">
-                <Card title="Consumo Real" value={consumoReal} />
-                <Card title="Consumo Previsto" value={consumoPrevisto} />
-                <Card
-                    title="Erro (%)"
-                    value={erroPercentualReal.toFixed(2) + "%"}
-                    tipo={tipoErro}
-                />
-                <Card
-                    title="Acurácia"
-                    value={acuracia.toFixed(2) + "%"}
-                    tipo={tipoErro}
-                />
-            </div>
-
-            {/* 🔹 Métricas */}
-            <div className="ciclo-section ciclo-cards">
-                <Card title="MAE" value={metricas.MAE.toFixed(2)} />
-                <Card title="RMSE" value={metricas.RMSE.toFixed(2)} />
-                <Card title="MAPE" value={metricas.MAPE.toFixed(2) + "%"} />
-                <Card title="BIAS" value={metricas.BIAS.toFixed(2)} />
-            </div>
-
-            {/* 🔹 Tendência */}
-            <div className="ciclo-section">
-                <div className={`ciclo-tendencia ${classeTendencia}`}>
-                    Tendência: {tendencia}
-                </div>
-            </div>
-
-            {/* 🔹 Insight */}
-            <div className="ciclo-section ciclo-insight">
-                <strong>Insight:</strong> {gerarInsight()}
-            </div>
-
-            {/* 🔹 Ajuste coeficiente */}
-            {coeficienteSugerido && (
-                <div className="ciclo-section ciclo-ajuste">
-                    <strong>Novo coeficiente A sugerido:</strong>{" "}
-                    {coeficienteSugerido.novoCoeficienteA.toFixed(3)}
-                </div>
-            )}
-
-            {/* 🔹 GRÁFICO 1 (SIMPLIFICADO NOVAMENTE) */}
-            <div className="ciclo-section">
-                <h3>Evolução das previsões</h3>
-                <div className="ciclo-grafico">
-                    <GraficoPrevisoes data={previsoesFiltradas} />
-                </div>
-            </div>
-
-            {/* 🔹 GRÁFICO 2 */}
-            <div className="ciclo-section">
-                <h3>Erro por janela</h3>
-                <div className="ciclo-grafico">
-                    <GraficoErro data={dadosErro} />
-                </div>
-            </div>
-        </div>
+      <div className="ciclo-loading">
+        Carregando análise do ciclo...
+      </div>
     );
-};
+  }
 
-function Card({ title, value, tipo = "neutro" }) {
+  if (!produto) {
     return (
-        <div className={`ciclo-card card-${tipo}`}>
-            <div className="ciclo-card-title">{title}</div>
-            <div className="ciclo-card-value">{value}</div>
-        </div>
+      <div className="ciclo-empty">
+        Nenhuma análise de ciclo disponível.
+      </div>
     );
+  }
+
+  const classeTendencia =
+    produto?.tendencia === "superestimando"
+      ? "tendencia-alerta"
+      : produto?.tendencia === "subestimando"
+      ? "tendencia-atencao"
+      : "tendencia-ok";
+
+  const insight =
+    produto?.tendencia === "superestimando"
+      ? "O modelo está prevendo acima do consumo real. Considere reduzir o coeficiente."
+      : produto?.tendencia === "subestimando"
+      ? "O modelo está prevendo abaixo do consumo real. Considere aumentar o coeficiente."
+      : "O modelo está operando dentro de uma faixa estável.";
+
+  const formatarData = (data) => {
+    if (!data) return "--";
+    return new Date(data).toLocaleDateString("pt-BR");
+  };  
+  
+  return (
+    <div className="ciclo-container">
+      <h2 className="ciclo-title">Análise do Ciclo Mensal</h2>
+
+      {/* 🔹 CICLO */}
+      <div className="ciclo-section ciclo-cards">
+        <Card title="Data Inicial" value={formatarData(produto?.ciclo?.dataInicial)} />
+        <Card title="Data Final" value={formatarData(produto?.ciclo?.dataFinal)} />
+      </div>
+
+       {/* 🔹 COEFICIENTE */}
+      <div className="ciclo-section ciclo-cards">
+        <Card title="Anterior" value={produto?.coeficiente?.anterior?.toFixed(2) ?? "--"} />
+        <Card title="Sugerido" value={produto?.coeficiente?.sugerido?.toFixed(2) ?? "--"} />
+      </div>
+
+      {/* 🔹 CONSUMO */}
+      <div className="ciclo-section ciclo-cards">
+        <Card title="Real" value={produto?.consumo?.real?.toFixed(2) ?? "--"} />
+        <Card title="Previsto" value={produto?.consumo?.previsto?.toFixed(2) ?? "--"} />
+        <Card title="Erro" value={produto?.consumo?.erro?.toFixed(2) ?? "--"} />
+        <Card
+          title="Erro (%)"
+          value={
+            produto?.consumo?.erroPercentual != null
+              ? `${produto.consumo.erroPercentual.toFixed(2)}%`
+              : "--"
+          }
+        />
+      </div>      
+
+       {/* 🔹 MÉTRICAS */}
+      <div className="ciclo-section ciclo-cards">
+        <Card title="MAE" value={produto?.metricas?.MAE?.toFixed(2) ?? "-"} />
+        <Card title="RMSE" value={produto?.metricas?.RMSE?.toFixed(2) ?? "-"} />
+        <Card title="MAPE" value={produto?.metricas?.MAPE?.toFixed(2) ?? "-"} />
+        <Card title="BIAS" value={produto?.metricas?.BIAS?.toFixed(2) ?? "-"} />
+      </div>
+
+      {/* 🔹 TENDÊNCIA */}
+      <div className="ciclo-section">
+        <div className={`ciclo-tendencia ${classeTendencia}`}>
+          Tendência: {produto?.tendencia ?? "--"}
+        </div>
+      </div>
+
+       {/* 🔹 INSIGHT */}
+      <div className="ciclo-section ciclo-insight">
+        <strong>Insight:</strong> {insight}
+      </div>
+
+      {/* 🔹 GRÁFICOS */}
+      <div className="ciclo-section">
+        <h3>Evolução das previsões</h3>
+        <div className="ciclo-grafico">
+          <GraficoPrevisoes data={graficos.previsoes} />
+        </div>
+      </div>
+
+      <div className="ciclo-section">
+        <h3>Erro por janela</h3>
+        <div className="ciclo-grafico">
+          <GraficoErro data={graficos.erros} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Card({ title, value }) {
+  return (
+    <div className="ciclo-card">
+      <div className="ciclo-card-title">{title}</div>
+      <div className="ciclo-card-value">{value}</div>
+    </div>
+  );
 }

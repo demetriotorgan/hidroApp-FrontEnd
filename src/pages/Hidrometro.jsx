@@ -11,11 +11,16 @@ import GraficoConsumoAcumulado from "../components/GraficoConsumoAcumulado";
 import FormUltimaLeitura from "../components/FormUltimaLeitura";
 import { useUltimaLeitura } from "../hooks/useUltimaLeitura";
 import CardUltimaLeitura from '../components/CardUltimaLeitura ';
+import { useLocation } from "react-router-dom";
 
-function Hidrometro() {
+
+function Hidrometro() { 
+  
   const { dados, loading, erro, deletarHidrometro, excluindo, carregarDados } = useHidrometros();
-  const ultimaLeituraHook = useUltimaLeitura();
   const navigate = useNavigate();
+
+  const ultimaLeituraHook = useUltimaLeitura();
+  console.log('Dados da Ultima Leitura: ', ultimaLeituraHook.leituras);
 
   const dadosParaTabela = gerarDadosTabela(dados);
 
@@ -41,17 +46,17 @@ function Hidrometro() {
       /> Registros do Hidrômetro</h1>
 
       <FormHidrometro atualizarLista={carregarDados} />
-      <FormUltimaLeitura {...ultimaLeituraHook}/>
+      <FormUltimaLeitura {...ultimaLeituraHook} />
       <h3>Última Leitura</h3>
       {ultimaLeituraHook.leituras.length === 0 ? (
         <p className="empty-message">Aguardando registros...</p>
-      ):(  
-          <CardUltimaLeitura          
+      ) : (
+        <CardUltimaLeitura
           dados={ultimaLeituraHook.leituras[0]}
           onDelete={ultimaLeituraHook.deletarUltimaLeitura}
           excluindo={ultimaLeituraHook.excluindoUltimaLeitura}
           leituraAtual={dados[0]}
-          />        
+        />
       )}
 
       <div>
@@ -59,9 +64,9 @@ function Hidrometro() {
         <TabelaHidrometro dados={dadosParaTabela} />
       </div>
       <h3>Consumo</h3>
-      <GraficoConsumo dados={dados}/>
+      <GraficoConsumo dados={dados} />
       <h3>Consumo Acumulado</h3>
-      <GraficoConsumoAcumulado dados={dados}/>
+      <GraficoConsumoAcumulado dados={dados} />
 
       {dados.length === 0 ? (
         <p>Sem registros de Hidrômetro</p>

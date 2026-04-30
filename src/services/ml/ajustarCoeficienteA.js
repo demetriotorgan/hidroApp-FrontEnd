@@ -13,16 +13,16 @@ export function ajustarCoeficienteA({
     };
   }
 
-  // 🔹 1. Fator bruto
+  // 1. Fator bruto
   const fatorBruto = consumoReal / consumoPrevisto;
 
-  // 🔹 2. Suavização (evita mudanças bruscas)
+  // 2. Suavização (evita mudanças bruscas)
   const fatorCorrecao = 1 + (fatorBruto - 1) * 0.3;
 
-  // 🔹 3. Novo coeficiente
+  // 3. Novo coeficiente
   let novoCoeficienteA = coeficienteAtual * fatorCorrecao;
 
-  // 🔥 4. LIMITES INTELIGENTES (relativos)
+  // 4. LIMITES INTELIGENTES (relativos)
   const LIMITE_MIN = coeficienteAtual * 0.5;
   const LIMITE_MAX = coeficienteAtual * 1.5;
 

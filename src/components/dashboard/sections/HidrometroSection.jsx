@@ -5,7 +5,7 @@ import { mapaCoresConsumo } from "../../../services/dashboardConfig";
 import { getCVConfig, getTendenciaConfig } from "../../../services/dashboardFormatters";
 import { useNavigate } from "react-router-dom";
 
-function HidrometroSection({ data }) {
+function HidrometroSection({ data,ultimasLeituraHook }) {
   const navigate = useNavigate();
 
   const tipoAtual = data.percentualAtualMaiorConsumo.tipo;

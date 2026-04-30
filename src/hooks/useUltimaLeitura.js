@@ -9,9 +9,9 @@ export const useUltimaLeitura = () => {
         obs: ''
     };
 
-    useEffect(()=>{
+    useEffect(() => {      
         listarUltimasLeituras();
-    },[]);
+    }, []);
 
     const [form, setForm] = useState(dadosIniciais)
     const [salvandoLeitura, setSalvandoLeitura] = useState(false);
@@ -36,7 +36,7 @@ export const useUltimaLeitura = () => {
         try {
             setSalvandoLeitura(true);
             await api.post('/saveUltimaLeitura', form);
-            alert('Leitura salva com sucesso')            
+            alert('Leitura salva com sucesso')
             setForm(dadosIniciais)
             listarUltimasLeituras()
         } catch (error) {
@@ -48,29 +48,29 @@ export const useUltimaLeitura = () => {
     };
 
     //GET
-    async function listarUltimasLeituras(){
+    async function listarUltimasLeituras() {        
         try {
-            setCarregandoUltimasLeituras(true);
-            const response = await api.get('/listarUltimaLeitura');
+            setCarregandoUltimasLeituras(true);            
+            const response = await api.get('/listarUltimaLeitura');                                
             setLeituras(response.data);
         } catch (error) {
             console.error('Erro ao carregar ultimas leituras: ', error);
-        }finally{
+        } finally {
             setCarregandoUltimasLeituras(false);
         }
     };
 
     //DELETE
-    async function deletarUltimaLeitura(id){
-    const confirmar = window.confirm('Deseja realmente excluir esta leitura?');
-    if(!confirmar) return
+    async function deletarUltimaLeitura(id) {
+        const confirmar = window.confirm('Deseja realmente excluir esta leitura?');
+        if (!confirmar) return
         try {
             setExcluindoUltimaLeitura(true);
             await api.delete(`/deletarUltimaLeitura/${id}`)
             setLeituras((prev) => prev.filter((item) => item._id !== id));
         } catch (error) {
             console.log(error);
-        }finally{
+        } finally {
             setExcluindoUltimaLeitura(false);
         }
     };

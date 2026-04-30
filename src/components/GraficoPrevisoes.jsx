@@ -73,19 +73,7 @@ function GraficoPrevisoes({ data }) {
                     strokeWidth={3}
                     dot={{ r: 3 }}
                     activeDot={{ r: 6 }}
-                />
-
-                {/* 🟢 REAL */}
-                <Line
-                    type="monotone"
-                    dataKey="consumoReal"
-                    name="Real (m³)"
-                    stroke="#16a34a"
-                    strokeWidth={2}
-                    dot={{ r: 3 }}
-                    strokeOpacity={0.85}
-                    activeDot={{ r: 6 }}
-                />
+                />              
 
             </LineChart>
         </ResponsiveContainer>
