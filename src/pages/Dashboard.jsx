@@ -14,7 +14,7 @@
  * - processar análises
  */
 
-import { ActivityIcon } from "lucide-react";
+import { ActivityIcon, MessageCircleWarning } from "lucide-react";
 import './Dashboard.css'
 import { useDashboardData } from "../hooks/useDashboardData";
 
@@ -34,17 +34,17 @@ import useEstimativasSalvas from "../hooks/useEstimativasSalvas";
 import useAnalises from "../hooks/useAnalises";
 import usePainelCiclo from "../hooks/usePainelCiclo";
 import usePreparadorCicloPainel from "../hooks/usePreparadorCicloPainel";
+import PainelAviso from "./PainelAviso";
 
 function Dashboard() {
 
-  
-
   //1.Organização - Insumos Operacionais - Estado operacional
-  const { estimativas, buscar } = useEstimativasSalvas(); //Dataset1
+  const { estimativas, buscar,carregandoEstimativas  } = useEstimativasSalvas(); //Dataset1
   const { analises, carregarAnalises, loading: carregandoAnalises } = useAnalises(); //Dataset2
 
   const ultimaLeituraHook = useUltimaLeitura();
   const { cicloAtual } = useCicloMensal(ultimaLeituraHook.leituras);
+  
   //Buscando Produto Final em Estoque no backend
   const {analiseFinal, loadingAnaliseFinal, errorAnaliseFinal} = usePreparadorCicloPainel();
 
@@ -52,11 +52,11 @@ function Dashboard() {
   //Dados para sections
   const { loading, hidrometro, pluviometro, qualidadeAgua, modelo, ultimaLavagem, mediasProdutos, lavagemHook, eficienciaGlobal, ultimaCloracao, metricasCloracao } = useDashboardData();
   //Dados para vitrine do produto final e gráficos
+  console.log("📦 ANALISES ENTREGUES AO PAINEL:", analises);
   const { produto, graficos, loadingCiclo } = usePainelCiclo({analiseFinal, estimativas, analises });
 
-  //3.Automação - Efeitos automáticos
-  useFechamentoCiclo(cicloAtual, estimativas, analises, carregarAnalises, carregandoAnalises);
-
+  //3.Automação - Efeitos automáticos  
+  const {avisoOperacional} = useFechamentoCiclo(cicloAtual, estimativas, analises, carregarAnalises, carregandoAnalises,carregandoEstimativas);
 
   //4.Debug temporário
   // console.log("📊 leituras:", ultimaLeituraHook.leituras);
@@ -81,15 +81,7 @@ function Dashboard() {
   useEffect(() => {
     // console.log("🔥 Chamando buscar estimativas...");
     buscar();
-  }, []);
-
-
-
-   
-
-
-
-  
+  }, []);  
 
   //5.Render - Distribuição - Entrega dos lotes para os painéis
   if (loading) {
@@ -97,7 +89,12 @@ function Dashboard() {
   }
 
   return (
-    <div className="dashboard">
+    <>
+    <h3>Painel de Avisos <MessageCircleWarning /></h3>
+      <PainelAviso
+      aviso={avisoOperacional}
+      />
+    <div className="dashboard">      
       <h1>Painel de Monitoramento <ActivityIcon /></h1>
       <HidrometroSection
         data={hidrometro}
@@ -123,6 +120,7 @@ function Dashboard() {
         loading={loadingCiclo}
       />
     </div>
+    </>
   );
 }
 

@@ -20,7 +20,7 @@ function Hidrometro() {
   const navigate = useNavigate();
 
   const ultimaLeituraHook = useUltimaLeitura();
-  console.log('Dados da Ultima Leitura: ', ultimaLeituraHook.leituras);
+  // console.log('Dados da Ultima Leitura: ', ultimaLeituraHook.leituras);
 
   const dadosParaTabela = gerarDadosTabela(dados);
 

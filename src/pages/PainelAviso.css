@@ -1,0 +1,132 @@
+.painel-aviso {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+
+  margin: 16px;
+  transition: all 0.3s ease;
+}
+
+.painel-aviso__icone {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.painel-aviso__conteudo {
+  display: flex;
+  flex-direction: column;
+}
+
+.painel-aviso__titulo {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.painel-aviso__detalhe {
+  margin: 2px 0 0;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* =========================
+   SUCESSO
+========================= */
+.painel-sucesso {
+  background-color: #ecfdf3;
+  border-color: #bbf7d0;
+  color: #166534;
+}
+
+/* =========================
+   INATIVO
+========================= */
+.painel-inativo {
+  background-color: #f5f5f5;
+  border-color: #d4d4d8;
+  color: #52525b;
+}
+
+/* =========================
+   AGUARDANDO
+========================= */
+.painel-aguardando {
+  background-color: #fffbeb;
+  border-color: #fde68a;
+  color: #92400e;
+}
+
+/* =========================
+   PROCESSANDO
+========================= */
+.painel-processando {
+  background-color: #eff6ff;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+.painel-processando .painel-aviso__icone {
+  animation: painel-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes painel-pulse {
+  0% {
+    opacity: 0.35;
+    transform: scale(0.95);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+
+  100% {
+    opacity: 0.35;
+    transform: scale(0.95);
+  }
+}
+
+/* =========================
+   ERRO
+========================= */
+.painel-erro {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+}
+
+
+
+/* =========================
+   SINCRONIZANDO / AGUARDANDO BOLETIM
+========================= */
+.painel-sync {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.painel-aviso__spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #cbd5e1;
+  border-top: 2px solid #64748b;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  animation: painel-spin 0.8s linear infinite;
+}
+
+@keyframes painel-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

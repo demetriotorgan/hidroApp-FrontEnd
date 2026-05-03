@@ -94,8 +94,8 @@ function GraficoErro({ data }) {
                         dataKey="erro"
                         name="Erro (m³)"
                         stroke="#2563eb"
-                        strokeWidth={3}
-                        dot={{ r: 3 }}
+                        strokeWidth={1}
+                        dot={false}
                         activeDot={{ r: 6 }}
                     />
 
@@ -106,9 +106,9 @@ function GraficoErro({ data }) {
                         dataKey="erroPercentual"
                         name="Erro (%)"
                         stroke="#dc2626"
-                        strokeWidth={2}          // 🔻 mais fina
-                        strokeOpacity={0.6}      // 🔻 mais transparente
-                        dot={{ r: 2 }}           // 🔻 ponto menor
+                        strokeWidth={1}          // 🔻 mais fina
+                        strokeOpacity={0.4}      // 🔻 mais transparente
+                        dot={false}           // 🔻 ponto menor
                         activeDot={{ r: 4 }}     // 🔻 destaque mais suave
                     />
                 </LineChart>

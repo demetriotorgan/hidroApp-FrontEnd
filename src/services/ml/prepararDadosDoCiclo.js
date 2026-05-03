@@ -78,32 +78,31 @@ export function prepararDadosDoCiclo({
   // 🔹 3. DATASET 2 NORMALIZADO
   // =========================================================
   const comparacoesFiltradas = dataset2
-    .map(reg => {
-      const consumoRealM3 = (reg.consumoReal?.litros || 0) / 1000;
-      const consumoEstimadoM3 = (reg.modelo?.consumoEstimado || 0) / 1000;
+  .map(reg => {
+    const consumoRealM3 = (reg.consumoReal?.litros || 0) / 1000;
+    const consumoEstimadoM3 = (reg.modelo?.consumoEstimado || 0) / 1000;
 
-      return {
-        periodo: {
-          dataInicial: reg.periodo?.dataInicial,
-          dataFinal: reg.periodo?.dataFinal
-        },
-        erro: consumoEstimadoM3 - consumoRealM3,
-        erroPercentual: reg.comparacao?.erroPercentual || 0,
-        consumoRealM3,
-        consumoEstimadoM3
-      };
-    })
-    .filter(reg => {
-      if (!reg?.periodo?.dataFinal) return false;
+    return {
+      periodo: {
+        dataInicial: reg.periodo?.dataInicial,
+        dataFinal: reg.periodo?.dataFinal
+      },
+      erro: consumoEstimadoM3 - consumoRealM3,
+      erroPercentual: reg.comparacao?.erroPercentual || 0,
+      consumoRealM3,
+      consumoEstimadoM3
+    };
+  })
+  .filter(reg => {
+    if (!reg?.periodo?.dataFinal) return false;
 
-      const data = new Date(reg.periodo.dataFinal);
-      return data >= inicio && data <= fim;
-    })
-    .sort(
-      (a, b) =>
-        new Date(a.periodo.dataFinal) - new Date(b.periodo.dataFinal)
-    );
-
+    const data = new Date(reg.periodo.dataFinal);
+    return data >= inicio && data <= fim;
+  })
+  .sort(
+    (a, b) =>
+      new Date(a.periodo.dataFinal) - new Date(b.periodo.dataFinal)
+  );
   // =========================================================
   // 🔹 DEBUG
   // =========================================================
