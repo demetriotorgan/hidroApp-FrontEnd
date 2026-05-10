@@ -36,7 +36,7 @@ export default function usePainelCiclo({
 
     const dataInicial = analiseFinal?.ciclo?.dataInicial;
     const dataFinal = analiseFinal?.ciclo?.dataFinal;
-    console.log("📦 DATASET2 RECEBIDO NO OFFICE-BOY:", analises);
+    // console.log("📦 DATASET2 RECEBIDO NO OFFICE-BOY:", analises);
 
     const { previsoesFiltradas, comparacoesFiltradas } = prepararDadosDoCiclo({
       dataset1: estimativas,
@@ -45,36 +45,36 @@ export default function usePainelCiclo({
       dataFinal
     });
 
-    console.log("🧪 TESTE REFERÊNCIA PERÍODO");
-    comparacoesFiltradas.forEach((item, i) => {
-      console.log(i, item.periodo, item.periodo === comparacoesFiltradas[0].periodo);
-    });
+    // console.log("🧪 TESTE REFERÊNCIA PERÍODO");
+    // comparacoesFiltradas.forEach((item, i) => {
+    //   console.log(i, item.periodo, item.periodo === comparacoesFiltradas[0].periodo);
+    // });
 
     const errosFormatados = comparacoesFiltradas.map((item) => ({
       data: item.periodo?.dataFinal,
       erro: item.erro,
       erroPercentual: item.erroPercentual
     }));
-    console.log("📍 Coordenadas de erro formatadas:", errosFormatados);
+    // console.log("📍 Coordenadas de erro formatadas:", errosFormatados);
 
     //🔎 DEBUG DE VALIDAÇÃO DO RECORTE
-    console.group("📦 OFFICE BOY → RECORTE DO CICLO");
-    console.log("📅 Intervalo do ciclo:", {
-      dataInicial,
-      dataFinal
-    });
+    // console.group("📦 OFFICE BOY → RECORTE DO CICLO");
+    // console.log("📅 Intervalo do ciclo:", {
+    //   dataInicial,
+    //   dataFinal
+    // });
 
-    console.log("📈 Dataset1 recortado (previsõesFiltradas):", {
-      total: previsoesFiltradas.length,
-      dados: previsoesFiltradas
-    });
+    // console.log("📈 Dataset1 recortado (previsõesFiltradas):", {
+    //   total: previsoesFiltradas.length,
+    //   dados: previsoesFiltradas
+    // });
 
-    console.log("📉 Dataset2 recortado (comparacoesFiltradas):", {
-      total: comparacoesFiltradas.length,
-      dados: comparacoesFiltradas
-    });
+    // console.log("📉 Dataset2 recortado (comparacoesFiltradas):", {
+    //   total: comparacoesFiltradas.length,
+    //   dados: comparacoesFiltradas
+    // });
 
-    console.groupEnd();
+    // console.groupEnd();
 
     return {
       produto: analiseFinal,

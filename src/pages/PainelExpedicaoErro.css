@@ -1,0 +1,133 @@
+/* =========================================================
+   📦 PAINEL EXPEDIÇÃO DE ERRO
+   Layout moderno azul/branco estilo dashboard técnico
+========================================================= */
+
+.painel-expedicao {
+    background: #f6f9ff;
+    border: 1px solid #d9e6ff;
+    border-radius: 14px;
+    padding: 18px;
+    margin-top: 20px;
+    box-shadow: 0 6px 18px rgba(20, 60, 160, 0.08);
+    font-family: Arial, sans-serif;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+.painel-expedicao header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #d9e6ff;
+}
+
+.painel-expedicao header h2 {
+    font-size: 18px;
+    color: #1d3b8b;
+    margin: 0;
+    font-weight: 700;
+}
+
+/* Status badge */
+.painel-expedicao header span {
+    background: #e6f0ff;
+    color: #1d3b8b;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* =========================================================
+   SEÇÕES BASE
+========================================================= */
+.painel-expedicao section {
+    background: #ffffff;
+    border: 1px solid #e6eeff;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 14px;
+    transition: 0.2s ease;
+}
+
+.painel-expedicao section:hover {
+    box-shadow: 0 4px 12px rgba(30, 80, 180, 0.08);
+}
+
+.painel-expedicao section h3 {
+    font-size: 14px;
+    color: #2a4db3;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+/* =========================================================
+   TEXTO
+========================================================= */
+.painel-expedicao p {
+    margin: 6px 0;
+    color: #334155;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* =========================================================
+   BLOCO RESUMO (destaque técnico)
+========================================================= */
+.painel-expedicao section:nth-of-type(1) {
+    border-left: 4px solid #2a4db3;
+}
+
+/* =========================================================
+   BLOCO INSIGHT (interpretação)
+========================================================= */
+.painel-expedicao section:nth-of-type(2) {
+    border-left: 4px solid #60a5fa;
+}
+
+/* =========================================================
+   BLOCO RECOMENDAÇÃO (ação)
+========================================================= */
+.painel-expedicao section:nth-of-type(3) {
+    border-left: 4px solid #2563eb;
+    background: linear-gradient(to right, #f8fbff, #ffffff);
+}
+
+/* =========================================================
+   BLOCO ERRO (fallback)
+========================================================= */
+.painel.erro {
+    background: #fff5f5;
+    border: 1px solid #ffcccc;
+    padding: 16px;
+    border-radius: 12px;
+}
+
+.painel.erro h3 {
+    color: #b91c1c;
+    margin-bottom: 6px;
+}
+
+.painel.erro p {
+    color: #7f1d1d;
+    font-size: 13px;
+}
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+@media (max-width: 768px) {
+    .painel-expedicao {
+        padding: 12px;
+    }
+
+    .painel-expedicao header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}

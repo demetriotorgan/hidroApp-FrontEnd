@@ -35,36 +35,56 @@ import useAnalises from "../hooks/useAnalises";
 import usePainelCiclo from "../hooks/usePainelCiclo";
 import usePreparadorCicloPainel from "../hooks/usePreparadorCicloPainel";
 import PainelAviso from "./PainelAviso";
+import useGerenteLaboratorioErro from "../hooks/useLaboratorioDeErro/useGerenteLaboratorioErro";
+import useCarregadorDeExibicaoErro from "../hooks/useLaboratorioDeErro/useCarregadorDeExibicaoErro";
+import PainelExpedicaoErro from "./PainelExpedicaoErro";
+import centroCoordenacaoTecnicos from "../hooks/useLaboratorioDeErro/cct/centroCoordenacaoTecnicos";
 
 function Dashboard() {
 
   //1.Organização - Insumos Operacionais - Estado operacional
-  const { estimativas, buscar,carregandoEstimativas  } = useEstimativasSalvas(); //Dataset1
+  const { estimativas, buscar, carregandoEstimativas } = useEstimativasSalvas(); //Dataset1
   const { analises, carregarAnalises, loading: carregandoAnalises } = useAnalises(); //Dataset2
 
   const ultimaLeituraHook = useUltimaLeitura();
   const { cicloAtual } = useCicloMensal(ultimaLeituraHook.leituras);
-  
+
   //Buscando Produto Final em Estoque no backend
-  const {analiseFinal, loadingAnaliseFinal, errorAnaliseFinal} = usePreparadorCicloPainel();
+  const { analiseFinal, loadingAnaliseFinal, errorAnaliseFinal } = usePreparadorCicloPainel();
+
+  //Laboratórios de análise de erros
+  const gerente = useGerenteLaboratorioErro({
+    dataset1: estimativas,
+    dataset2: analises,
+    dataInicial: cicloAtual?.dataInicial,
+    dataFinal: cicloAtual?.dataFinal
+  });
+  
+  console.log("📦 GERENTE → CCT | pacote entregue:", gerente);
+  const cct = centroCoordenacaoTecnicos(gerente.pacote);
+
+  //Expedição das analises do laboratório de erros
+  const expedicao = useCarregadorDeExibicaoErro(cct)
+  // console.log('Expedição finalizada: ', expedicao);
+
 
   //2.Coleta - Abastecimento visual
   //Dados para sections
   const { loading, hidrometro, pluviometro, qualidadeAgua, modelo, ultimaLavagem, mediasProdutos, lavagemHook, eficienciaGlobal, ultimaCloracao, metricasCloracao } = useDashboardData();
   //Dados para vitrine do produto final e gráficos
-  console.log("📦 ANALISES ENTREGUES AO PAINEL:", analises);
-  const { produto, graficos, loadingCiclo } = usePainelCiclo({analiseFinal, estimativas, analises });
+  // console.log("📦 ANALISES ENTREGUES AO PAINEL:", analises);
+  const { produto, graficos, loadingCiclo } = usePainelCiclo({ analiseFinal, estimativas, analises });
 
   //3.Automação - Efeitos automáticos  
-  const {avisoOperacional} = useFechamentoCiclo(cicloAtual, estimativas, analises, carregarAnalises, carregandoAnalises,carregandoEstimativas);
+  const { avisoOperacional } = useFechamentoCiclo(cicloAtual, estimativas, analises, carregarAnalises, carregandoAnalises, carregandoEstimativas);
 
   //4.Debug temporário
   // console.log("📊 leituras:", ultimaLeituraHook.leituras);
   // console.log("🔄 cicloAtual:", cicloAtual);
-    // useEffect(() => {
+  // useEffect(() => {
   //   console.log("📦 ESTIMATIVAS NO DASHBOARD:", estimativas.length);
   // }, [estimativas]);
-    // useEffect(() => {
+  // useEffect(() => {
   //   console.log("📦 analises:", analises);
   // }, [analises]);
   //useEffect(() => {
@@ -81,7 +101,7 @@ function Dashboard() {
   useEffect(() => {
     // console.log("🔥 Chamando buscar estimativas...");
     buscar();
-  }, []);  
+  }, []);
 
   //5.Render - Distribuição - Entrega dos lotes para os painéis
   if (loading) {
@@ -90,38 +110,42 @@ function Dashboard() {
 
   return (
     <>
-    <h3>Painel de Avisos <MessageCircleWarning /></h3>
+      <h3>Painel de Avisos <MessageCircleWarning /></h3>
       <PainelAviso
-      aviso={avisoOperacional}
+        aviso={avisoOperacional}
       />
-    <div className="dashboard">      
-      <h1>Painel de Monitoramento <ActivityIcon /></h1>
-      <HidrometroSection
-        data={hidrometro}
-        ultimasLeituraHook={ultimaLeituraHook}
-      />
-      <PluviometroSection data={pluviometro} />
-      <QualidadeAguaSection data={qualidadeAgua} />
-      <ModeloSection data={modelo} />
-      <PrevisaoSection />
-      <LavagemSection
-        ultimaLavagem={ultimaLavagem}
-        mediasProdutos={mediasProdutos}
-        lavagemHook={lavagemHook}
-        eficienciaGlobal={eficienciaGlobal}
-      />
-      <CloroSection
-        dadosUltimaCloracao={ultimaCloracao}
-        dadosCloracao={metricasCloracao}
-      />
-      <CicloMensalPanel
-        produto={produto}
-        graficos={graficos}
-        loading={loadingCiclo}
-      />
-    </div>
+      <div className="dashboard">
+        <h1>Painel de Monitoramento <ActivityIcon /></h1>
+        <HidrometroSection
+          data={hidrometro}
+          ultimasLeituraHook={ultimaLeituraHook}
+        />
+        <PluviometroSection data={pluviometro} />
+        <QualidadeAguaSection data={qualidadeAgua} />
+        <ModeloSection data={modelo} />
+        <PrevisaoSection />
+        <LavagemSection
+          ultimaLavagem={ultimaLavagem}
+          mediasProdutos={mediasProdutos}
+          lavagemHook={lavagemHook}
+          eficienciaGlobal={eficienciaGlobal}
+        />
+        <CloroSection
+          dadosUltimaCloracao={ultimaCloracao}
+          dadosCloracao={metricasCloracao}
+        />
+        <CicloMensalPanel
+          produto={produto}
+          graficos={graficos}
+          loading={loadingCiclo}
+        />
+        <PainelExpedicaoErro
+          expedicao={expedicao}
+        />
+      </div>
     </>
   );
 }
 
 export default Dashboard;
+

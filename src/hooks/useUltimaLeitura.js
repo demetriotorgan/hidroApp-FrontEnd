@@ -50,7 +50,8 @@ export const useUltimaLeitura = () => {
     //GET
     async function listarUltimasLeituras() {        
         try {
-            setCarregandoUltimasLeituras(true);            
+            setCarregandoUltimasLeituras(true);
+            // console.log("URL chamada:", `${api.defaults.baseURL}listarUltimaLeitura`);
             const response = await api.get('/listarUltimaLeitura');                                
             setLeituras(response.data);
         } catch (error) {

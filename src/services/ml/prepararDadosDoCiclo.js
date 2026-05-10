@@ -90,7 +90,12 @@ export function prepararDadosDoCiclo({
       erro: consumoEstimadoM3 - consumoRealM3,
       erroPercentual: reg.comparacao?.erroPercentual || 0,
       consumoRealM3,
-      consumoEstimadoM3
+      consumoEstimadoM3,
+
+      //novos campos
+      acuracia: reg.comparacao?.acuracia ?? null,
+      tendencia: reg.comparacao?.tendencia ?? null,
+      classificacao:reg.comparacao?.classificacao ?? null
     };
   })
   .filter(reg => {
