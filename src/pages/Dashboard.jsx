@@ -39,6 +39,7 @@ import useGerenteLaboratorioErro from "../hooks/useLaboratorioDeErro/useGerenteL
 import useCarregadorDeExibicaoErro from "../hooks/useLaboratorioDeErro/useCarregadorDeExibicaoErro";
 import PainelExpedicaoErro from "./PainelExpedicaoErro";
 import centroCoordenacaoTecnicos from "../hooks/useLaboratorioDeErro/cct/centroCoordenacaoTecnicos";
+import useGerenteCinematico from "../hooks/useLaboratorioCinematico/gerencia/useGerenteCinematico";
 
 function Dashboard() {
 
@@ -70,10 +71,13 @@ function Dashboard() {
 
   //2.Coleta - Abastecimento visual
   //Dados para sections
-  const { loading, hidrometro, pluviometro, qualidadeAgua, modelo, ultimaLavagem, mediasProdutos, lavagemHook, eficienciaGlobal, ultimaCloracao, metricasCloracao } = useDashboardData();
+  const { loading, registrosHidrometro, hidrometro, pluviometro, qualidadeAgua, modelo, ultimaLavagem, mediasProdutos, lavagemHook, eficienciaGlobal, ultimaCloracao, metricasCloracao } = useDashboardData();
   //Dados para vitrine do produto final e gráficos
   // console.log("📦 ANALISES ENTREGUES AO PAINEL:", analises);
   const { produto, graficos, loadingCiclo } = usePainelCiclo({ analiseFinal, estimativas, analises });
+  const {resultadoDeCinematica} = useGerenteCinematico({registrosHidrometro,loading});
+  //Dados de Cinemática
+  console.log('Dados de Cinemática: ', resultadoDeCinematica);
 
   //3.Automação - Efeitos automáticos  
   const { avisoOperacional } = useFechamentoCiclo(cicloAtual, estimativas, analises, carregarAnalises, carregandoAnalises, carregandoEstimativas);

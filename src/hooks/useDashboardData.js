@@ -64,6 +64,7 @@ export function useDashboardData() {
 
     return {
         loading,
+        registrosHidrometro: dados,
         hidrometro: {
             total,
             media,
