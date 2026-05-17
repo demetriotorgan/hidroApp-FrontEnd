@@ -40,6 +40,7 @@ import useCarregadorDeExibicaoErro from "../hooks/useLaboratorioDeErro/useCarreg
 import PainelExpedicaoErro from "./PainelExpedicaoErro";
 import centroCoordenacaoTecnicos from "../hooks/useLaboratorioDeErro/cct/centroCoordenacaoTecnicos";
 import useGerenteCinematico from "../hooks/useLaboratorioCinematico/gerencia/useGerenteCinematico";
+import PainelCinematico from "./PainelCinematico";
 
 function Dashboard() {
 
@@ -138,11 +139,17 @@ function Dashboard() {
           dadosUltimaCloracao={ultimaCloracao}
           dadosCloracao={metricasCloracao}
         />
+
+        <PainelCinematico
+          cinematica={resultadoDeCinematica}
+         />
+
         <CicloMensalPanel
           produto={produto}
           graficos={graficos}
           loading={loadingCiclo}
-        />
+        />       
+
         <PainelExpedicaoErro
           expedicao={expedicao}
         />

@@ -216,6 +216,59 @@ export default function analisarVelocidades(registros) {
             : 0;
 
     // =========================================================
+    // DADOS PARA O GRÁFICO (ÚLTIMOS 7 DIAS)
+    // =========================================================
+    // A lista original já vem ordenada do mais recente para o mais antigo.
+    // Para o gráfico, geralmente é melhor inverter para exibir do
+    // mais antigo -> mais recente.
+    const serieUltimos7Dias = ultimas7Velocidades
+        .slice()
+        .reverse()
+        .map((valor, index) => ({
+            dia: `D-${6 - index}`, // D-6 ... D-0
+            velocidade: valor,
+            mediaSemanal,
+            media3Dias: mediaUltimos3Dias,
+            maximoSemanal,
+            minimoSemanal,
+            limiteSuperiorNormal: mediaSemanal + desvioPadraoSemanal,
+            limiteInferiorNormal: mediaSemanal - desvioPadraoSemanal,
+            ehValorAtual: index === 6, // último ponto após reverse()
+            classificacao:
+                valor === velocidadeAtual
+                    ? classificacaoConsumoAtual
+                    : null,
+        }));
+
+    // =========================================================
+    // RESUMO PARA O COMPONENTE DO GRÁFICO
+    // =========================================================
+    const dadosGrafico = {
+        serie: serieUltimos7Dias,
+
+        resumo: {
+            velocidadeAtual,
+            mediaSemanal,
+            mediaUltimos3Dias,
+            maximoSemanal,
+            minimoSemanal,
+            amplitudeSemanal,
+            desvioPadraoSemanal,
+            CV,
+            tendenciaRecente,
+            classificacaoConsumoAtual,
+            classificacaoVariabilidade,
+            classificacaoPercentil,
+            classificacaoDePico,
+            posicaoAtualNaFaixa,
+            percentilAtual,
+            diferencaSemanal,
+            distanciaPercentualAoMaximo,
+            isPicoSemanal,
+        },
+    };
+
+    // =========================================================
     // 5. RETORNO
     // =========================================================        
     return {
@@ -239,7 +292,11 @@ export default function analisarVelocidades(registros) {
         isPicoSemanal,
         classificacaoDePico,
         classificacaoPercentil,
-        distanciaPercentualAoMaximo
+        distanciaPercentualAoMaximo,
 
+        // Dados do gráfico
+        ultimas7Velocidades,
+        percentilAtual,
+        dadosGrafico,
     };
 }
