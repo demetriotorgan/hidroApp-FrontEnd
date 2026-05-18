@@ -113,7 +113,7 @@ export function calcularPrevisaoFaturaComAjuste(
     }
 
     const a = modelo.valor;
-    console.log("📌 Coeficiente A:", a);
+    // console.log("📌 Coeficiente A:", a);
 
     // -----------------------------------
     // Configuração da fatura
@@ -163,10 +163,10 @@ export function calcularPrevisaoFaturaComAjuste(
 
     // if (!Number.isFinite(erroProjetado)) {
     //     console.error("🚨 erroProjetado não é finito!");
-    // }
-
+    // }        
+    
     const leituraCorrigida = Math.floor(
-        leituraPrevistaFatura - erroProjetado
+        leituraPrevistaFatura + Math.abs(erroProjetado)
     );
 
     // console.log("📏 leituraCorrigida:", leituraCorrigida);

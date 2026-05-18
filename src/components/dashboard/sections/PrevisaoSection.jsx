@@ -8,20 +8,36 @@ import {
     Waves,
     ShieldCheck,
     AlertTriangle,
-    Percent
+    Percent,
+    SaveAll
 } from 'lucide-react';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardCard from '../DashboardCard';
 import { usePrevisaoLeitura } from '../../../hooks/usePrevisaoLeitura';
 import './previsaoSection.css';
+import { gerarPayloadDados } from '../../../hooks/useLaboratorioCinematico/gerencia/gerarPayloadDados';
+import useSalvarDadosML from '../../../hooks/useLaboratorioCinematico/gerencia/useSalvarDadosML';
 
 const PrevisaoSection = () => {
+    //states para salvar dados de ML
+    const [mensagem, setMensagem] = useState("");
+    const [tipoMensagem, setTipoMensagem] = useState("");
+
+    //configurações do Componente
     const navigate = useNavigate();
     const previsao = usePrevisaoLeitura();
-
     const isOk = previsao.status === "ok";
+
+    //salvar dados de ML
+    const { salvarDadosML, salvando } = useSalvarDadosML(previsao);
+
+    async function handleSalvarDados() {
+        const resultado = await salvarDadosML();
+        setMensagem(resultado.mensagem);
+        setTipoMensagem(resultado.sucesso ? "sucesso" : "erro");
+    };
 
     return (
         <section className="dashboard-section">
@@ -153,7 +169,8 @@ const PrevisaoSection = () => {
                         </h2>
                     </div>
                 </DashboardCard>
-
+            </div>
+            <div className='painel-botoes'>
                 {/* 🔘 Botão */}
                 <button
                     className="dashboard-button"
@@ -162,8 +179,20 @@ const PrevisaoSection = () => {
                     <TrendingUp size={18} />
                     Ver Modelo
                 </button>
-
+                <button
+                    className="dashboard-button salvar-dados-ml"
+                    onClick={handleSalvarDados}
+                    disabled={salvando}
+                >
+                    <SaveAll size={18} />
+                    {salvando ? 'Salvando...' : 'Salvar Dados'}
+                </button>
             </div>
+            {mensagem && (
+                <div className={`mensagem ${tipoMensagem}`}>
+                    {mensagem}
+                </div>
+            )}
         </section>
     );
 };

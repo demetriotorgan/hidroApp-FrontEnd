@@ -78,7 +78,7 @@ function Dashboard() {
   const { produto, graficos, loadingCiclo } = usePainelCiclo({ analiseFinal, estimativas, analises });
   const {resultadoDeCinematica} = useGerenteCinematico({registrosHidrometro,loading});
   //Dados de Cinemática
-  console.log('Dados de Cinemática: ', resultadoDeCinematica);
+  // console.log('Dados de Cinemática: ', resultadoDeCinematica);
 
   //3.Automação - Efeitos automáticos  
   const { avisoOperacional } = useFechamentoCiclo(cicloAtual, estimativas, analises, carregarAnalises, carregandoAnalises, carregandoEstimativas);

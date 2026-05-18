@@ -92,3 +92,91 @@
 .badge-neutral {
     background-color: #6b7280; /* cinza elegante */
 }
+
+.painel-botoes button{
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.painel-botoes .salvar-dados-ml{
+    background-color: red;
+}
+
+/* mensagemRetorno.css */
+
+/* Container base da mensagem */
+.mensagem {
+  margin-top: 16px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-left: 5px solid transparent;
+  animation: fadeInMensagem 0.3s ease;
+}
+
+/* =========================
+   Mensagem de sucesso
+========================= */
+.mensagem.sucesso {
+  background-color: #ecfdf3;
+  color: #166534;
+  border-left-color: #22c55e;
+}
+
+/* =========================
+   Mensagem de erro
+========================= */
+.mensagem.erro {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border-left-color: #ef4444;
+}
+
+/* =========================
+   Mensagem de aviso
+========================= */
+.mensagem.aviso {
+  background-color: #fffbeb;
+  color: #92400e;
+  border-left-color: #f59e0b;
+}
+
+/* =========================
+   Mensagem informativa
+========================= */
+.mensagem.info {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border-left-color: #3b82f6;
+}
+
+/* =========================
+   Animação de entrada
+========================= */
+@keyframes fadeInMensagem {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   Responsividade
+========================= */
+@media (max-width: 768px) {
+  .mensagem {
+    font-size: 13px;
+    padding: 12px 14px;
+  }
+}

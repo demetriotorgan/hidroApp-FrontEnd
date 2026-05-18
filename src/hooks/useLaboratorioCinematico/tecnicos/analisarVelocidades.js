@@ -12,7 +12,7 @@ export default function analisarVelocidades(registros) {
         listaDeVelocidades,
     } = resultado;
 
-    console.log('Lista de Velocidades: ', listaDeVelocidades);
+    // console.log('Lista de Velocidades: ', listaDeVelocidades);
 
     // =========================================================
     // 2. PROPAGA FALHA DE VALIDAÇÃO
