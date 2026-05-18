@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../../../services/api";
-import { gerarPayloadDados } from "./gerarPayloadDados";
-import { validarPayload } from "./validarPayload";
+import { gerarPayloadDados } from "../utilsML/gerarPayloadDados";
+import { validarPayload } from "../utilsML/validarPayload";
 
 function useSalvarDadosML(dados) {
     const [salvando, setSalvando] = useState(false);

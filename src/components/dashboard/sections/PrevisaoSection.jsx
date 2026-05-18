@@ -12,13 +12,16 @@ import {
     SaveAll
 } from 'lucide-react';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardCard from '../DashboardCard';
 import { usePrevisaoLeitura } from '../../../hooks/usePrevisaoLeitura';
 import './previsaoSection.css';
-import { gerarPayloadDados } from '../../../hooks/useLaboratorioCinematico/gerencia/gerarPayloadDados';
-import useSalvarDadosML from '../../../hooks/useLaboratorioCinematico/gerencia/useSalvarDadosML';
+import { gerarPayloadDados } from '../../../hooks/useLaboratorioML/utilsML/gerarPayloadDados';
+import useSalvarDadosML from '../../../hooks/useLaboratorioML/hooksML/useSalvarDadosML';
+import useBuscarDadosML from '../../../hooks/useLaboratorioML/hooksML/useBuscarDadosML';
+import { gerarDadosGraficoErroAbsoluto } from '../../../hooks/useLaboratorioML/utilsML/gerarDadosGraficoErroAbsoluto';
+import GraficoErroAbsoluto from '../../../hooks/useLaboratorioML/graficos/GraficoErroAbsoluto';
 
 const PrevisaoSection = () => {
     //states para salvar dados de ML
@@ -30,6 +33,14 @@ const PrevisaoSection = () => {
     const previsao = usePrevisaoLeitura();
     const isOk = previsao.status === "ok";
 
+    //Buscar dados de ML
+    const { dadosML, carregandoML, carregarDadosML } = useBuscarDadosML();
+    //Gerando dados do grafico erro absoluto
+    const dadosErroAbsoluto = useMemo(
+        () => gerarDadosGraficoErroAbsoluto(dadosML),
+        [dadosML]
+    );
+
     //salvar dados de ML
     const { salvarDadosML, salvando } = useSalvarDadosML(previsao);
 
@@ -38,6 +49,8 @@ const PrevisaoSection = () => {
         setMensagem(resultado.mensagem);
         setTipoMensagem(resultado.sucesso ? "sucesso" : "erro");
     };
+
+    console.log('Dados de ML:', dadosML);
 
     return (
         <section className="dashboard-section">
@@ -193,6 +206,18 @@ const PrevisaoSection = () => {
                     {mensagem}
                 </div>
             )}
+
+            <div className="container-grafico-ml">
+                {carregandoML ? (
+                    <div className="loading-grafico">
+                        Carregando gráfico...
+                    </div>
+                ) : (
+                    <div className="grafico-wrapper">
+                        <GraficoErroAbsoluto dados={dadosErroAbsoluto} />
+                    </div>
+                )}
+            </div>
         </section>
     );
 };

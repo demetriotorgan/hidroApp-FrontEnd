@@ -156,6 +156,38 @@
   border-left-color: #3b82f6;
 }
 
+/* =========================================================
+   Container mínimo para o gráfico
+   ========================================================= */
+.container-grafico-ml {
+  width: 100%;
+  min-width: 0; /* essencial se estiver dentro de flexbox */
+  box-sizing: border-box;
+}
+
+/* Área que fornece dimensões reais ao ResponsiveContainer */
+.container-grafico-ml .grafico-wrapper {
+  width: 100%;
+  min-width: 0;
+  height: 450px; /* altura efetiva do gráfico */
+  box-sizing: border-box;
+  margin-top: 10px;
+}
+
+/* Mensagem de carregamento */
+.container-grafico-ml .loading-grafico {
+  width: 100%;
+  height: 450px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
 /* =========================
    Animação de entrada
 ========================= */
